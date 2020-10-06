@@ -14,7 +14,7 @@ source venv/bin/activate
 pip install -r requirements.txt
 ```
 Check this [link](https://towardsdatascience.com/virtual-environments-104c62d48c54) out for a more in depth explanation  
-In order to start the project, run this command:
+  In order to start the project, run this command:
 ```
 python3 manage.py runserver
 ```

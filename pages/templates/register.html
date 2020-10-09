@@ -25,8 +25,36 @@
     <link rel="stylesheet" href="{% static 'css/style.css' %}" type="text/css">
 </head>
 
+<body style="background-color:grey;">
+    
+    <!-- Header Section Begin -->
+    <header class="header-section">
+        <div class="container">
+            <div class="logo">
+                <a href="./home.html">
+                    <img src="{% static 'img/logo.png' %}" alt="">
+                </a>
+            </div>
+            <div class="nav-menu">
+                <nav class="mainmenu mobile-menu">
+                    <ul>
+                        <li class="active"><a href="./home.html">Home</a></li>
+                        <li><a href="./about-us.html">About</a></li>
+                        <li><a href="./classes.html">Classes</a></li>
+                        <li><a href="./blog.html">Blog</a></li>
+                        <li><a href="./gallery.html">Gallery</a></li>
+                        <li><a href="./contact.html">Contacts</a></li>
+                    </ul>
+                </nav>
+                <a href="register/" class="primary-btn">Register</a>
+            </div>
+            <div id="mobile-menu-wrap"></div>
+        </div>
+    </header>
 
-<section class="register-section spad">
+
+
+    <section class="register-section spad">
         <div class="container" style="align-content: center" >
             <div class="row">
                 <div class="col-lg-8">
@@ -93,24 +121,11 @@
                     </div>
                 </div>
             </div>
-            <div class="subscribe-option set-bg" data-setbg="{% static 'img/footer-signup.jpg' %}">
-                <div class="so-text">
-                    <h4>Subscribe To Our Mailing List</h4>
-                    <p>Sign up to receive the latest information </p>
-                </div>
-                <form action="#" class="subscribe-form">
-                    <input type="text" placeholder="Enter Your Mail">
-                    <button type="submit"><i class="fa fa-send"></i></button>
-                </form>
-            </div>
             <div class="copyright-text">
                 <ul>
                     <li><a href="#">Term&Use</a></li>
                     <li><a href="#">Privacy Policy</a></li>
                 </ul>
-                <p>&copy;<p><!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
-  Copyright &copy;<script>document.write(new Date().getFullYear());</script> All rights reserved | This template is made with <i class="fa fa-heart" aria-hidden="true"></i> by <a href="https://colorlib.com" target="_blank">Colorlib</a>
-  <!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. --></p></p>
                 <div class="footer-social">
                     <a href="#"><i class="fa fa-facebook"></i></a>
                     <a href="#"><i class="fa fa-twitter"></i></a>
@@ -120,3 +135,7 @@
             </div>
         </div>
     </footer>
+
+</body>
+
+</html>

@@ -23,11 +23,7 @@
     <link rel="stylesheet" href="{% static 'css/style.css' %}" type="text/css">
 </head>
 
-<body>
-    <!-- Page Preloder -->
-    <!-- <div id="preloder">
-        <div class="loader"></div>
-    </div> -->
+<body style="background-color:grey;" >
 
     <!-- Header Section Begin -->
     <header class="header-section">
@@ -55,23 +51,6 @@
     </header>
     <!-- Header End -->
     
-    <!-- Hero Section Begin -->
-    <section class="hero-section set-bg" data-setbg="{% static 'img/hero-bg.jpg' %}">
-        <div class="container">
-            <div class="row">
-                <div class="col-lg-8">
-                    <div class="hero-text">
-                        <span>FITNESS ELEMENTS</span>
-                        <h1>BMI CALCULATOR</h1>
-                        <p>Gutim comes packed with the user-friendly BMI Calculator<br /> shortcode which lets</p>
-                        <a href="#" class="primary-btn">Read More</a>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-    <!-- Hero Section End -->
-    
     <!-- About Section Begin -->
     <section class="about-section spad">
         <div class="container">
@@ -79,20 +58,21 @@
                 <div class="col-lg-6">
                     <div class="about-pic">
                         <img src="{% static 'img/about-pic.jpg' %}" alt="">
-                        <a href="https://www.youtube.com/watch?v=SlPhMPnQ58k" class="play-btn video-popup">
+                        <a href="https://www.youtube.com/watch?v=s3oDv6M6Fb0&feature=youtu.be&ab_channel=RyanAhmed" class="play-btn video-popup">
                             <img src="{% static 'img/play.png' %}" alt="">
                         </a>
                     </div>
                 </div>
                 <div class="col-lg-6">
                     <div class="about-text">
-                        <h2>Story About Us</h2>
-                        <p class="first-para">Lorem ipsum proin gravida nibh vel velit auctor aliquet. Aenean pretium
-                            sollicitudin, nascetur auci elit consequat ipsutissem niuis sed odio sit amet nibh vulputate
-                            cursus a amet.</p>
-                        <p class="second-para">Etiam rhoncus. Maecenas tempus, tellus eget condimentum rhoncus, gravida
-                            quam semper libero sit amet. Etiam rhoncus. Maecenas tempus, tellus eget condimentum
-                            rhoncus, gravida quam semper libero sit amet.</p>
+                        <h2 style="color:white;" >Story About Us </h2>
+                        <p class="first-para" style="color:white;">We are a group of College Students studying Computer Science at the University of Florida. 
+                            We all share a strong passion for both mental and physical health/fitness, as well as helping others upgrade and become the best versions of themselves.
+                        </p>    
+                        <p class="second-para" style="color:white;">In the past, we have all shared similar struggles in finding a coherent application to track various aspects of our health. 
+                            Therefore, we decided to come together and create an "all in one" application that tracks bodyweight, lifts, macros, and calories, suggest workout plans and caloric intake per day,
+                            and more all personalized to the individual!
+                        </p>
                         <a href="#" class="primary-btn">Read More</a>
                     </div>
                 </div>
@@ -156,65 +136,7 @@
             <div class="row">
                 <div class="col-lg-12">
                     <div class="section-title">
-                        <h2>UNLIMITED CLASSES</h2>
-                    </div>
-                </div>
-            </div>
-            <div class="row classes-slider owl-carousel">
-                <div class="col-lg-4">
-                    <div class="single-class-item set-bg" data-setbg="{% static 'img/classes/classes-1.jpg' %}">
-                        <div class="si-text">
-                            <h4>Yoga</h4>
-                            <span><i class="fa fa-user"></i> Ryan Knight</span>
-                        </div>
-                    </div>
-                    <div class="single-class-item set-bg" data-setbg="{% static 'img/classes/classes-4.jpg' %}">
-                        <div class="si-text">
-                            <h4>Karate</h4>
-                            <span><i class="fa fa-user"></i> Kevin McCormick</span>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-lg-4">
-                    <div class="single-class-item set-bg" data-setbg="{% static 'img/classes/classes-2.jpg' %}">
-                        <div class="si-text">
-                            <h4>Running</h4>
-                            <span><i class="fa fa-user"></i> Randy Rivera</span>
-                        </div>
-                    </div>
-                    <div class="single-class-item set-bg" data-setbg="{% static 'img/classes/classes-5.jpg' %}">
-                        <div class="si-text">
-                            <h4>Dance</h4>
-                            <span><i class="fa fa-user"></i> Russell Lane</span>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-lg-4">
-                    <div class="single-class-item set-bg" data-setbg="{% static 'img/classes/classes-3.jpg' %}">
-                        <div class="si-text">
-                            <h4>Personal Training</h4>
-                            <span><i class="fa fa-user"></i> Cole Robertson</span>
-                        </div>
-                    </div>
-                    <div class="single-class-item set-bg" data-setbg="{% static 'img/classes/classes-6.jpg' %}">
-                        <div class="si-text">
-                            <h4>Weight Loss</h4>
-                            <span><i class="fa fa-user"></i> Ryan Scott</span>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-lg-4">
-                    <div class="single-class-item set-bg" data-setbg="{% static 'img/classes/classes-7.jpg' %}">
-                        <div class="si-text">
-                            <h4>Personal Training</h4>
-                            <span><i class="fa fa-user"></i> Cole Robertson</span>
-                        </div>
-                    </div>
-                    <div class="single-class-item set-bg" data-setbg="{% static 'img/classes/classes-8.jpg' %}">
-                        <div class="si-text">
-                            <h4>Weight Loss</h4>
-                            <span><i class="fa fa-user"></i> Ryan Scott</span>
-                        </div>
+                        <a href="register/" class="primary-btn">Register Now!</a>
                     </div>
                 </div>
             </div>
@@ -245,24 +167,11 @@
                     </div>
                 </div>
             </div>
-            <div class="subscribe-option set-bg" data-setbg="{% static 'img/footer-signup.jpg' %}">
-                <div class="so-text">
-                    <h4>Subscribe To Our Mailing List</h4>
-                    <p>Sign up to receive the latest information </p>
-                </div>
-                <form action="#" class="subscribe-form">
-                    <input type="text" placeholder="Enter Your Mail">
-                    <button type="submit"><i class="fa fa-send"></i></button>
-                </form>
-            </div>
             <div class="copyright-text">
                 <ul>
                     <li><a href="#">Term&Use</a></li>
                     <li><a href="#">Privacy Policy</a></li>
                 </ul>
-                <p>&copy;<p><!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
-  Copyright &copy;<script>document.write(new Date().getFullYear());</script> All rights reserved | This template is made with <i class="fa fa-heart" aria-hidden="true"></i> by <a href="https://colorlib.com" target="_blank">Colorlib</a>
-  <!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. --></p></p>
                 <div class="footer-social">
                     <a href="#"><i class="fa fa-facebook"></i></a>
                     <a href="#"><i class="fa fa-twitter"></i></a>

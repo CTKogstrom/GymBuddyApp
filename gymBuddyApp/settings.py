@@ -32,6 +32,7 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
+    'activityLibrary.apps.ActivitylibraryConfig',
     'users.apps.UsersConfig',
     'pages.apps.PagesConfig',
     'crispy_forms',
@@ -133,4 +134,6 @@ CRISPY_TEMPLATE_PACK = 'bootstrap4'
 LOGIN_REDIRECT_URL = 'home-page'
 
 LOGIN_URL = 'login'
+
+MEDIA_ROOT = '/static/media/'
 

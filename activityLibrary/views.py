@@ -1,3 +1,7 @@
 from django.shortcuts import render
+from .models import Activity
 
-# Create your views here.
+def search(request):
+    context = {
+        'results': Activity.objects.all()
+    }

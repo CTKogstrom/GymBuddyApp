@@ -135,5 +135,7 @@ LOGIN_REDIRECT_URL = 'home-page'
 
 LOGIN_URL = 'login'
 
-MEDIA_ROOT = '/static/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'static/media')
+
+MEDIA_URL = '/media/'
 

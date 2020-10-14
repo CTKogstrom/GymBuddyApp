@@ -32,5 +32,5 @@ urlpatterns = [
     path('exercises/', user_views.exercises, name='exercises'),
     path('exercises/<int:active_exercises>', user_views.exercises, name='exercises'),
     path('meals/', user_views.meals, name='meals'),
-    path('login/', user_views.login, name='login')
+    path('login/', user_views.login2, name='login')
 ]

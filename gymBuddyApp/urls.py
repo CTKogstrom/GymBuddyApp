@@ -31,5 +31,5 @@ urlpatterns = [
     path('macros/', user_views.macros, name='macros'),
     path('exercises/', user_views.exercises, name='exercises'),
     path('meals/', user_views.meals, name='meals'),
-    path('login/', user_views.login, name='login')
+    path('login/', user_views.login2, name='login')
 ]

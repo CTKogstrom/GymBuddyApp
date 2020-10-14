@@ -43,8 +43,14 @@
                         <li><a href="/weight">Track Your Weight</a></li>
                     </ul>
                 </nav>
-                <a href="/register" class="primary-btn">Register</a>
-                <a href="/login" class="primary-btn">Sign In</a>
+                {% if loggedIn %}
+                    <a href="/register" class="primary-btn">Profile</a>
+                    <a href="/login" class="primary-btn">Logout</a>
+                {% endif %}
+                {% if not loggedIn %}
+                    <a href="/register" class="primary-btn">Register</a>
+                    <a href="/login" class="primary-btn">Sign In</a>
+                {% endif %}
             </div>
             <div id="mobile-menu-wrap"></div>
         </div>

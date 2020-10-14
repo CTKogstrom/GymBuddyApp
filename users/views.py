@@ -25,9 +25,9 @@ def login2(request, user):
 
 @login_required
 def profile(request):
-    if request.method == 'POST' and 'submit_form' in request.POST:
+    if request.method == 'POST' and 'form_submit' in request.POST:
         profForm = ProfileForm(request.POST)
-        if profForm.is_valid:
+        if profForm.is_valid():
             stillValid = True
             if profForm.cleaned_data['daily_cal_in'] < 0:
                 messages.error(request, "Please enter a valid number of calories.", extra_tags='danger')
@@ -53,15 +53,15 @@ def profile(request):
             if stillValid:
                 prof = Profile(daily_cal_in=profForm.cleaned_data['daily_cal_in'],daily_carbs=profForm.cleaned_data['daily_carbs'],daily_fat=profForm.cleaned_data['daily_fat'],
                     daily_protein=profForm.cleaned_data['daily_protein'],goal_weight_change=profForm.cleaned_data['goal_weight_change'],activity_level=profForm.cleaned_data['activity_level'],
-                    current_weight=profForm.cleaned_data['current_weight'])
+                    current_weight=profForm.cleaned_data['current_weight'],user=request.user)
                 prof.save()
-                messages.succes(request, "Successfully updated profile!", extra_tags='success')
+                messages.success(request, "Successfully updated profile!", extra_tags='success')
         else:
             messages.error(request, "Please reenter valid information.", extra_tags='danger')
     form = ProfileForm()
     context = {
         'loggedIn': False,
-        'form': form
+        'form': form,
     }
     if request.user.is_authenticated:
         context['loggedIn'] = True

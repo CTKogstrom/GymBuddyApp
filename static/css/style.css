@@ -588,7 +588,7 @@ ul, ol {
 	top: 50%;
 	width: 1100px;
 	height: 540px;
-	background: url(../img/testimonial/testimonial-bg.png);
+	background: url(../meida/img/testimonial/testimonial-bg.png);
 	content: "";
 	-webkit-transform: translate(-550px, -270px);
 	-ms-transform: translate(-550px, -270px);

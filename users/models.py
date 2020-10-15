@@ -1,6 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import User
 from activityLibrary.models import Exercise
+from django.utils import timezone
 
 class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
@@ -19,7 +20,7 @@ class Profile(models.Model):
 class WeightRecord(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     lbs = models.IntegerField()
-    date = models.DateField()
+    date = models.DateField(default=timezone.now)
 
     def __str__(self):
         return f"{self.user.username}: {self.lbs} on {self.date}"

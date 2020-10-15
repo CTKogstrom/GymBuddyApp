@@ -1,3 +1,4 @@
+{% load crispy_forms_tags %}
 {% load static %}
 <!DOCTYPE html>
 <html lang="zxx">
@@ -56,21 +57,40 @@
         <div class="container">
             <div class="row">
                 <div class="col-lg-6">
-                    <div class="about-pic">
-                        <img src="{% static 'img/weight-filler.png' %}" alt="">
-                    </div>
-                </div>
-                <div class="col-lg-6">
                     <div class="about-text">
-                        <h2 style="color:white;" >Log and Track Your Weight Change Progress!</h2>
-                        <p class="first-para" style="color:white;">We are a group of College Students studying Computer Science at the University of Florida. 
-                            We all share a strong passion for both mental and physical health/fitness, as well as helping others upgrade and become the best versions of themselves.
-                        </p>    
-                        <p class="second-para" style="color:white;">In the past, we have all shared similar struggles in finding a coherent application to track various aspects of our health. 
-                            Therefore, we decided to come together and create an "all in one" application that tracks bodyweight, lifts, macros, and calories, suggest workout plans and caloric intake per day,
-                            and more all personalized to the individual!
-                        </p>
-                        <a href="#" class="primary-btn">Log</a>
+                        <form method="POST">
+                            {% csrf_token %}
+                            <fieldset class="form-group">
+                                <legend class="border-bottom mb-4">Get Jacked!</legend>
+                                {{form|crispy}}
+                            </fieldset>
+                            <div class="form-group">
+                                <button class="btn btn-outline-info" type="submit" name="form_submit">Log</button>
+                            </div>
+                            <div>
+                                <table class="table">
+                                    <thead>
+                                      <tr>
+                                        <th scope="col">Date</th>
+                                        <th scope="col">Weight</th>
+                                      </tr>
+                                    </thead>
+                                    <tbody>
+                                        {% for weight in weights %}
+                                            <tr>
+                                                <th scope="row">{{weight.date}}</th>
+                                                <td>{{weight.lbs}} lbs</td>
+                                            </tr>
+                                        {% endfor %}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </form>
+                        <div class="col-lg-6">
+                            <div class="about-pic">
+                                <img src="{% static 'img/weight-filler.png' %}" alt="">
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>

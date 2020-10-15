@@ -6,7 +6,9 @@ from django.contrib.auth.decorators import login_required
 import json, os
 from .forms import UserRegisterForm
 from .forms import ProfileForm
+from .forms import WeightForm
 from .models import Profile
+from .models import WeightRecord
 
 def register(request):
     if request.method == 'POST':
@@ -59,7 +61,7 @@ def profile(request):
                 profForm.save()
                 messages.success(request, "Successfully updated profile!", extra_tags='success')
         else:
-            messages.error(request, "Please reenter valid information.", extra_tags='danger')
+            messages.error(request, "Please re-enter valid information.", extra_tags='danger')
     form = ProfileForm()
     data = Profile.objects.filter(user = request.user)
     calories = carbs = fats = protein = goalWeight = currWeight = activity = {}
@@ -88,7 +90,20 @@ def profile(request):
 
 @login_required
 def weight(request):
-    return render(request, 'users/weight.html')
+    weightrecord = WeightRecord(user=request.user)
+    if request.method == 'POST' and 'form_submit' in request.POST:
+        lbForm = WeightForm(request.POST, instance = weightrecord)
+        if lbForm.is_valid():
+            lbForm.save()
+        else:
+            messages.error(request, "Please re-enter valid information.", extra_tags='danger')
+    form = WeightForm()
+    data = WeightRecord.objects.filter(user = request.user).order_by('-date')
+    context = {
+        'form' : form,
+        'weights' : data,
+    }
+    return render(request, 'users/weight.html', context)
   
 @login_required
 def macros(request):

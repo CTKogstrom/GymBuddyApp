@@ -56,6 +56,9 @@ def profile(request):
             if profForm.cleaned_data['goal_weight_change'] < 0:
                 messages.error(request, "Please enter a valid weight.", extra_tags='danger')
                 stillValid = False
+            if profForm.cleaned_data['starting_weight'] < 0:
+                messages.error(request, "Please enter a valid weight.", extra_tags='danger')
+                stillValid = False
             if profForm.cleaned_data['activity_level'] < 0:
                 messages.error(request, "Please enter a valid activity level.", extra_tags='danger')
                 stillValid = False
@@ -66,13 +69,14 @@ def profile(request):
             messages.error(request, "Please re-enter valid information.", extra_tags='danger')
     form = ProfileForm()
     data = Profile.objects.filter(user = request.user)
-    calories = carbs = fats = protein = goalWeight = currWeight = activity = {}
+    calories = carbs = fats = protein = goalWeight = currWeight = activity = starting_weight = {}
     for e in data:
         calories = e.daily_cal_in
         carbs = e.daily_carbs
         fats = e.daily_fat
         protein = e.daily_protein
         activity = e.activity_level
+        startingWeight = e.starting_weight
         goalWeight = e.goal_weight_change
 
     weightList = []
@@ -89,6 +93,7 @@ def profile(request):
         'fats' : fats,
         'protein' : protein,
         'activity' : activity,
+        'startingWeight' : startingWeight,
         'goalWeight' : goalWeight,
         'currWeight' : currWeight,
     }

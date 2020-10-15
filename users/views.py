@@ -3,6 +3,8 @@ from django.contrib import messages
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth import authenticate, logout, login
 from django.contrib.auth.decorators import login_required
+from django.utils import timezone
+from django.utils.timezone import now, localtime
 import json, os
 from .forms import UserRegisterForm
 from .forms import ProfileForm
@@ -73,6 +75,14 @@ def profile(request):
         activity = e.activity_level
         goalWeight = e.goal_weight_change
         currWeight = e.current_weight
+    weightList = []
+    weights = WeightRecord.objects.filter(user=request.user).order_by('-date')
+    for e in weights:
+        weightList.append(e)
+
+    #delete current weight later
+    if len(weightList) != 0:
+        currWeight = weightList[0].lbs
     context = {
         'loggedIn': False,
         'form': form,

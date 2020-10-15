@@ -3,6 +3,7 @@ from django.contrib.auth.models import User
 from django.contrib.auth.forms import UserCreationForm
 from .models import Profile
 from .models import WeightRecord
+from .models import LiftRecord2
 
 class UserRegisterForm(UserCreationForm):
     email = forms.EmailField()
@@ -22,3 +23,8 @@ class WeightForm(forms.ModelForm):
     class Meta:
         model = WeightRecord
         fields = ['lbs', 'date']
+
+class Lift2Form(forms.ModelForm):
+    class Meta:
+        model = LiftRecord2
+        fields = ['name','weight', 'sets', 'reps', 'date']

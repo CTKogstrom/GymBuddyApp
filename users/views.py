@@ -9,8 +9,11 @@ import json, os
 from .forms import UserRegisterForm
 from .forms import ProfileForm
 from .forms import WeightForm
+from .forms import Lift2Form
 from .models import Profile
 from .models import WeightRecord
+from .models import LiftRecord2
+
 
 def register(request):
     if request.method == 'POST':
@@ -129,12 +132,26 @@ def exercises(request, active_exercises=0):
     if (active_exercises == 100):
         exercise_list = data
 
+    liftrecord2 = LiftRecord2(user=request.user)
+    if request.method == 'POST' and 'form_submit' in request.POST:
+        liftForm = Lift2Form(request.POST, instance = liftrecord2)
+        if liftForm.is_valid():
+            liftForm.save()
+        else:
+            messages.error(request, "Please re-enter valid information.", extra_tags='danger')
+    form = Lift2Form()
+    data = LiftRecord2.objects.filter(user = request.user).order_by('-date')
     context = {
-            'exercises': exercise_list,
-            'title': 'Exercises',
-            'active_exercise': active_exercises, #exercise_list[0].group,
+        'exercises': exercise_list,
+        'title': 'Exercises',
+        'active_exercise': active_exercises, #exercise_list[0].group,
+        'form' : form,
+        'lifts' : data,
     }
+
     return render(request, 'users/exercises.html', context)
+
+
 
 @login_required
 def meals(request):

@@ -32,4 +32,12 @@ class LiftRecord(models.Model):
     reps_per_set = models.IntegerField(blank=True, null=True)
     date = models.DateField()
 
+class LiftRecord2(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    name = models.CharField(max_length=100)
+    weight = models.IntegerField(blank=True, null=True)
+    sets = models.IntegerField(blank=True, null=True)
+    reps = models.IntegerField(blank=True, null=True)
+    date = models.DateField(default=timezone.now)
+
 

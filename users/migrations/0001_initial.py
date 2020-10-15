@@ -26,7 +26,7 @@ class Migration(migrations.Migration):
                 ('goal_weight_change', models.IntegerField()),
                 ('activity_level', models.DecimalField(decimal_places=1, max_digits=2)),
                 ('current_weight', models.IntegerField()),
-                ('user', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to=settings.AUTH_USER_MODEL)),
+                ('user', models.OneToOneField(on_delete=django.db.models.deletion.CASCADE, to=settings.AUTH_USER_MODEL)),
             ],
         ),
     ]

@@ -59,9 +59,6 @@ def profile(request):
             if profForm.cleaned_data['activity_level'] < 0:
                 messages.error(request, "Please enter a valid activity level.", extra_tags='danger')
                 stillValid = False
-            if profForm.cleaned_data['current_weight'] < 0:
-                messages.error(request, "Please enter a valid weight.", extra_tags='danger')
-                stillValid = False
             if stillValid:
                 profForm.save()
                 messages.success(request, "Successfully updated profile!", extra_tags='success')
@@ -77,13 +74,11 @@ def profile(request):
         protein = e.daily_protein
         activity = e.activity_level
         goalWeight = e.goal_weight_change
-        currWeight = e.current_weight
+
     weightList = []
     weights = WeightRecord.objects.filter(user=request.user).order_by('-date')
     for e in weights:
         weightList.append(e)
-
-    #delete current weight later
     if len(weightList) != 0:
         currWeight = weightList[0].lbs
     context = {

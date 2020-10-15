@@ -12,7 +12,6 @@ class Profile(models.Model):
     daily_protein = models.IntegerField()
     goal_weight_change = models.IntegerField()
     activity_level = models.DecimalField(max_digits=2, decimal_places=1)
-    current_weight = models.IntegerField()
 
     def __str__(self):
         return f'{self.user.username} Profile'

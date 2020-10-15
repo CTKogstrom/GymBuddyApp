@@ -10,9 +10,11 @@ from .forms import UserRegisterForm
 from .forms import ProfileForm
 from .forms import WeightForm
 from .forms import Lift2Form
+from .forms import ExerciseFilterForm
 from .models import Profile
 from .models import WeightRecord
 from .models import LiftRecord2
+
 
 
 def register(request):
@@ -125,12 +127,25 @@ def macros(request):
 @login_required
 def exercises(request, active_exercises=0):
     exercise_list = []
+    category = 'All'
+    if request.method == 'POST':
+        filter_form = ExerciseFilterForm(request.POST)
+        if filter_form.is_valid():
+            category = filter_form.cleaned_data['category']
+            print(category)
 
+        
+
+    filter_form = ExerciseFilterForm({'category': category})
     with open(os.path.dirname(os.path.realpath(__file__)) + '/Exercises.json') as f:
         data = json.load(f)
 
     if (active_exercises == 100):
-        exercise_list = data
+        # print(data)
+        for exercise in data:
+            if exercise['group'] == category or category == 'All':
+                exercise_list.append(exercise)
+        
 
     liftrecord2 = LiftRecord2(user=request.user)
     if request.method == 'POST' and 'form_submit' in request.POST:
@@ -140,12 +155,14 @@ def exercises(request, active_exercises=0):
         else:
             messages.error(request, "Please re-enter valid information.", extra_tags='danger')
     form = Lift2Form()
+    filter_form = ExerciseFilterForm()
     data = LiftRecord2.objects.filter(user = request.user).order_by('-date')
     context = {
         'exercises': exercise_list,
         'title': 'Exercises',
         'active_exercise': active_exercises, #exercise_list[0].group,
         'form' : form,
+        'filter': filter_form,
         'lifts' : data,
     }
 

@@ -26,8 +26,12 @@ def login2(request, user):
 
 @login_required
 def profile(request):
+    try:
+        profile = request.user.profile
+    except Profile.DoesNotExist:
+        profile = Profile(user=request.user)
     if request.method == 'POST' and 'form_submit' in request.POST:
-        profForm = ProfileForm(request.POST)
+        profForm = ProfileForm(request.POST, instance = profile)
         if profForm.is_valid():
             stillValid = True
             if profForm.cleaned_data['daily_cal_in'] < 0:
@@ -52,17 +56,31 @@ def profile(request):
                 messages.error(request, "Please enter a valid weight.", extra_tags='danger')
                 stillValid = False
             if stillValid:
-                prof = Profile(daily_cal_in=profForm.cleaned_data['daily_cal_in'],daily_carbs=profForm.cleaned_data['daily_carbs'],daily_fat=profForm.cleaned_data['daily_fat'],
-                    daily_protein=profForm.cleaned_data['daily_protein'],goal_weight_change=profForm.cleaned_data['goal_weight_change'],activity_level=profForm.cleaned_data['activity_level'],
-                    current_weight=profForm.cleaned_data['current_weight'],user=request.user)
-                prof.save()
+                profForm.save()
                 messages.success(request, "Successfully updated profile!", extra_tags='success')
         else:
             messages.error(request, "Please reenter valid information.", extra_tags='danger')
     form = ProfileForm()
+    data = Profile.objects.filter(user = request.user)
+    calories = carbs = fats = protein = goalWeight = currWeight = activity = {}
+    for e in data:
+        calories = e.daily_cal_in
+        carbs = e.daily_carbs
+        fats = e.daily_fat
+        protein = e.daily_protein
+        activity = e.activity_level
+        goalWeight = e.goal_weight_change
+        currWeight = e.current_weight
     context = {
         'loggedIn': False,
         'form': form,
+        'calories' : calories,
+        'carbs' : carbs,
+        'fats' : fats,
+        'protein' : protein,
+        'activity' : activity,
+        'goalWeight' : goalWeight,
+        'currWeight' : currWeight,
     }
     if request.user.is_authenticated:
         context['loggedIn'] = True

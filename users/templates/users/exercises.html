@@ -1,3 +1,4 @@
+{% load crispy_forms_tags %}
 {% load static %}
 <!DOCTYPE html>
 <html lang="zxx">
@@ -56,13 +57,52 @@
         <div class="container">
             <div class="row">
                 <div class="col-lg-6">
+
+
+                    <form method="POST">
+                        {% csrf_token %}
+                        <fieldset class="form-group">
+                            <legend class="border-bottom mb-4">Get Jacked!</legend>
+                            {{form|crispy}}
+                        </fieldset>
+                        <div class="form-group">
+                            <button class="btn btn-outline-info" type="submit" name="form_submit">Log</button>
+                        </div>
+                        <div>
+                            <table class="table">
+                                <thead>
+                                  <tr>
+                                    <th scope="col">name</th>
+                                    <th scope='col'>weight</th>
+                                    <th scope="col">sets</th>
+                                    <th scope="col">reps</th>
+                                    <th scope="col">date</th>
+                                  </tr>
+                                </thead>
+                                <tbody>
+                                    {% for info in lifts %}
+                                        <tr>
+                                            <th scope="row">{{info.name}}</th>
+                                            <td>{{info.weight}} lbs</td>
+                                            <td>{{info.sets}} sets</td>
+                                            <td>{{info.reps}} reps</td>
+                                            <td>{{info.date}} date</td>
+                                        </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </form>
+
+
                     <div class="about-pic">
                         <img src="{% static 'img/exercise-filler.jpg' %}" alt="">
                     </div>
                 </div>
                 <div class="col-lg-6">
+
                     <div class="about-text">
-                        <h2 style="color:white;" >Log Your Exercises or Find New Ones!</h2>
+                        <h2 style="color:white;" >Excercise Log</h2>
                         <p class="first-para" style="color:white;">We are a group of College Students studying Computer Science at the University of Florida. 
                             We all share a strong passion for both mental and physical health/fitness, as well as helping others upgrade and become the best versions of themselves.
                         </p>    
@@ -79,8 +119,8 @@
     <!-- About Section End -->
 
     {% block body %}
-    <h1 class="header pb-0 mb-0 pl-0" style="text-align: left;">Exercise Catalog</h1>
-    <p class="text-muted">Get inspired and build your next workout from our extensive library of workouts.</p>
+    <h1 class="header pb-0 mb-0 pl-0" style="text-align: left;">Exercise List</h1>
+    <p class="text-muted">Check out our extensive list of workouts and log your favorites to your profile!</p>
     <hr>
     <div>
 
@@ -89,12 +129,11 @@
         <div>
             <div class="header">
                 <div class="exercises-box-text">
-                    <h1 class="title">On your marks... Get set... Go!</h1></br>
-                    <h3 class="subtitle">Select a muscle group or exercise category to get started</h3>
-                    <h6 class="subtitle">or click below to see the full list:</h3></br></br>
+                    <h3 class="subtitle">Select a category</h3>
+                    <h6 class="subtitle">Click below to see the full list:</h3></br></br>
                     <form action='100' method='POST'>
                         {% csrf_token %}
-                        <Button class="btn btn-default btn-lg">See full list</Button>  
+                        <Button class="btn btn-default btn-lg">Full List</Button>  
                     </form>
                 </div>
             </div>
@@ -103,13 +142,13 @@
         {% else %}
             <div class="exercises-box-overflow">
             <!--Alert message-->
-            {% if messages %}
+            <!-- {% if messages %}
                 {% for message in messages %}
                     <div class="alert alert-{{ message.tags }}" role="alert">
                         {{ message }}
                     </div>
                 {% endfor %}
-            {% endif %}
+            {% endif %} -->
                 <h5 style="padding-left: 10px;">Recommended exercises: </h5>
                 {% for exercise in exercises %}
                     <div class="exercise">                     

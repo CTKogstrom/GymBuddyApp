@@ -3,10 +3,17 @@ from django.contrib import messages
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth import authenticate, logout, login
 from django.contrib.auth.decorators import login_required
+from django.utils import timezone
+from django.utils.timezone import now, localtime
 import json, os
 from .forms import UserRegisterForm
 from .forms import ProfileForm
+from .forms import WeightForm
+from .forms import Lift2Form
 from .models import Profile
+from .models import WeightRecord
+from .models import LiftRecord2
+
 
 def register(request):
     if request.method == 'POST':
@@ -59,7 +66,7 @@ def profile(request):
                 profForm.save()
                 messages.success(request, "Successfully updated profile!", extra_tags='success')
         else:
-            messages.error(request, "Please reenter valid information.", extra_tags='danger')
+            messages.error(request, "Please re-enter valid information.", extra_tags='danger')
     form = ProfileForm()
     data = Profile.objects.filter(user = request.user)
     calories = carbs = fats = protein = goalWeight = currWeight = activity = {}
@@ -71,6 +78,14 @@ def profile(request):
         activity = e.activity_level
         goalWeight = e.goal_weight_change
         currWeight = e.current_weight
+    weightList = []
+    weights = WeightRecord.objects.filter(user=request.user).order_by('-date')
+    for e in weights:
+        weightList.append(e)
+
+    #delete current weight later
+    if len(weightList) != 0:
+        currWeight = weightList[0].lbs
     context = {
         'loggedIn': False,
         'form': form,
@@ -88,7 +103,20 @@ def profile(request):
 
 @login_required
 def weight(request):
-    return render(request, 'users/weight.html')
+    weightrecord = WeightRecord(user=request.user)
+    if request.method == 'POST' and 'form_submit' in request.POST:
+        lbForm = WeightForm(request.POST, instance = weightrecord)
+        if lbForm.is_valid():
+            lbForm.save()
+        else:
+            messages.error(request, "Please re-enter valid information.", extra_tags='danger')
+    form = WeightForm()
+    data = WeightRecord.objects.filter(user = request.user).order_by('-date')
+    context = {
+        'form' : form,
+        'weights' : data,
+    }
+    return render(request, 'users/weight.html', context)
   
 @login_required
 def macros(request):
@@ -104,12 +132,26 @@ def exercises(request, active_exercises=0):
     if (active_exercises == 100):
         exercise_list = data
 
+    liftrecord2 = LiftRecord2(user=request.user)
+    if request.method == 'POST' and 'form_submit' in request.POST:
+        liftForm = Lift2Form(request.POST, instance = liftrecord2)
+        if liftForm.is_valid():
+            liftForm.save()
+        else:
+            messages.error(request, "Please re-enter valid information.", extra_tags='danger')
+    form = Lift2Form()
+    data = LiftRecord2.objects.filter(user = request.user).order_by('-date')
     context = {
-            'exercises': exercise_list,
-            'title': 'Exercises',
-            'active_exercise': active_exercises, #exercise_list[0].group,
+        'exercises': exercise_list,
+        'title': 'Exercises',
+        'active_exercise': active_exercises, #exercise_list[0].group,
+        'form' : form,
+        'lifts' : data,
     }
+
     return render(request, 'users/exercises.html', context)
+
+
 
 @login_required
 def meals(request):

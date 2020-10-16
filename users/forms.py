@@ -17,7 +17,7 @@ class ProfileForm(forms.ModelForm):
         model = Profile
         #we probably want to change the labels of the fields on the front end
         #example: daily_cal_in = forms.IntegerField(label="Daily Calories")
-        fields = ['daily_cal_in', 'daily_carbs', 'daily_fat', 'daily_protein', 'goal_weight_change','activity_level','current_weight']
+        fields = ['daily_cal_in', 'daily_carbs', 'daily_fat', 'daily_protein','starting_weight', 'goal_weight_change','activity_level']
 
 class WeightForm(forms.ModelForm):
     class Meta:
@@ -28,3 +28,6 @@ class Lift2Form(forms.ModelForm):
     class Meta:
         model = LiftRecord2
         fields = ['name','weight', 'sets', 'reps', 'date']
+
+class OptionForm(forms.Form):
+    optionName = forms.ChoiceField()

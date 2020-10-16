@@ -10,9 +10,12 @@ from .forms import UserRegisterForm
 from .forms import ProfileForm
 from .forms import WeightForm
 from .forms import Lift2Form
+from .forms import OptionForm
 from .models import Profile
 from .models import WeightRecord
 from .models import LiftRecord2
+import io, matplotlib, urllib, base64
+import matplotlib.pyplot as plt
 
 
 def register(request):
@@ -56,11 +59,11 @@ def profile(request):
             if profForm.cleaned_data['goal_weight_change'] < 0:
                 messages.error(request, "Please enter a valid weight.", extra_tags='danger')
                 stillValid = False
+            if profForm.cleaned_data['starting_weight'] < 0:
+                messages.error(request, "Please enter a valid weight.", extra_tags='danger')
+                stillValid = False
             if profForm.cleaned_data['activity_level'] < 0:
                 messages.error(request, "Please enter a valid activity level.", extra_tags='danger')
-                stillValid = False
-            if profForm.cleaned_data['current_weight'] < 0:
-                messages.error(request, "Please enter a valid weight.", extra_tags='danger')
                 stillValid = False
             if stillValid:
                 profForm.save()
@@ -68,22 +71,79 @@ def profile(request):
         else:
             messages.error(request, "Please re-enter valid information.", extra_tags='danger')
     form = ProfileForm()
+   
+    #retrieve data in profile
     data = Profile.objects.filter(user = request.user)
-    calories = carbs = fats = protein = goalWeight = currWeight = activity = {}
+    calories = carbs = fats = protein = goalWeight = currWeight = activity = starting_weight = {}
     for e in data:
         calories = e.daily_cal_in
         carbs = e.daily_carbs
         fats = e.daily_fat
         protein = e.daily_protein
         activity = e.activity_level
+        startingWeight = e.starting_weight
         goalWeight = e.goal_weight_change
-        currWeight = e.current_weight
+
+    #create graph for weight
     weightList = []
+    dateList = []
+    lbsList = []
     weights = WeightRecord.objects.filter(user=request.user).order_by('-date')
     for e in weights:
         weightList.append(e)
+        lbsList.append(e.lbs)
+        dateList.append(e.date)
+    matplotlib.use('Agg')
+    plt.plot(dateList, lbsList, marker='D', markersize=5)
+    for i in range (0,len(lbsList)):
+        plt.annotate(lbsList[i], (dateList[i], lbsList[i]), ha="center")
+    plt.title('Weight Record')
+    plt.xlabel('Date')
+    plt.ylabel('Weight (lbs)')
+    weightFig = plt.gcf()
+    weightBuf = io.BytesIO()
+    weightFig.savefig(weightBuf, format='png')
+    weightBuf.seek(0)
+    string = base64.b64encode(weightBuf.read())
+    weightGraph = urllib.parse.quote(string)
+    plt.close()
 
-    #delete current weight later
+    #create graph for lifts
+    exerciseNames = []
+    exercises = LiftRecord2.objects.filter(user=request.user).order_by('-name')
+    for e in exercises:
+        if not e.name.lower().title() in exerciseNames:
+           exerciseNames.append(e.name.lower().title())
+    print(exerciseNames)
+    chosenName = ""
+    if request.method == 'POST' and 'option_submit' in request.POST:
+        if request.POST.get('exercise', False):
+            chosenName = request.POST['exercise']
+    
+    print(chosenName)
+
+    chosenList = []
+    date2List = []
+    exercisesFiltered = LiftRecord2.objects.filter(user=request.user).order_by('-date')
+    for e in exercisesFiltered:
+        if e.name.lower().title() == chosenName:
+            chosenList.append(e.weight)
+            date2List.append(e.date)
+    matplotlib.use('Agg')
+    plt.plot(date2List, chosenList, marker='D', markersize=5)
+    for i in range (0,len(chosenList)):
+        plt.annotate(chosenList[i], (date2List[i], chosenList[i]), ha="center")
+    plt.title(chosenName.title() + ' Record')
+    plt.xlabel('Date')
+    plt.ylabel('Weight (lbs)')
+    strengthFig = plt.gcf()
+    strengthBuf = io.BytesIO()
+    strengthFig.savefig(strengthBuf, format='png')
+    strengthBuf.seek(0)
+    string = base64.b64encode(strengthBuf.read())
+    strengthGraph = urllib.parse.quote(string)
+    plt.close()
+
     if len(weightList) != 0:
         currWeight = weightList[0].lbs
     context = {
@@ -94,8 +154,12 @@ def profile(request):
         'fats' : fats,
         'protein' : protein,
         'activity' : activity,
+        'startingWeight' : startingWeight,
         'goalWeight' : goalWeight,
         'currWeight' : currWeight,
+        'weightGraph': weightGraph,
+        'exerciseNames' : exerciseNames,
+        'strengthGraph' : strengthGraph,
     }
     if request.user.is_authenticated:
         context['loggedIn'] = True

@@ -10,9 +10,9 @@ class Profile(models.Model):
     daily_carbs = models.IntegerField()
     daily_fat = models.IntegerField()
     daily_protein = models.IntegerField()
+    starting_weight = models.IntegerField()
     goal_weight_change = models.IntegerField()
     activity_level = models.DecimalField(max_digits=2, decimal_places=1)
-    current_weight = models.IntegerField()
 
     def __str__(self):
         return f'{self.user.username} Profile'
@@ -39,5 +39,6 @@ class LiftRecord2(models.Model):
     sets = models.IntegerField(blank=True, null=True)
     reps = models.IntegerField(blank=True, null=True)
     date = models.DateField(default=timezone.now)
+
 
 

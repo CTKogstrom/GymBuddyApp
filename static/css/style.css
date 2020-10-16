@@ -430,29 +430,6 @@ ul, ol {
 .classes-slider {
 	margin: 0;
 }
-.classes-slider.owl-carousel .owl-dots {
-	text-align: center;
-	margin-top: 12px;
-}
-.classes-slider.owl-carousel .owl-dots button {
-	width: 9px;
-	height: 9px;
-	display: inline-block;
-	background: #ebebeb;
-	border-radius: 50%;
-	margin-right: 10px;
-	-webkit-transition: 0.5s;
-	-o-transition: 0.5s;
-	transition: 0.5s;
-}
-.classes-slider.owl-carousel .owl-dots button.owl-dot.active {
-	width: 42px;
-	border-radius: 50px;
-	background: #f67831;
-}
-.classes-slider.owl-carousel .owl-dots button:last-child {
-	margin-right: 0;
-}
 .classes-slider .col-lg-4 {
 	max-width: 100%;
 }
@@ -596,23 +573,6 @@ ul, ol {
 }
 .testimonial-section .section-title {
 	margin-bottom: 35px;
-}
-.testimonial-slider.owl-carousel .owl-item img {
-	display: inline-block;
-}
-.testimonial-slider.owl-carousel .owl-nav button {
-	font-size: 36px;
-	color: #bdbdbd;
-	position: absolute;
-	left: -110px;
-	top: 30%;
-}
-.testimonial-slider.owl-carousel .owl-nav button:hover {
-	color: #ed8064;
-}
-.testimonial-slider.owl-carousel .owl-nav button.owl-next {
-	left: auto;
-	right: -110px;
 }
 .testimonial-slider .testimonial-item {
 	text-align: center;
@@ -1674,12 +1634,6 @@ ul, ol {
 		-ms-transform: translate(-225px, -155px);
 		transform: translate(-225px, -155px);
 	}
-	.testimonial-slider.owl-carousel .owl-nav button {
-		left: -95px;
-	}
-	.testimonial-slider.owl-carousel .owl-nav button.owl-next {
-		right: -95px;
-	}
 	.about-counter-text .single-counter {
 		margin-right: 110px;
 	}
@@ -1750,12 +1704,6 @@ ul, ol {
 		margin: 16px 0px 16px 0px;
 		width: 145px;
 	}
-	.testimonial-slider.owl-carousel .owl-nav button {
-		left: -25px;
-	}
-	.testimonial-slider.owl-carousel .owl-nav button.owl-next {
-		right: -25px;
-	}
 	.about-counter-text .single-counter {
 		margin-right: 30px;
 	}
@@ -1806,12 +1754,6 @@ ul, ol {
 	}
 	.services-pic img {
 		height: auto;
-	}
-	.testimonial-slider.owl-carousel .owl-nav button {
-		left: -10px;
-	}
-	.testimonial-slider.owl-carousel .owl-nav button.owl-next {
-		right: -10px;
 	}
 	.footer-banner-item:after {
 		width: 450px;
@@ -1864,14 +1806,6 @@ ul, ol {
 	}
 	.bd-text .tag-share .social-share {
 		float: none;
-	}
-	.testimonial-slider.owl-carousel .owl-nav {
-		text-align: center;
-		padding-top: 20px;
-	}
-	.testimonial-slider.owl-carousel .owl-nav button {
-		position: relative;
-		margin: 0 5px;
 	}
 }
 /* Small Mobile: 320px */

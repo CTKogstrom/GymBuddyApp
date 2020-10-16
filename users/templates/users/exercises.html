@@ -16,6 +16,11 @@
         rel="stylesheet">
     
     <!-- Css Styles -->
+    <!-- <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}" type="text/css"> 
+    <link rel="stylesheet" href="{% static 'css/font-awesome.min.css' %}" type="text/css">
+    <link rel="stylesheet" href="{% static 'css/owl.carousel.min.css' %}" type="text/css">
+    <link rel="stylesheet" href="{% static 'css/magnific-popup.css' %}" type="text/css">
+    <link rel="stylesheet" href="{% static 'css/slicknav.min.css' %}" type="text/css"> -->
     <link rel="stylesheet" href="{% static 'css/style.css' %}" type="text/css"> 
 </head>
 
@@ -61,82 +66,75 @@
                             {{form|crispy}}
                         </fieldset>
                         <div class="form-group">
-                            <button class="btn btn-outline-info" type="submit" name="form_submit">Log</button>
-                        </div>
-                        <div>
-                            <table class="table">
-                                <thead>
-                                  <tr>
-                                    <th scope="col">name</th>
-                                    <th scope='col'>weight</th>
-                                    <th scope="col">sets</th>
-                                    <th scope="col">reps</th>
-                                    <th scope="col">date</th>
-                                  </tr>
-                                </thead>
-                                <tbody>
-                                    {% for info in lifts %}
-                                        <tr>
-                                            <th scope="row">{{info.name}}</th>
-                                            <td>{{info.weight}} lbs</td>
-                                            <td>{{info.sets}} sets</td>
-                                            <td>{{info.reps}} reps</td>
-                                            <td>{{info.date}} date</td>
-                                        </tr>
-                                    {% endfor %}
-                                </tbody>
-                            </table>
+                            <button class="primary-btn" type="submit" name="form_submit">Log</button>
                         </div>
                     </form>
-
-
-                    <div class="about-pic">
-                        <img src="{% static 'img/exercise-filler.jpg' %}" alt="">
-                    </div>
                 </div>
-                <div class="col-lg-6">
+                <!-- <div class="col-lg-6"> -->
 
-                    <div class="about-text">
-                        <h2 style="color:white;" >Excercise Log</h2>
-                        <p class="first-para" style="color:white;">We are a group of College Students studying Computer Science at the University of Florida. 
-                            We all share a strong passion for both mental and physical health/fitness, as well as helping others upgrade and become the best versions of themselves.
-                        </p>    
-                        <p class="second-para" style="color:white;">In the past, we have all shared similar struggles in finding a coherent application to track various aspects of our health. 
-                            Therefore, we decided to come together and create an "all in one" application that tracks bodyweight, lifts, macros, and calories, suggest workout plans and caloric intake per day,
-                            and more all personalized to the individual!
-                        </p>
-                        <a href="#" class="primary-btn">Log</a>
-                    </div>
-                </div>
+                    <!-- <div>
+                    <h2 class="log-text" >Excercise List</h2>
+                    <p class="text-muted">Check out our extensive list of workouts and log your favorites to your profile!</p>
+                    </div> -->
+                <!-- </div> -->
             </div>
         </div>
     </section>
     <!-- About Section End -->
 
     {% block body %}
-    <h1 class="header pb-0 mb-0 pl-0" style="text-align: left;">Exercise List</h1>
+    <h2 class="log-text" >Excercise List</h2>
     <p class="text-muted">Check out our extensive list of workouts and log your favorites to your profile!</p>
-    <hr>
+
+    
     <div>
 
         <!--Display exercise welcome message-->
-        <div class="exercises-box-overflow">
-            <h5 style="padding-left: 10px;">Recommended exercises: </h5>
-            {% for exercise in exercises %}
-                <div class="exercise">                     
-                    <img src="/static/exerciseImages/{{exercise.image_link}}" class="exercise-image">
-                    <p class="exercise-text" style="margin-bottom: 5px;">
-                        <!--Pending: populate exercise log with selected exercise-->
-                        
-                        <strong>{{exercise.name}}</strong></br>
-                        <em style="font-size: 80%;">Category: {{exercise.group}}</em></br>
-                    </p>   
-                    <p class="exercise-text">
-                        {{exercise.description}}
-                    </p>                      
+        {% if not active_exercise %}
+        <div>
+            <div class="header">
+                <div class="exercises-box-text">
+                    <h3 class="subtitle">Select a category</h3>
+                    <h6 class="subtitle">Click below to see the full list:</h3></br></br>
+                    <form action='100' method='POST'>
+                        {% csrf_token %}
+                        <Button class="btn btn-default btn-lg">Full List</Button>  
+                    </form>
                 </div>
-            {% endfor %}
+            </div>
         </div>
+        <!--Display exercise list-->
+        {% else %}
+            <div class="exercises-box-overflow">
+            <!--Alert message-->
+            <!-- {% if messages %}
+                {% for message in messages %}
+                    <div class="alert alert-{{ message.tags }}" role="alert">
+                        {{ message }}
+                    </div>
+                {% endfor %}
+            {% endif %} -->
+            <form method='POST' action="{{filter.get_category_display}}">
+                {% csrf_token %}
+                {{filter|crispy}}
+                <Button class="btn btn-default btn-lg" type="submit" name="form_submit">Filter</Button>  
+            </form>
+                {% for exercise in exercises %}
+                    <div class="exercise">                     
+                        <img src="/static/exerciseImages/{{exercise.image_link}}" class="exercise-image">
+                        <p class="exercise-text" style="margin-bottom: 5px;">
+                            <!--Pending: populate exercise log with selected exercise-->
+                            <!-- <strong>{{filter.get_category_display}}</strong></br> -->
+                            <strong>{{exercise.name}}</strong></br>
+                            <em style="font-size: 80%;">Category: {{exercise.group}}</em></br>
+                        </p>   
+                        <p class="exercise-text">
+                            {{exercise.description}}
+                        </p>                      
+                    </div>
+                {% endfor %}
+            </div>
+        {% endif %}
     </div>
     {% endblock body %}
 

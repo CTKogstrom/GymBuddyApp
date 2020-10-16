@@ -15,11 +15,6 @@
         rel="stylesheet">
     
     <!-- Css Styles -->
-    <!-- <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}" type="text/css"> 
-    <link rel="stylesheet" href="{% static 'css/font-awesome.min.css' %}" type="text/css">
-    <link rel="stylesheet" href="{% static 'css/owl.carousel.min.css' %}" type="text/css">
-    <link rel="stylesheet" href="{% static 'css/magnific-popup.css' %}" type="text/css">
-    <link rel="stylesheet" href="{% static 'css/slicknav.min.css' %}" type="text/css"> -->
     <link rel="stylesheet" href="{% static 'css/style.css' %}" type="text/css"> 
 </head>
 
@@ -63,15 +58,35 @@
                 <div class="col-lg-6">
                     <div class="about-text">
                         <h2 style="color:white;" >Find New Meals To Fit Your Goals!</h2>
-                        <p class="first-para" style="color:white;">We are a group of College Students studying Computer Science at the University of Florida. 
-                            We all share a strong passion for both mental and physical health/fitness, as well as helping others upgrade and become the best versions of themselves.
-                        </p>    
-                        <p class="second-para" style="color:white;">In the past, we have all shared similar struggles in finding a coherent application to track various aspects of our health. 
-                            Therefore, we decided to come together and create an "all in one" application that tracks bodyweight, lifts, macros, and calories, suggest workout plans and caloric intake per day,
-                            and more all personalized to the individual!
-                        </p>
-                        <a href="#" class="primary-btn">Find</a>
-                    </div>
+                        <div class="meal-box-overflow">
+                            {% for key, value in meals.items %}
+                                <div class="meal">                     
+                                    <img src="/static/mealImages/{{meal.image_link}}" class="meal-image">
+                                    <p class="meal-text" style="margin-bottom: 5px;">
+                                        <!--Pending: populate meal log with selected meal-->
+                                        <h2 strong style="color:white;">{{value.name}}</strong></br>
+                                    </p>   
+                                    <h4 style="color:white;"> Tags: </h4>
+                                    <p style="color:black;" class="meal-text">
+                                        {% for i in value.tags %}
+                                            {{i}}
+                                        {% endfor %}
+                                    </p>
+                                    <h4 style="color:white;" >Instructions: </h4>
+                                    <p style="color:black;" class="meal-text">
+                                        {{value.instructions}}
+                                    </p>
+                                    <h4 style="color:white;" >Ingredients: </h4>
+                                    <p style="color:black;" class="meal-text">
+                                        {% for i in value.ingredients %}
+                                            {{i}}
+                                            <p></p>
+                                        {% endfor %}
+                                    </p>
+                                </div>
+                            {% endfor %}
+                        </div>
+                    <a href="#" class="primary-btn">Find</a>
                 </div>
             </div>
         </div>
@@ -117,14 +132,6 @@
     </footer>
     <!-- Footer Section End -->
 
-    <!-- Js Plugins -->
-    <!-- <script src="{% static 'js/jquery-3.3.1.min.js' %}"></script>
-    <script src="{% static 'js/bootstrap.min.js' %}"></script>
-    <script src="{% static 'js/jquery.magnific-popup.min.js' %}"></script>
-    <script src="{% static 'js/mixitup.min.js' %}"></script>
-    <script src="{% static 'js/jquery.slicknav.js' %}"></script>
-    <script src="{% static 'js/owl.carousel.min.js' %}"></script>
-    <script src="{% static 'js/main.js' %}"></script> -->
 </body>
 
 </html>

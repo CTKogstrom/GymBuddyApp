@@ -16,11 +16,6 @@
         rel="stylesheet">
     
     <!-- Css Styles -->
-    <!-- <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}" type="text/css"> 
-    <link rel="stylesheet" href="{% static 'css/font-awesome.min.css' %}" type="text/css">
-    <link rel="stylesheet" href="{% static 'css/owl.carousel.min.css' %}" type="text/css">
-    <link rel="stylesheet" href="{% static 'css/magnific-popup.css' %}" type="text/css">
-    <link rel="stylesheet" href="{% static 'css/slicknav.min.css' %}" type="text/css"> -->
     <link rel="stylesheet" href="{% static 'css/style.css' %}" type="text/css"> 
 </head>
 
@@ -125,47 +120,23 @@
     <div>
 
         <!--Display exercise welcome message-->
-        {% if not active_exercise %}
-        <div>
-            <div class="header">
-                <div class="exercises-box-text">
-                    <h3 class="subtitle">Select a category</h3>
-                    <h6 class="subtitle">Click below to see the full list:</h3></br></br>
-                    <form action='100' method='POST'>
-                        {% csrf_token %}
-                        <Button class="btn btn-default btn-lg">Full List</Button>  
-                    </form>
+        <div class="exercises-box-overflow">
+            <h5 style="padding-left: 10px;">Recommended exercises: </h5>
+            {% for exercise in exercises %}
+                <div class="exercise">                     
+                    <img src="/static/exerciseImages/{{exercise.image_link}}" class="exercise-image">
+                    <p class="exercise-text" style="margin-bottom: 5px;">
+                        <!--Pending: populate exercise log with selected exercise-->
+                        
+                        <strong>{{exercise.name}}</strong></br>
+                        <em style="font-size: 80%;">Category: {{exercise.group}}</em></br>
+                    </p>   
+                    <p class="exercise-text">
+                        {{exercise.description}}
+                    </p>                      
                 </div>
-            </div>
+            {% endfor %}
         </div>
-        <!--Display exercise list-->
-        {% else %}
-            <div class="exercises-box-overflow">
-            <!--Alert message-->
-            <!-- {% if messages %}
-                {% for message in messages %}
-                    <div class="alert alert-{{ message.tags }}" role="alert">
-                        {{ message }}
-                    </div>
-                {% endfor %}
-            {% endif %} -->
-                <h5 style="padding-left: 10px;">Recommended exercises: </h5>
-                {% for exercise in exercises %}
-                    <div class="exercise">                     
-                        <img src="/static/exerciseImages/{{exercise.image_link}}" class="exercise-image">
-                        <p class="exercise-text" style="margin-bottom: 5px;">
-                            <!--Pending: populate exercise log with selected exercise-->
-                            
-                            <strong>{{exercise.name}}</strong></br>
-                            <em style="font-size: 80%;">Category: {{exercise.group}}</em></br>
-                        </p>   
-                        <p class="exercise-text">
-                            {{exercise.description}}
-                        </p>                      
-                    </div>
-                {% endfor %}
-            </div>
-        {% endif %}
     </div>
     {% endblock body %}
 

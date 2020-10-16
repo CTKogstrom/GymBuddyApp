@@ -259,14 +259,13 @@ def macros(request):
     return render(request, 'users/macros.html', context)
     
 @login_required
-def exercises(request, active_exercises=0):
+def exercises(request):
     exercise_list = []
 
     with open(os.path.dirname(os.path.realpath(__file__)) + '/Exercises.json') as f:
         data = json.load(f)
 
-    if (active_exercises == 100):
-        exercise_list = data
+    exercise_list = data
 
     liftrecord2 = LiftRecord2(user=request.user)
     if request.method == 'POST' and 'form_submit' in request.POST:
@@ -280,7 +279,6 @@ def exercises(request, active_exercises=0):
     context = {
         'exercises': exercise_list,
         'title': 'Exercises',
-        'active_exercise': active_exercises, #exercise_list[0].group,
         'form' : form,
         'lifts' : data,
     }
@@ -291,5 +289,18 @@ def exercises(request, active_exercises=0):
 
 @login_required
 def meals(request):
-    return render(request, 'users/meals.html')
+    meal_dict = {}
+
+    with open(os.path.dirname(os.path.realpath(__file__)) + '/Meals.json') as f:
+        data = json.load(f)
+
+    meal_dict = data
+
+    # data = LiftRecord2.objects.filter(user = request.user).order_by('-date')
+    context = {
+        'meals': meal_dict,
+        'title': 'Meals',
+    }
+
+    return render(request, 'users/meals.html', context)
 

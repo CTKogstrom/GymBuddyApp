@@ -240,5 +240,18 @@ def exercises(request, active_exercises=0):
 
 @login_required
 def meals(request):
-    return render(request, 'users/meals.html')
+    meal_dict = {}
+
+    with open(os.path.dirname(os.path.realpath(__file__)) + '/Meals.json') as f:
+        data = json.load(f)
+
+    meal_dict = data
+
+    # data = LiftRecord2.objects.filter(user = request.user).order_by('-date')
+    context = {
+        'meals': meal_dict,
+        'title': 'Meals',
+    }
+
+    return render(request, 'users/meals.html', context)
 

@@ -48,5 +48,3 @@ class Food(models.Model):
     protein = models.IntegerField()
     calories = models.IntegerField(default=0)
     date = models.DateField(default=timezone.now)
-
-

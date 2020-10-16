@@ -150,5 +150,6 @@ def exercises(request, active_exercises=0):
 
 @login_required
 def meals(request):
-    return render(request, 'users/meals.html')
+    model  =
+    return render(request, 'users/meals.html', context)
 

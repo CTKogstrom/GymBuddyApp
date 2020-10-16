@@ -6,7 +6,7 @@ from django.utils import timezone
 class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     profile_picture = models.ImageField(default='default.jpg', upload_to='profile_pics')
-    daily_cal_in = models.IntegerField()
+    Daily_Calories = models.IntegerField()
     daily_carbs = models.IntegerField()
     daily_fat = models.IntegerField()
     daily_protein = models.IntegerField()

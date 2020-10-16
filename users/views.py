@@ -18,6 +18,8 @@ from .models import LiftRecord2
 from .models import Food
 import io, matplotlib, urllib, base64
 import matplotlib.pyplot as plt
+import datetime
+from dateutil.parser import parse
 
 
 def register(request):
@@ -146,6 +148,52 @@ def profile(request):
     strengthGraph = urllib.parse.quote(string)
     plt.close()
 
+    #create pie chart for daily macros
+    foodDates = []
+    foods = Food.objects.filter(user=request.user).order_by('-date')
+    for e in foods:
+        if not e.date in foodDates:
+           foodDates.append(e.date)
+    print(foodDates)
+    chosenDate = ""
+    titleDate = ""
+    if request.method == 'POST' and 'date_submit' in request.POST:
+        if request.POST.get('date', False):
+            chosenDate = request.POST['date']
+            titleDate = chosenDate
+            chosenDate = chosenDate.replace(".", "")
+            chosenDate = datetime.datetime.strptime(str(parse(chosenDate)), '%Y-%m-%d %H:%M:%S').strftime("%Y-%m-%d")
+
+    percentages = [0,0,0]
+    totalCal = 0
+    macroLabels = 'Carbohydrates','Fats','Protein'
+    fig3 = plt.figure(figsize =(10, 7)) 
+    if chosenDate != "":
+        foodsFiltered = Food.objects.filter(user=request.user,date=chosenDate)
+        for e in foodsFiltered:
+            print(chosenDate)
+            print("matches")
+            print(e.date)
+            percentages[0] += e.carbs
+            percentages[1] += e.fats
+            percentages[2] += e.protein
+            totalCal += e.calories
+            print(e.calories)
+        plt.pie(percentages, labels = macroLabels, autopct='%1.1f%%', shadow=True, startangle=90)
+    totalCalStr = ""
+    if titleDate != "":
+        totalCalStr = "Total Calories: " + str(totalCal)
+    plt.title("Macro Distribution " + str(titleDate) +"\n" + totalCalStr)
+    macroFig = plt.gcf()
+    macroBuf = io.BytesIO()
+    macroFig.savefig(macroBuf, format='png')
+    macroBuf.seek(0)
+    string = base64.b64encode(macroBuf.read())
+    macroGraph = urllib.parse.quote(string)
+    matplotlib.use('Agg')
+    plt.close()
+
+
     if len(weightList) != 0:
         currWeight = weightList[0].lbs
     context = {
@@ -162,6 +210,8 @@ def profile(request):
         'weightGraph': weightGraph,
         'exerciseNames' : exerciseNames,
         'strengthGraph' : strengthGraph,
+        'foodDates' : foodDates,
+        'macroGraph' : macroGraph,
     }
     if request.user.is_authenticated:
         context['loggedIn'] = True
@@ -200,6 +250,7 @@ def macros(request):
         fatCal = 9 * e.fats
         proteinCal = 4 * e.protein
         e.calories = carbCal + fatCal + proteinCal
+        e.save()
     context = {
         'form' : form,
         'foods' : data,

@@ -4,6 +4,7 @@ from django.contrib.auth.forms import UserCreationForm
 from .models import Profile
 from .models import WeightRecord
 from .models import LiftRecord2
+from .models import Food
 
 class UserRegisterForm(UserCreationForm):
     email = forms.EmailField()
@@ -28,6 +29,11 @@ class Lift2Form(forms.ModelForm):
     class Meta:
         model = LiftRecord2
         fields = ['name','weight', 'sets', 'reps', 'date']
+
+class FoodForm(forms.ModelForm):
+    class Meta:
+        model = Food
+        fields = ['name','carbs', 'fats', 'protein', 'date']
 
 class OptionForm(forms.Form):
     optionName = forms.ChoiceField()

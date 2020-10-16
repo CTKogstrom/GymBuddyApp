@@ -11,9 +11,11 @@ from .forms import ProfileForm
 from .forms import WeightForm
 from .forms import Lift2Form
 from .forms import OptionForm
+from .forms import FoodForm
 from .models import Profile
 from .models import WeightRecord
 from .models import LiftRecord2
+from .models import Food
 import io, matplotlib, urllib, base64
 import matplotlib.pyplot as plt
 
@@ -184,7 +186,26 @@ def weight(request):
   
 @login_required
 def macros(request):
-    return render(request, 'users/macros.html')
+    food = Food(user=request.user)
+    if request.method == 'POST' and 'form_submit' in request.POST:
+        foodForm = FoodForm(request.POST, instance = food)
+        if foodForm.is_valid():
+            foodForm.save()
+        else:
+            messages.error(request, "Please re-enter valid information.", extra_tags='danger')
+    form = FoodForm()
+    data = Food.objects.filter(user = request.user).order_by('-date')
+    for e in data:
+        carbCal = 4 * e.carbs
+        fatCal = 9 * e.fats
+        proteinCal = 4 * e.protein
+        e.calories = carbCal + fatCal + proteinCal
+    context = {
+        'form' : form,
+        'foods' : data,
+    }
+
+    return render(request, 'users/macros.html', context)
     
 @login_required
 def exercises(request, active_exercises=0):

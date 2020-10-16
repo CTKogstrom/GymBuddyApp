@@ -40,5 +40,13 @@ class LiftRecord2(models.Model):
     reps = models.IntegerField(blank=True, null=True)
     date = models.DateField(default=timezone.now)
 
+class Food(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    name = models.CharField(max_length=100)
+    carbs = models.IntegerField()
+    fats = models.IntegerField()
+    protein = models.IntegerField()
+    calories = models.IntegerField(default=0)
+    date = models.DateField(default=timezone.now)
 
 

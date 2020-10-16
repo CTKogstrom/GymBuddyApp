@@ -125,7 +125,7 @@ def macros(request):
     return render(request, 'users/macros.html')
     
 @login_required
-def exercises(request):
+def exercises(request, active_exercises=0):
     exercise_list = []
     category = 'All'
     if request.method == 'POST':
@@ -140,10 +140,11 @@ def exercises(request):
     with open(os.path.dirname(os.path.realpath(__file__)) + '/Exercises.json') as f:
         data = json.load(f)
 
+    if (active_exercises == 100):
         # print(data)
-    for exercise in data:
-        if exercise['group'] == category or category == 'All':
-            exercise_list.append(exercise)
+        for exercise in data:
+            if exercise['group'] == category or category == 'All':
+                exercise_list.append(exercise)
         
 
     liftrecord2 = LiftRecord2(user=request.user)
@@ -159,6 +160,7 @@ def exercises(request):
     context = {
         'exercises': exercise_list,
         'title': 'Exercises',
+        'active_exercise': active_exercises, #exercise_list[0].group,
         'form' : form,
         'filter': filter_form,
         'lifts' : data,

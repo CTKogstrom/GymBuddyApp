@@ -28,3 +28,6 @@ class Lift2Form(forms.ModelForm):
     class Meta:
         model = LiftRecord2
         fields = ['name','weight', 'sets', 'reps', 'date']
+
+class OptionForm(forms.Form):
+    optionName = forms.ChoiceField()

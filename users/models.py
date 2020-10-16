@@ -41,3 +41,4 @@ class LiftRecord2(models.Model):
     date = models.DateField(default=timezone.now)
 
 
+

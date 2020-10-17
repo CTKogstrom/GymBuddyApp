@@ -2,9 +2,12 @@ from django import forms
 from django.contrib.auth.models import User
 from django.contrib.auth.forms import UserCreationForm
 from .models import Profile
+<<<<<<< Updated upstream
 from .models import WeightRecord
 from .models import LiftRecord2
 from .models import Food
+=======
+>>>>>>> Stashed changes
 
 class UserRegisterForm(UserCreationForm):
     email = forms.EmailField()
@@ -12,6 +15,7 @@ class UserRegisterForm(UserCreationForm):
     class Meta:
         model = User
         fields = ['username', 'email', 'password1', 'password2']
+<<<<<<< Updated upstream
 
 class ProfileForm(forms.ModelForm):
     class Meta:
@@ -37,3 +41,5 @@ class FoodForm(forms.ModelForm):
 
 class OptionForm(forms.Form):
     optionName = forms.ChoiceField()
+=======
+>>>>>>> Stashed changes

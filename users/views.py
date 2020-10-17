@@ -10,6 +10,7 @@ from .forms import UserRegisterForm
 from .forms import ProfileForm
 from .forms import WeightForm
 from .forms import Lift2Form
+from .forms import ExerciseFilterForm
 from .forms import OptionForm
 from .forms import FoodForm
 from .models import Profile
@@ -20,6 +21,7 @@ import io, matplotlib, urllib, base64
 import matplotlib.pyplot as plt
 import datetime
 from dateutil.parser import parse
+
 
 
 def register(request):
@@ -261,11 +263,24 @@ def macros(request):
 @login_required
 def exercises(request):
     exercise_list = []
+    category = 'All'
+    if request.method == 'POST':
+        filter_form = ExerciseFilterForm(request.POST)
+        if filter_form.is_valid():
+            category = filter_form.cleaned_data['category']
+            print(category)
 
+        
+
+    filter_form = ExerciseFilterForm({'category': category})
     with open(os.path.dirname(os.path.realpath(__file__)) + '/Exercises.json') as f:
         data = json.load(f)
 
-    exercise_list = data
+        # print(data)
+    for exercise in data:
+        if exercise['group'] == category or category == 'All':
+            exercise_list.append(exercise)
+        
 
     liftrecord2 = LiftRecord2(user=request.user)
     if request.method == 'POST' and 'form_submit' in request.POST:
@@ -275,11 +290,13 @@ def exercises(request):
         else:
             messages.error(request, "Please re-enter valid information.", extra_tags='danger')
     form = Lift2Form()
+    filter_form = ExerciseFilterForm()
     data = LiftRecord2.objects.filter(user = request.user).order_by('-date')
     context = {
         'exercises': exercise_list,
         'title': 'Exercises',
         'form' : form,
+        'filter': filter_form,
         'lifts' : data,
     }
 

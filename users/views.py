@@ -272,7 +272,7 @@ def exercises(request):
 
         
 
-    filter_form = ExerciseFilterForm({'category': category})
+    filter_form = ExerciseFilterForm(initial={'category': category})
     with open(os.path.dirname(os.path.realpath(__file__)) + '/Exercises.json') as f:
         data = json.load(f)
 
@@ -290,7 +290,7 @@ def exercises(request):
         else:
             messages.error(request, "Please re-enter valid information.", extra_tags='danger')
     form = Lift2Form()
-    filter_form = ExerciseFilterForm()
+    # filter_form = ExerciseFilterForm()
     data = LiftRecord2.objects.filter(user = request.user).order_by('-date')
     context = {
         'exercises': exercise_list,

@@ -29,6 +29,41 @@
                 </div>
             {% endif %}
         </form>
+        <div>
+            <p class="card-text">
+            <img src="data:image/png;base64,{{ weightGraph }}" width="100%">
+            </p>
+        </div>
+        <form method="POST" action="/profile/">{% csrf_token %}
+            <label for="colorSelect">Select an Exercise</label>
+                <select type="text" class="form-control" name="exercise" id ="exercise">
+                    <option selected disabled>---------</option>
+                    {% for exercise in exerciseNames %}
+                        <option value="{{ exercise }}"> {{exercise}}</option> 
+                    {% endfor %}
+                </select>
+            <Button class="btn btn-outline-secondary form-control" name="option_submit" type="submit">Select</Button>
+        </form>
+        <div>
+            <p class="card-text">
+            <img src="data:image/png;base64,{{ strengthGraph }}" width="100%">
+            </p>
+        </div>
+        <form method="POST" action="/profile/">{% csrf_token %}
+            <label for="colorSelect">Select a Date</label>
+                <select type="text" class="form-control" name="date" id ="date">
+                    <option selected disabled>---------</option>
+                    {% for date in foodDates %}
+                        <option value="{{ date }}"> {{date}}</option> 
+                    {% endfor %}
+                </select>
+            <Button class="btn btn-outline-secondary form-control" name="date_submit" type="submit">Select</Button>
+        </form>
+        <div>
+            <p class="card-text">
+            <img src="data:image/png;base64,{{ macroGraph }}" width="100%">
+            </p>
+        </div>
         <div class="border-top pt-3">
         </div>
     </div>

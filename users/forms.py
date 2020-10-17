@@ -4,6 +4,7 @@ from django.contrib.auth.forms import UserCreationForm
 from .models import Profile
 from .models import WeightRecord
 from .models import LiftRecord2
+from .models import Food
 
 WORKOUT_CATEGORIES = [
     ('All', 'All'),
@@ -50,3 +51,11 @@ class Lift2Form(forms.ModelForm):
 
 class ExerciseFilterForm(forms.Form):
     category = forms.CharField(label='Filter by Category: ', widget=forms.Select(choices = WORKOUT_CATEGORIES))
+    
+class FoodForm(forms.ModelForm):
+    class Meta:
+        model = Food
+        fields = ['name','carbs', 'fats', 'protein', 'date']
+
+class OptionForm(forms.Form):
+    optionName = forms.ChoiceField()

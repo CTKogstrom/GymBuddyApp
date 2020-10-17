@@ -10,7 +10,7 @@ from .forms import UserRegisterForm
 from .forms import ProfileForm
 from .forms import WeightForm
 from .forms import Lift2Form
-from .forms import ExerciseFilterForm
+from .forms import ExerciseFilterForm, MealFilterForm
 from .forms import OptionForm
 from .forms import FoodForm
 from .models import Profile
@@ -21,6 +21,7 @@ import io, matplotlib, urllib, base64
 import matplotlib.pyplot as plt
 import datetime
 from dateutil.parser import parse
+from activityLibrary.models import Exercise, Recipe
 
 
 
@@ -79,7 +80,7 @@ def profile(request):
     form = ProfileForm()
    
     #retrieve data in profile
-    data = Profile.objects.filter(user = request.user)
+    data = Profile.objects.filter(user=request.user_id)
     calories = carbs = fats = protein = goalWeight = currWeight = activity = starting_weight = {}
     for e in data:
         calories = e.daily_cal_in
@@ -273,13 +274,11 @@ def exercises(request):
         
 
     filter_form = ExerciseFilterForm({'category': category})
-    with open(os.path.dirname(os.path.realpath(__file__)) + '/Exercises.json') as f:
-        data = json.load(f)
 
-        # print(data)
-    for exercise in data:
-        if exercise['group'] == category or category == 'All':
-            exercise_list.append(exercise)
+    if category == 'All':
+        exercise_list = Exercise.objects.all()
+    else:
+        exercise_list= Exercise.objects.filter(category=category)
         
 
     liftrecord2 = LiftRecord2(user=request.user)
@@ -306,17 +305,24 @@ def exercises(request):
 
 @login_required
 def meals(request):
-    meal_dict = {}
+    meal_list = []
+    category = 'All'
+    if request.method == 'POST':
+        filter_form = MealFilterForm(request.POST)
+        if filter_form.is_valid():
+            category = filter_form.cleaned_data['category']
+            print(category)
 
-    with open(os.path.dirname(os.path.realpath(__file__)) + '/Meals.json') as f:
-        data = json.load(f)
+    filter_form = MealFilterForm({'category': category})
 
-    meal_dict = data
-
-    # data = LiftRecord2.objects.filter(user = request.user).order_by('-date')
+    if category == 'All':
+        meal_list = Recipe.objects.all()
+    else:
+        meal_list = Recipe.objects.filter(category = category)
     context = {
-        'meals': meal_dict,
+        'meals': meal_list,
         'title': 'Meals',
+        'filter' : filter_form,
     }
 
     return render(request, 'users/meals.html', context)

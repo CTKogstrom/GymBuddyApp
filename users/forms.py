@@ -25,6 +25,15 @@ WORKOUT_CATEGORIES = [
     ('Calves', 'Calves'),
 ]
 
+MEAL_CATEGORIES = [
+    ('All', 'All'),
+    ('Breakfast','Breakfast'),
+    ('Lunch','Lunch'),
+    ('Dinner', 'Dinner'),
+    ('Snacks', 'Snacks'),
+    ('Dessert', 'Dessert'),
+]
+
 class UserRegisterForm(UserCreationForm):
     email = forms.EmailField()
 
@@ -51,7 +60,11 @@ class Lift2Form(forms.ModelForm):
 
 class ExerciseFilterForm(forms.Form):
     category = forms.CharField(label='Filter by Category: ', widget=forms.Select(choices = WORKOUT_CATEGORIES))
-    
+
+class MealFilterForm(forms.Form):
+    category = forms.CharField(label='Filter by Category', widget=forms.Select(choices=MEAL_CATEGORIES))
+
+
 class FoodForm(forms.ModelForm):
     class Meta:
         model = Food

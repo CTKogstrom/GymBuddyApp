@@ -1,3 +1,4 @@
+{% load crispy_forms_tags %}
 {% load static %}
 <!DOCTYPE html>
 <html lang="zxx">
@@ -92,6 +93,43 @@
         </div>
     </section>
     <!-- About Section End -->
+    {% block body %}
+    <h2 class="log-text" >Meals List</h2>
+    <p class="text-muted">Check out our extensive list of meals!</p>
+
+
+    <div>
+            <div class="meals-box-overflow">
+            <!--Alert message-->
+            <!--{% if messages %}
+                {% for message in messages %}
+                    <div class="alert alert-{{ message.tags }}" role="alert">
+                        {{ message }}
+                    </div>
+                {% endfor %}
+            {% endif %} -->
+            <form method='POST' action="{{filter.get_category_display}}">
+                {% csrf_token %}
+                {{filter|crispy}}
+                <Button class="btn btn-default btn-lg" type="submit" name="form_submit">Filter</Button>
+            </form>
+                {% for meal in meals %}
+                    <div class="meal">
+                        <img src="/static/media/{{meal.icon}}" class="exercise-image">
+                        <p class="exercise-text" style="margin-bottom: 5px;">
+                            <!--Pending: populate exercise log with selected exercise-->
+                            <!-- <strong>{{filter.get_category_display}}</strong></br> -->
+                            <strong>{{meal.title}}</strong></br>
+                            <em style="font-size: 80%;">Category: {{meal.category}}</em></br>
+                        </p>
+                        <p class="exercise-text">
+                            {{meal.summary}}
+                        </p>
+                    </div>
+                {% endfor %}
+            </div>
+    </div>
+    {% endblock body %}
 
     <!-- Footer Section Begin -->
     <footer class="footer-section">

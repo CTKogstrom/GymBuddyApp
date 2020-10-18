@@ -100,13 +100,13 @@
                 {% for exercise in exercises %}
                     <div class="exercise">                     
                         <img src="/static/exerciseImages/{{exercise.image_link}}" class="exercise-image">
-                        <p class="exercise-text" style="margin-bottom: 5px;">
+                        <p class="exercise-text" style="margin-bottom: 2px;">
                             <!--Pending: populate exercise log with selected exercise-->
                             <!-- <strong>{{filter.get_category_display}}</strong></br> -->
-                            <strong>{{exercise.name}}</strong></br>
-                            <em style="font-size: 80%;">Category: {{exercise.group}}</em></br>
-                        </p>   
-                        <p class="exercise-text">
+                            <h2 strong style="color:white;">{{exercise.name}}</strong></br>
+                        </p>
+                        <h4 style="color:white;"> Category: {{exercise.group}} </h4>   
+                        <p style="color:black;" class="exercise-text">
                             {{exercise.description}}
                         </p>                      
                     </div>

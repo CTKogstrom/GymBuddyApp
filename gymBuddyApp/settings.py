@@ -26,7 +26,7 @@ SECRET_KEY = 'mk5wdvc-7shvd#8xpzo!l0vq&&5xiecbr*9np&q@#cuyonlj#f'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['gymbuddyproject.herokuapp.com']
 
 
 # Application definition

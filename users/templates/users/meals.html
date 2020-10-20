@@ -52,11 +52,6 @@
         <div class="container">
             <div class="row">
                 <div class="col-lg-6">
-                    <div class="about-pic">
-                        <img src="{% static 'img/meals_filler.png' %}" alt="">
-                    </div>
-                </div>
-                <div class="col-lg-6">
                     <div class="about-text">
                         <h2 style="color:white;" >Find New Meals To Fit Your Goals!</h2>
                         <div class="meal-box-overflow">
@@ -65,7 +60,7 @@
                                     <img src="/static/mealImages/{{meal.image_link}}" class="meal-image">
                                     <p class="meal-text" style="margin-bottom: 5px;">
                                         <!--Pending: populate meal log with selected meal-->
-                                        <h2 strong style="color:white;">{{value.name}}</strong></br>
+                                        <h2 style="color:white;">{{value.name}}</h2></br>
                                     </p>   
                                     <h4 style="color:white;"> Tags: </h4>
                                     <p style="color:black;" class="meal-text">
@@ -87,7 +82,6 @@
                                 </div>
                             {% endfor %}
                         </div>
-                    <a href="#" class="primary-btn">Find</a>
                 </div>
             </div>
         </div>

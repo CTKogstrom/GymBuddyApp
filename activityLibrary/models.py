@@ -32,6 +32,14 @@ MEAL_CATEGORIES = [
 ]
 
 
+def get_default_exercise():
+    return Exercise.objects.get_or_create(title='GenericExercise')
+
+
+def get_default_meal():
+    return Recipe.objects.get_or_create(title='GenericRecipe',)
+
+
 class Activity(models.Model):
     title = models.CharField(max_length=100)
     summary = models.TextField()
@@ -45,17 +53,18 @@ class Exercise(Activity):
     def __str__(self):
         return self.title
 
-class ScheduledExercise(Exercise):
-    date = models.DateTimeField(default=timezone.now)
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
 
-    def __str__(self):
-        return self.title
+class ScheduledExercise(models.Model):
+    date = models.DateTimeField(default=timezone.now)
+    user = models.ForeignKey(User, on_delete=models.CASCADE, null=True)
+    exercise = models.ForeignKey(Exercise, on_delete=models.CASCADE, null=True)
+
 
 class Ingredient(models.Model):
     name = models.CharField(max_length=100)
     vegetarian = models.BooleanField()
     vegan = models.BooleanField()
+
 
 class Recipe(Activity):
     calories = models.IntegerField()
@@ -69,11 +78,11 @@ class Recipe(Activity):
     def __str__(self):
         return self.title
 
-class ScheduledMeal(Recipe):
+
+class ScheduledMeal(models.Model):
     date = models.DateTimeField(default=timezone.now)
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
-    
-    def __str__(self):
-        return self.title
+    user = models.ForeignKey(User, on_delete=models.CASCADE,null=True)
+    recipe = models.ForeignKey(Recipe, on_delete=models.CASCADE,null=True)
+
 
 

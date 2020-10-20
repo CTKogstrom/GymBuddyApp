@@ -6,9 +6,7 @@ from django.contrib.auth.decorators import login_required
 from django.utils import timezone
 from django.utils.timezone import now, localtime
 import json, os
-from .forms import UserRegisterForm
-from .forms import ProfileForm
-from .forms import WeightForm
+from .forms import UserRegisterForm, ProfileForm, WeightForm
 from .forms import Lift2Form
 from .forms import ExerciseFilterForm, MealFilterForm
 from .forms import OptionForm
@@ -22,6 +20,7 @@ import matplotlib.pyplot as plt
 import datetime
 from dateutil.parser import parse
 from activityLibrary.models import Exercise, Recipe
+from activityLibrary.forms import ScheduleExerciselForm, ScheduleMealForm
 
 
 
@@ -80,7 +79,7 @@ def profile(request):
     form = ProfileForm()
    
     #retrieve data in profile
-    data = Profile.objects.filter(user=request.user_id)
+    data = Profile.objects.filter(user=request.user.id)
     calories = carbs = fats = protein = goalWeight = currWeight = activity = starting_weight = {}
     for e in data:
         calories = e.daily_cal_in
@@ -271,8 +270,6 @@ def exercises(request):
             category = filter_form.cleaned_data['category']
             print(category)
 
-        
-
     filter_form = ExerciseFilterForm({'category': category})
 
     if category == 'All':
@@ -289,7 +286,6 @@ def exercises(request):
         else:
             messages.error(request, "Please re-enter valid information.", extra_tags='danger')
     form = Lift2Form()
-    filter_form = ExerciseFilterForm()
     data = LiftRecord2.objects.filter(user = request.user).order_by('-date')
     context = {
         'exercises': exercise_list,

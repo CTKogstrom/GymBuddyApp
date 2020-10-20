@@ -14,18 +14,6 @@ class Migration(migrations.Migration):
     ]
 
     operations = [
-        migrations.CreateModel(
-            name='LiftRecord2',
-            fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('name', models.CharField(max_length=100)),
-                ('weight', models.IntegerField(blank=True, null=True)),
-                ('sets', models.IntegerField(blank=True, null=True)),
-                ('reps', models.IntegerField(blank=True, null=True)),
-                ('date', models.DateField(default=django.utils.timezone.now)),
-                ('user', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to=settings.AUTH_USER_MODEL)),
-            ],
-        ),
         migrations.AlterField(
             model_name='profile',
             name='activity_level',

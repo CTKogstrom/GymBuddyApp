@@ -34,7 +34,6 @@ ALLOWED_HOSTS = []
 INSTALLED_APPS = [
     'activityLibrary.apps.ActivitylibraryConfig',
     'users.apps.UsersConfig',
-    'pages.apps.PagesConfig',
     'crispy_forms',
     'django.contrib.admin',
     'django.contrib.auth',
@@ -132,7 +131,7 @@ AUTHENTICATION_BACKENDS = ('django.contrib.auth.backends.ModelBackend',)
 
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
 
-LOGIN_REDIRECT_URL = 'home-page'
+LOGIN_REDIRECT_URL = 'profile'
 
 LOGIN_URL = 'login'
 

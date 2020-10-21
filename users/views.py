@@ -6,21 +6,15 @@ from django.contrib.auth.decorators import login_required
 from django.utils import timezone
 from django.utils.timezone import now, localtime
 import json, os
-from .forms import UserRegisterForm, ProfileForm, WeightForm
-from .forms import Lift2Form
-from .forms import ExerciseFilterForm, MealFilterForm
-from .forms import OptionForm
-from .forms import FoodForm
-from .models import Profile
-from .models import WeightRecord
-from .models import LiftRecord2
-from .models import Food
+from .forms import *
+from .models import *
 import io, matplotlib, urllib, base64
 import matplotlib.pyplot as plt
 import datetime
 from dateutil.parser import parse
 from activityLibrary.models import Exercise, Recipe
 from activityLibrary.forms import ScheduleExerciselForm, ScheduleMealForm
+import pandas as pd
 
 
 
@@ -37,8 +31,10 @@ def register(request):
         form = UserRegisterForm()
     return render(request, 'users/register.html', {'form' : form})
 
+
 def login2(request, user):
     return render(request, 'users/login.html')
+
 
 @login_required
 def profile(request):
@@ -47,7 +43,7 @@ def profile(request):
     except Profile.DoesNotExist:
         profile = Profile(user=request.user)
     if request.method == 'POST' and 'form_submit' in request.POST:
-        profForm = ProfileForm(request.POST, instance = profile)
+        profForm = ProfileForm(request.POST, instance=profile)
         if profForm.is_valid():
             stillValid = True
             if profForm.cleaned_data['daily_cal_in'] < 0:
@@ -76,10 +72,10 @@ def profile(request):
                 messages.success(request, "Successfully updated profile!", extra_tags='success')
         else:
             messages.error(request, "Please re-enter valid information.", extra_tags='danger')
-    form = ProfileForm()
+    form = ProfileForm(instance=request.user.profile)
    
     #retrieve data in profile
-    data = Profile.objects.filter(user=request.user.id)
+    data = Profile.objects.filter(user=request.user)
     calories = carbs = fats = protein = goalWeight = currWeight = activity = starting_weight = {}
     for e in data:
         calories = e.daily_cal_in
@@ -323,3 +319,12 @@ def meals(request):
 
     return render(request, 'users/meals.html', context)
 
+
+def home(request):
+    context = {
+        'loggedIn': False
+    }
+    if request.user.is_authenticated:
+        context['loggedIn'] = True
+
+    return render(request, 'users/home.html', context)

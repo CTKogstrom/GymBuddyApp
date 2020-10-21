@@ -6,20 +6,16 @@ from django.contrib.auth.decorators import login_required
 from django.utils import timezone
 from django.utils.timezone import now, localtime
 import json, os
-from .forms import UserRegisterForm
-from .forms import ProfileForm
-from .forms import WeightForm
-from .forms import Lift2Form
-from .forms import OptionForm
-from .forms import FoodForm
-from .models import Profile
-from .models import WeightRecord
-from .models import LiftRecord2
-from .models import Food
+from .forms import *
+from .models import *
 import io, matplotlib, urllib, base64
 import matplotlib.pyplot as plt
 import datetime
 from dateutil.parser import parse
+from activityLibrary.models import Exercise, Recipe
+from activityLibrary.forms import ScheduleExerciselForm, ScheduleMealForm
+import pandas as pd
+
 
 
 def register(request):
@@ -35,8 +31,10 @@ def register(request):
         form = UserRegisterForm()
     return render(request, 'users/register.html', {'form' : form})
 
+
 def login2(request, user):
     return render(request, 'users/login.html')
+
 
 @login_required
 def profile(request):
@@ -45,7 +43,7 @@ def profile(request):
     except Profile.DoesNotExist:
         profile = Profile(user=request.user)
     if request.method == 'POST' and 'form_submit' in request.POST:
-        profForm = ProfileForm(request.POST, instance = profile)
+        profForm = ProfileForm(request.POST, instance=profile)
         if profForm.is_valid():
             stillValid = True
             if profForm.cleaned_data['daily_cal_in'] < 0:
@@ -74,10 +72,10 @@ def profile(request):
                 messages.success(request, "Successfully updated profile!", extra_tags='success')
         else:
             messages.error(request, "Please re-enter valid information.", extra_tags='danger')
-    form = ProfileForm()
+    form = ProfileForm(instance=request.user.profile)
    
     #retrieve data in profile
-    data = Profile.objects.filter(user = request.user)
+    data = Profile.objects.filter(user=request.user)
     calories = carbs = fats = protein = goalWeight = currWeight = activity = starting_weight = {}
     for e in data:
         calories = e.daily_cal_in
@@ -261,11 +259,20 @@ def macros(request):
 @login_required
 def exercises(request):
     exercise_list = []
+    category = 'All'
+    if request.method == 'POST':
+        filter_form = ExerciseFilterForm(request.POST)
+        if filter_form.is_valid():
+            category = filter_form.cleaned_data['category']
+            print(category)
 
-    with open(os.path.dirname(os.path.realpath(__file__)) + '/Exercises.json') as f:
-        data = json.load(f)
+    filter_form = ExerciseFilterForm({'category': category})
 
-    exercise_list = data
+    if category == 'All':
+        exercise_list = Exercise.objects.all()
+    else:
+        exercise_list= Exercise.objects.filter(category=category)
+        
 
     liftrecord2 = LiftRecord2(user=request.user)
     if request.method == 'POST' and 'form_submit' in request.POST:
@@ -280,6 +287,7 @@ def exercises(request):
         'exercises': exercise_list,
         'title': 'Exercises',
         'form' : form,
+        'filter': filter_form,
         'lifts' : data,
     }
 
@@ -289,18 +297,34 @@ def exercises(request):
 
 @login_required
 def meals(request):
-    meal_dict = {}
+    meal_list = []
+    category = 'All'
+    if request.method == 'POST':
+        filter_form = MealFilterForm(request.POST)
+        if filter_form.is_valid():
+            category = filter_form.cleaned_data['category']
+            print(category)
 
-    with open(os.path.dirname(os.path.realpath(__file__)) + '/Meals.json') as f:
-        data = json.load(f)
+    filter_form = MealFilterForm({'category': category})
 
-    meal_dict = data
-
-    # data = LiftRecord2.objects.filter(user = request.user).order_by('-date')
+    if category == 'All':
+        meal_list = Recipe.objects.all()
+    else:
+        meal_list = Recipe.objects.filter(category = category)
     context = {
-        'meals': meal_dict,
+        'meals': meal_list,
         'title': 'Meals',
+        'filter' : filter_form,
     }
 
     return render(request, 'users/meals.html', context)
 
+
+def home(request):
+    context = {
+        'loggedIn': False
+    }
+    if request.user.is_authenticated:
+        context['loggedIn'] = True
+
+    return render(request, 'users/home.html', context)

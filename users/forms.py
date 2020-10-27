@@ -8,21 +8,16 @@ from .models import Food
 
 WORKOUT_CATEGORIES = [
     ('All', 'All'),
-    ('Cardio', 'Cardio'),
-    ('Chest', 'Chest'),
-    ('Abdominals', 'Abdominals'),
-    ('Obliques', 'Obliques'),
-    ('Lats', 'Lats'),
-    ('Trapezius', 'Trapezius'),
-    ('Shoulders', 'Shoulders'),
-    ('Triceps', 'Triceps'),
+    ('Abs', 'Abs'),
     ('Biceps', 'Biceps'),
-    ('Forearms', 'Forearms'),
-    ('Hips', 'Hips'),
-    ('Buttocks', 'Buttocks'),
-    ('Quads', 'Quads'),
-    ('Hamstrings', 'Hamstrigns'),
+    ('Butt/Hip', 'Butt/Hip'),
     ('Calves', 'Calves'),
+    ('Chest', 'Chest'),
+    ('Lats', 'Lats'),
+    ('Shoulders', 'Shoulders'),
+    ('Trapezius', 'Trapezius'),
+    ('Triceps', 'Triceps'),
+    ('Quads', 'Quads'),
 ]
 
 class UserRegisterForm(UserCreationForm):

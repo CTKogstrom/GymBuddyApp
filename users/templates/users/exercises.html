@@ -99,16 +99,16 @@
             </form>
                 {% for exercise in exercises %}
                     <div class="exercise">                     
-                        <img src="/static/exerciseImages/{{exercise.image_link}}" class="exercise-image">
+                        <img src={{exercise.img}} class="exercise-image">
                         <p class="exercise-text" style="margin-bottom: 2px;">
                             <!--Pending: populate exercise log with selected exercise-->
                             <!-- <strong>{{filter.get_category_display}}</strong></br> -->
                             <h2 strong style="color:white;">{{exercise.name}}</strong></br>
                         </p>
-                        <h4 style="color:white;"> Category: {{exercise.group}} </h4>   
-                        <p style="color:black;" class="exercise-text">
-                            {{exercise.description}}
-                        </p>                      
+                        <h4 style="color:white;"> Category: {{exercise.category}} </h4> 
+                        <h4 style="color:white;"> Equipment: {{exercise.equipment}} </h4> 
+                        <a href = {{exercise.description_link}}>Description Link</a>
+                                            
                     </div>
                 {% endfor %}
             </div>

@@ -424,4 +424,3 @@ def meals(request):
     }
 
     return render(request, 'users/meals.html', context)
-

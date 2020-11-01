@@ -13,11 +13,13 @@ from .forms import Lift2Form
 from .forms import ExerciseFilterForm
 from .forms import OptionForm
 from .forms import FoodForm
+from .forms import SingleFood
 from .models import Profile
 from .models import WeightRecord
 from .models import LiftRecord2
 from .models import Food
 import io, matplotlib, urllib, base64
+import re
 import matplotlib.pyplot as plt
 import datetime
 from dateutil.parser import parse
@@ -253,10 +255,54 @@ def weight(request):
   
 @login_required
 def macros(request):
+    foodName = ""
+    foodDate = ""
+    display = False
+    if request.method == 'POST' and 'form2_submit' in request.POST:
+        display = True
+        singleFood = SingleFood(request.POST)
+        if singleFood.is_valid():
+            foodName = singleFood.cleaned_data['foodName'].capitalize()
+            foodDate = singleFood.cleaned_data['date']
+        else:
+            messages.error(request, "Please re-enter valid information.", extra_tags='danger')        
+        print(foodName)
+
+        # URL = "https://www.acefitness.org/education-and-resources/lifestyle/exercise-library/body-part/abs/"
+        r = requests.get("https://www.myfitnesspal.com/food/search?page=1&search="+str(foodName)) 
+
+        soup = BeautifulSoup(r.content, 'html5lib') # If this line causes an error, run 'pip install html5lib' or install html5lib 
+        print("hi")
+        if soup.find('div', attrs = {"class": "jss16"}) == None:
+            print("rip")
+        else:
+            macroData = soup.find('div', attrs = {"class": "jss16"}).text
+            servingSize = soup.find('div', attrs = {"class": "jss11"}).text
+            servingSize = servingSize[servingSize.find(",")+2:]
+            macroList = re.findall(r'[0-9]+', macroData) 
+            print(macroData)
+            print(macroList)
+            print(servingSize)
+            print("Calories: " + str(macroList[0]))
+            print("Carbs: " + str(macroList[1]))
+            print("Fat: " + str(macroList[2]))
+            print("Protein: " + str(macroList[3]))
+            food2 = Food(user=request.user)
+            food2.name = foodName
+            food2.calories = macroList[0]
+            food2.carbs = macroList[1]
+            food2.fats = macroList[2]
+            food2.protein = macroList[3]
+            food2.date = foodDate
+            food2.save()
+    form2 = SingleFood()
+           
+            
     food = Food(user=request.user)
     if request.method == 'POST' and 'form_submit' in request.POST:
         foodForm = FoodForm(request.POST, instance = food)
         if foodForm.is_valid():
+            food.name = foodForm.cleaned_data['name'].capitalize()
             foodForm.save()
         else:
             messages.error(request, "Please re-enter valid information.", extra_tags='danger')
@@ -270,7 +316,9 @@ def macros(request):
         e.save()
     context = {
         'form' : form,
+        'form2': form2,
         'foods' : data,
+        'display' : display,
     }
 
     return render(request, 'users/macros.html', context)

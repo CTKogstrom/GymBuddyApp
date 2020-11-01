@@ -62,33 +62,38 @@
                             <div class="form-group">
                                 <button class="btn btn-outline-info" type="submit" name="form_submit">Log</button>
                             </div>
-                            <div>
-                                <table class="table">
-                                    <thead>
-                                      <tr>
-                                        <th scope="col">Food</th>
-                                        <th scope="col">Carbs</th>
-                                        <th scope="col">Fats</th>
-                                        <th scope="col">Protein</th>
-                                        <th scope="col">Calories</th>
-                                        <th scope="col">Date</th>
-                                      </tr>
-                                    </thead>
-                                    <tbody>
-                                        {% for food in foods %}
-                                            <tr>
-                                                <th scope="row">{{food.name}}</th>
-                                                <td style="text-align: center">{{food.carbs}}</td>
-                                                <td style="text-align: center">{{food.fats}}</td>
-                                                <td style="text-align: center">{{food.protein}}</td>
-                                                <td style="text-align: center">{{food.calories}}</td>
-                                                <td style="text-align: center">{{food.date}}</td>
-                                            </tr>
-                                        {% endfor %}
-                                    </tbody>
-                                </table>
-                            </div>
                         </form>
+                        <form method="POST">
+                            {% csrf_token %}
+                            {{form2|crispy}}
+                            <button class="btn btn-outline-info" type="submit" name="form2_submit">Add</button>
+                        </form>  
+                        <div>
+                            <table class="table">
+                                <thead>
+                                    <tr>
+                                    <th scope="col">Food</th>
+                                    <th scope="col">Carbs</th>
+                                    <th scope="col">Fats</th>
+                                    <th scope="col">Protein</th>
+                                    <th scope="col">Calories</th>
+                                    <th scope="col">Date</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for food in foods %}
+                                        <tr>
+                                            <th scope="row">{{food.name}}</th>
+                                            <td style="text-align: center">{{food.carbs}}</td>
+                                            <td style="text-align: center">{{food.fats}}</td>
+                                            <td style="text-align: center">{{food.protein}}</td>
+                                            <td style="text-align: center">{{food.calories}}</td>
+                                            <td style="text-align: center">{{food.date}}</td>
+                                        </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
                         <div class="col-lg-6">
                             <div class="about-pic">
                                 <img src="{% static 'img/Macro-Graphic.png' %}" alt="">

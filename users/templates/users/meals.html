@@ -1,4 +1,3 @@
-{% load crispy_forms_tags %}
 {% load static %}
 <!DOCTYPE html>
 <html lang="zxx">
@@ -52,6 +51,11 @@
         <div class="container">
             <div class="row">
                 <div class="col-lg-6">
+                    <div class="about-pic">
+                        <img src="{% static 'img/meals_filler.png' %}" alt="">
+                    </div>
+                </div>
+                <div class="col-lg-6">
                     <div class="about-text">
                         <h2 style="color:white;" >Find New Meals To Fit Your Goals!</h2>
                         <div class="meal-box-overflow">
@@ -60,7 +64,7 @@
                                     <img src="/static/mealImages/{{meal.image_link}}" class="meal-image">
                                     <p class="meal-text" style="margin-bottom: 5px;">
                                         <!--Pending: populate meal log with selected meal-->
-                                        <h2 style="color:white;">{{value.name}}</h2></br>
+                                        <h2 strong style="color:white;">{{value.name}}</strong></br>
                                     </p>   
                                     <h4 style="color:white;"> Tags: </h4>
                                     <p style="color:black;" class="meal-text">
@@ -82,48 +86,12 @@
                                 </div>
                             {% endfor %}
                         </div>
+                    <a href="#" class="primary-btn">Find</a>
                 </div>
             </div>
         </div>
     </section>
     <!-- About Section End -->
-    {% block body %}
-    <h2 class="log-text" >Meals List</h2>
-    <p class="text-muted">Check out our extensive list of meals!</p>
-
-
-    <div>
-            <div class="meals-box-overflow">
-            <!--Alert message-->
-            <!--{% if messages %}
-                {% for message in messages %}
-                    <div class="alert alert-{{ message.tags }}" role="alert">
-                        {{ message }}
-                    </div>
-                {% endfor %}
-            {% endif %} -->
-            <form method='POST' action="{{filter.get_category_display}}">
-                {% csrf_token %}
-                {{filter|crispy}}
-                <Button class="btn btn-default btn-lg" type="submit" name="form_submit">Filter</Button>
-            </form>
-                {% for meal in meals %}
-                    <div class="meal">
-                        <img src="/static/media/{{meal.icon}}" class="exercise-image">
-                        <p class="exercise-text" style="margin-bottom: 5px;">
-                            <!--Pending: populate exercise log with selected exercise-->
-                            <!-- <strong>{{filter.get_category_display}}</strong></br> -->
-                            <strong>{{meal.title}}</strong></br>
-                            <em style="font-size: 80%;">Category: {{meal.category}}</em></br>
-                        </p>
-                        <p class="exercise-text">
-                            {{meal.summary}}
-                        </p>
-                    </div>
-                {% endfor %}
-            </div>
-    </div>
-    {% endblock body %}
 
     <!-- Footer Section Begin -->
     <footer class="footer-section">

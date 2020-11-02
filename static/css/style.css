@@ -342,6 +342,14 @@ ul, ol {
 	font-weight: 700;
 	margin-bottom: 25px;
 }
+
+.log-text{
+	font-size: 40px;
+	text-transform: uppercase;
+	font-weight: 700;
+	color:white;
+}
+
 .about-text p {
 	color: #6b6b6b;
 }

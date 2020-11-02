@@ -85,7 +85,7 @@
     <div>
             <div class="exercises-box-overflow">
             <!--Alert message-->
-            <!--{% if messages %}
+            <!-- {% if messages %}
                 {% for message in messages %}
                     <div class="alert alert-{{ message.tags }}" role="alert">
                         {{ message }}
@@ -99,16 +99,16 @@
             </form>
                 {% for exercise in exercises %}
                     <div class="exercise">                     
-                        <img src="/static/media/{{exercise.icon}}" class="exercise-image">
-                        <p class="exercise-text" style="margin-bottom: 5px;">
+                        <img src={{exercise.img}} class="exercise-image">
+                        <p class="exercise-text" style="margin-bottom: 2px;">
                             <!--Pending: populate exercise log with selected exercise-->
                             <!-- <strong>{{filter.get_category_display}}</strong></br> -->
-                            <strong>{{exercise.title}}</strong></br>
-                            <em style="font-size: 80%;">Category: {{exercise.category}}</em></br>
-                        </p>   
-                        <p class="exercise-text">
-                            {{exercise.summary}}
-                        </p>                      
+                            <h2 strong style="color:white;">{{exercise.name}}</strong></br>
+                        </p>
+                        <h4 style="color:white;"> Category: {{exercise.category}} </h4> 
+                        <h4 style="color:white;"> Equipment: {{exercise.equipment}} </h4> 
+                        <a href = {{exercise.description_link}}>Description Link</a>
+                                            
                     </div>
                 {% endfor %}
             </div>

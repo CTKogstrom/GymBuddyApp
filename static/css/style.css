@@ -226,7 +226,67 @@ ul, ol {
   Header
 -----------------------*/
 
-
+.header-section {
+	position: absolute;
+	left: 0;
+	top: 0;
+	width: 100%;
+	border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+}
+.logo {
+	float: left;
+}
+.logo a {
+	display: inline-block;
+	padding: 24px 0 29px;
+}
+.nav-menu {
+	float: right;
+}
+.nav-menu .mainmenu {
+	display: inline-block;
+}
+.nav-menu .mainmenu ul li {
+	list-style: none;
+	display: inline-block;
+	margin-right: 27px;
+}
+.nav-menu .mainmenu ul li.active a:after {
+	opacity: 1;
+}
+.nav-menu .mainmenu ul li a {
+	font-size: 18px;
+	color: #ffffff;
+	font-weight: 600;
+	padding: 28px 0;
+	position: relative;
+}
+.nav-menu .mainmenu ul li a:hover:after {
+	opacity: 1;
+}
+.nav-menu .mainmenu ul li a:after {
+	position: absolute;
+	left: 0;
+	bottom: 24px;
+	width: 100%;
+	height: 2px;
+	background: #f15d44;
+	content: "";
+	opacity: 0;
+	-webkit-transition: all 0.3s;
+	-o-transition: all 0.3s;
+	transition: all 0.3s;
+}
+.nav-menu .signup-btn {
+	display: inline-block;
+	margin: 16px 0px 16px 30px;
+}
+.nav-menu .signup-btn:after {
+	opacity: 0;
+}
+.slicknav_menu {
+	display: none;
+}
 /*---------------------
   Hero Section
 -----------------------*/

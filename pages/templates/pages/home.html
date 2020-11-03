@@ -33,7 +33,7 @@
                     <img src="{% static 'img/logo2.png' %}" alt="">
                 </a>
             </div>
-            <div class="nav-menu" style="margin-top: 50px;">
+            <div class="nav-menu" style="margin-top: 45px;">
                 <nav class="mainmenu mobile-menu" >
                     <ul>
                         <li class="active"><a href="/home">Home</a></li>
@@ -58,18 +58,22 @@
     <!-- Header End -->
     
     <!-- About Section Begin -->
-    <section class="about-section spad">
+    <section class="about-section spad" style="margin-top: 50px;">
         <div class="container">
             <div class="row">
+                <img src="{% static 'img/about-pic.jpg' %}" alt="" style=" margin-top: 20px; float: left; margin-left: 50px; margin-right: 50px;">
+                <div class="col-lg-6" style="float: right; margin-left: 50px;">
+                </div>
+                
                 <div class="col-lg-6">
                     <div class="about-pic">
-                        <img src="{% static 'img/about-pic.jpg' %}" alt="">
+                        <!-- <img src="{% static 'img/about-pic.jpg' %}" alt="" > -->
                         <a href="https://www.youtube.com/watch?v=s3oDv6M6Fb0&feature=youtu.be&ab_channel=RyanAhmed" class="play-btn video-popup">
                             <img src="{% static 'img/play.png' %}" alt="">
                         </a>
                     </div>
                 </div>
-                <div class="col-lg-6">
+                <div class="col-lg-6" >
                     <div class="about-text">
                         <h2 style="color:white;" >Story About Us </h2>
                         <p class="first-para" style="color:white;">We are a group of College Students studying Computer Science at the University of Florida. 
@@ -79,7 +83,6 @@
                             Therefore, we decided to come together and create an "all in one" application that tracks bodyweight, lifts, macros, and calories, suggest workout plans and caloric intake per day,
                             and more all personalized to the individual!
                         </p>
-                        <a href="#" class="primary-btn">Read More</a>
                     </div>
                 </div>
             </div>

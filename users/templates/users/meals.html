@@ -59,32 +59,22 @@
                     <div class="about-text">
                         <h2 style="color:white;" >Find New Meals To Fit Your Goals!</h2>
                         <div class="meal-box-overflow">
-                            {% for key, value in meals.items %}
-                                <div class="meal">                     
-                                    <img src="/static/mealImages/{{meal.image_link}}" class="meal-image">
-                                    <p class="meal-text" style="margin-bottom: 5px;">
-                                        <!--Pending: populate meal log with selected meal-->
-                                        <h2 strong style="color:white;">{{value.name}}</strong></br>
-                                    </p>   
-                                    <h4 style="color:white;"> Tags: </h4>
-                                    <p style="color:black;" class="meal-text">
-                                        {% for i in value.tags %}
-                                            {{i}}
-                                        {% endfor %}
+                           {% for recipe in meals %}
+                                <div class="exercise">
+                                    <p class="exercise-text" style="margin-bottom: 2px;">
+                                        <!--Pending: populate exercise log with selected exercise-->
+                                        <!-- <strong>{{filter.get_category_display}}</strong></br> -->
+                                        <h2 strong style="color:white;">{{recipe.title}}</strong></br>
                                     </p>
-                                    <h4 style="color:white;" >Instructions: </h4>
-                                    <p style="color:black;" class="meal-text">
-                                        {{value.instructions}}
-                                    </p>
-                                    <h4 style="color:white;" >Ingredients: </h4>
-                                    <p style="color:black;" class="meal-text">
-                                        {% for i in value.ingredients %}
-                                            {{i}}
-                                            <p></p>
-                                        {% endfor %}
-                                    </p>
+                                    <h4 style="color:white;"> Serving: {{recipe.Serving}} </h4>
+                                    <h4 style="color:white;"> Calories: {{recipe.Calories}} </h4>
+                                    <h4 style="color:white;"> Carbs: {{recipe.Carbohydrates}} </h4>
+                                    <h4 style="color:white;"> Protein: {{recipe.Protein}} </h4>
+                                    <h4 style="color:white;"> Fat: {{recipe.Fat}} </h4>
+                                    <a href = {{recipe.link}}>{{recipe.title}}</a>
+
                                 </div>
-                            {% endfor %}
+                {% endfor %}
                         </div>
                     <a href="#" class="primary-btn">Find</a>
                 </div>

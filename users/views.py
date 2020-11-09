@@ -362,16 +362,51 @@ def exercises(request):
 
 @login_required
 def meals(request):
-    meal_dict = {}
 
-    with open(os.path.dirname(os.path.realpath(__file__)) + '/Meals.json') as f:
-        data = json.load(f)
+    URL = 'https://www.skinnytaste.com/recipes/'
+    r = requests.get(URL)
 
-    meal_dict = data
+    soup = BeautifulSoup(r.text, 'lxml')
+    recipe_urls = []
 
-    # data = LiftRecord2.objects.filter(user = request.user).order_by('-date')
+    for tag in soup.find_all('div', class_="archive-post"):
+        link = tag.find('a')
+        recipe_urls.append(link['href'])
+
+    count = 1
+    while count < 2:
+        URL = 'https://www.skinnytaste.com/recipes/page/' + str(count) + '/'
+        r = requests.get(URL)
+        soup = BeautifulSoup(r.text, 'lxml')
+        count += 1
+        for tag in soup.find_all('div', class_="archive-post"):
+            link = tag.find('a')
+            recipe_urls.append(link['href'])
+
+    recipe_dict = {}
+    recipe_list = []
+    nutrition_dict = {}
+    for link in recipe_urls:
+        r = requests.get(link)
+        soup = BeautifulSoup(r.text, 'lxml')
+        top_level = soup.find('div', class_='recipe-nutrition')
+        if top_level:
+            if(nutrition_dict):
+                recipe_list.append(nutrition_dict)
+            nutrition_dict = {}
+            nutrition_dict['title'] = soup.find('div', class_='post-title').find('h1').text
+            nutrition_dict['link'] = link
+            nutrition_dict['course'] = soup.find('span', class_='wprm-recipe-course').text
+            label = top_level.find_all('span', class_='wprm-nutrition-label-text-nutrition-container')
+            for item in label:
+                nutrition_dict[item.find('span', class_='wprm-nutrition-label-text-nutrition-label').text[0:-2]] = \
+                    item.find('span', class_='wprm-nutrition-label-text-nutrition-value').text + ' ' \
+                    + item.find('span', class_='wprm-nutrition-label-text-nutrition-unit').text
+
+
+    #print(recipe_list)
     context = {
-        'meals': meal_dict,
+        'meals': recipe_list,
         'title': 'Meals',
     }
 

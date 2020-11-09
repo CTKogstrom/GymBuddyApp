@@ -45,41 +45,37 @@
         </div>
     </header>
     <!-- Header End -->
-    
-    <!-- About Section Begin -->
+
+
     <section class="about-section spad">
         <div class="container">
-            <div class="row">
-                <div class="col-lg-6">
-                    <div class="about-pic">
-                        <img src="{% static 'img/meals_filler.png' %}" alt="">
-                    </div>
-                </div>
-                <div class="col-lg-6">
-                    <div class="about-text">
+
                         <h2 style="color:white;" >Find New Meals To Fit Your Goals!</h2>
                         <div class="meal-box-overflow">
                            {% for recipe in meals %}
-                                <div class="exercise">
-                                    <p class="exercise-text" style="margin-bottom: 2px;">
-                                        <!--Pending: populate exercise log with selected exercise-->
-                                        <!-- <strong>{{filter.get_category_display}}</strong></br> -->
-                                        <h2 strong style="color:white;">{{recipe.title}}</strong></br>
-                                    </p>
-                                    <h4 style="color:white;"> Serving: {{recipe.Serving}} </h4>
-                                    <h4 style="color:white;"> Calories: {{recipe.Calories}} </h4>
-                                    <h4 style="color:white;"> Carbs: {{recipe.Carbohydrates}} </h4>
-                                    <h4 style="color:white;"> Protein: {{recipe.Protein}} </h4>
-                                    <h4 style="color:white;"> Fat: {{recipe.Fat}} </h4>
+                                <div class="recipes">
+
+                                    <div class = "container">
+                                    <h4>{{recipe.title}}</h4>
+                                    <img src= "{{recipe.img}}" alt = "" width="150" height="200">
+                                    <h5 style="color:white;"> Course Type: {{recipe.course}} </h5>
+                                    <h6 style="color:white;"> Serving: {{recipe.Serving}} </h6>
+                                    <h6 style="color:white;"> Calories: {{recipe.Calories}} </h6>
+                                    <h6 style="color:white;"> Carbs: {{recipe.Carbohydrates}} </h6>
+                                    <h6 style="color:white;"> Protein: {{recipe.Protein}} </h6>
+                                    <h6 style="color:white;"> Fat: {{recipe.Fat}} </h6>
                                     <a href = {{recipe.link}}>{{recipe.title}}</a>
 
+                                    </p>
                                 </div>
+
                 {% endfor %}
                         </div>
                     <a href="#" class="primary-btn">Find</a>
-                </div>
+
             </div>
         </div>
+
     </section>
     <!-- About Section End -->
 

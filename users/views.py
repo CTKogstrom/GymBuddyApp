@@ -23,6 +23,8 @@ import datetime
 from dateutil.parser import parse
 import requests 
 from bs4 import BeautifulSoup
+import cchardet as chardet
+import lxml
 
 URLS = {
     'Abs' : 'https://www.acefitness.org/education-and-resources/lifestyle/exercise-library/body-part/abs/',
@@ -383,12 +385,12 @@ def meals(request):
             link = tag.find('a')
             recipe_urls.append(link['href'])
 
-    recipe_dict = {}
     recipe_list = []
     nutrition_dict = {}
     for link in recipe_urls:
         r = requests.get(link)
         soup = BeautifulSoup(r.text, 'lxml')
+
         top_level = soup.find('div', class_='recipe-nutrition')
         if top_level:
             if(nutrition_dict):
@@ -397,14 +399,19 @@ def meals(request):
             nutrition_dict['title'] = soup.find('div', class_='post-title').find('h1').text
             nutrition_dict['link'] = link
             nutrition_dict['course'] = soup.find('span', class_='wprm-recipe-course').text
+            try:
+                nutrition_dict['img'] = soup.find('h2').find('img')['src']
+            except :
+                nutrition_dict['img'] = ''
             label = top_level.find_all('span', class_='wprm-nutrition-label-text-nutrition-container')
             for item in label:
                 nutrition_dict[item.find('span', class_='wprm-nutrition-label-text-nutrition-label').text[0:-2]] = \
                     item.find('span', class_='wprm-nutrition-label-text-nutrition-value').text + ' ' \
                     + item.find('span', class_='wprm-nutrition-label-text-nutrition-unit').text
+                if item.find('span', class_='wprm-nutrition-label-text-nutrition-label').text[0:-2] == 'Fat':
+                    break
 
 
-    #print(recipe_list)
     context = {
         'meals': recipe_list,
         'title': 'Meals',

@@ -369,22 +369,30 @@ def meals(request):
     r = requests.get(URL)
 
     soup = BeautifulSoup(r.text, 'lxml')
-    recipe_urls = []
+    recipe_list = []
+    recipe_dict = {}
 
     for tag in soup.find_all('div', class_="archive-post"):
-        link = tag.find('a')
-        recipe_urls.append(link['href'])
+        recipe_dict['link'] = tag.find('a')['href']
+        recipe_dict['title'] = tag.find('a')['title']
+        recipe_dict['img'] = tag.find('img')['src']
+        recipe_list.append(recipe_dict)
+        recipe_dict = {}
 
     count = 1
-    while count < 2:
+    while count < 5:
         URL = 'https://www.skinnytaste.com/recipes/page/' + str(count) + '/'
         r = requests.get(URL)
         soup = BeautifulSoup(r.text, 'lxml')
         count += 1
         for tag in soup.find_all('div', class_="archive-post"):
-            link = tag.find('a')
-            recipe_urls.append(link['href'])
+            recipe_dict['link'] = tag.find('a')['href']
+            recipe_dict['title'] = tag.find('a')['title']
+            recipe_dict['img'] = tag.find('img')['src']
+            recipe_list.append(recipe_dict)
+            recipe_dict = {}
 
+    '''
     recipe_list = []
     nutrition_dict = {}
     for link in recipe_urls:
@@ -411,7 +419,7 @@ def meals(request):
                 if item.find('span', class_='wprm-nutrition-label-text-nutrition-label').text[0:-2] == 'Fat':
                     break
 
-
+    '''
     context = {
         'meals': recipe_list,
         'title': 'Meals',

@@ -1,4 +1,5 @@
 {% load static %}
+{% load crispy_forms_tags %}
 <!DOCTYPE html>
 <html lang="zxx">
 
@@ -52,10 +53,17 @@
 
                         <h2 style="color:white;" >Find New Meals To Fit Your Goals!</h2>
                         <div class="meal-box-overflow">
+
+                         <form method='POST' action="{{filter.get_category_display}}">
+                             {% csrf_token %}
+                            {{filter|crispy}}
+                            <Button class="btn btn-default btn-lg" type="submit" name="form_submit">Filter</Button>
+                         </form>
                            {% for recipe in meals %}
                                 <div class="recipes">
 
                                     <div class = "container">
+                                    {{filter.get_category_display}}
                                     <h4>{{recipe.title}}</h4>
                                     <img src= "{{recipe.img}}" alt = "" width="150" height="200">
                                     <h5> <a href = {{recipe.link}}>{{recipe.title}}</a></h5>

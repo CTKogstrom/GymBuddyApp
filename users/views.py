@@ -11,6 +11,7 @@ from .forms import ProfileForm
 from .forms import WeightForm
 from .forms import Lift2Form
 from .forms import ExerciseFilterForm
+from .forms import MealFilterForm
 from .forms import OptionForm
 from .forms import FoodForm
 from .models import Profile
@@ -365,7 +366,17 @@ def exercises(request):
 @login_required
 def meals(request):
 
-    URL = 'https://www.skinnytaste.com/recipes/'
+    category = 'All'
+    if request.method == 'POST':
+        filter_form = MealFilterForm(request.POST)
+        if filter_form.is_valid():
+            category = filter_form.cleaned_data['category']
+
+    if category != 'All':
+        URL = 'https://www.skinnytaste.com/recipes/' + category + '/'
+    else:
+        URL = 'https://www.skinnytaste.com/recipes/'
+
     r = requests.get(URL)
 
     soup = BeautifulSoup(r.text, 'lxml')
@@ -392,37 +403,11 @@ def meals(request):
             recipe_list.append(recipe_dict)
             recipe_dict = {}
 
-    '''
-    recipe_list = []
-    nutrition_dict = {}
-    for link in recipe_urls:
-        r = requests.get(link)
-        soup = BeautifulSoup(r.text, 'lxml')
-
-        top_level = soup.find('div', class_='recipe-nutrition')
-        if top_level:
-            if(nutrition_dict):
-                recipe_list.append(nutrition_dict)
-            nutrition_dict = {}
-            nutrition_dict['title'] = soup.find('div', class_='post-title').find('h1').text
-            nutrition_dict['link'] = link
-            nutrition_dict['course'] = soup.find('span', class_='wprm-recipe-course').text
-            try:
-                nutrition_dict['img'] = soup.find('h2').find('img')['src']
-            except :
-                nutrition_dict['img'] = ''
-            label = top_level.find_all('span', class_='wprm-nutrition-label-text-nutrition-container')
-            for item in label:
-                nutrition_dict[item.find('span', class_='wprm-nutrition-label-text-nutrition-label').text[0:-2]] = \
-                    item.find('span', class_='wprm-nutrition-label-text-nutrition-value').text + ' ' \
-                    + item.find('span', class_='wprm-nutrition-label-text-nutrition-unit').text
-                if item.find('span', class_='wprm-nutrition-label-text-nutrition-label').text[0:-2] == 'Fat':
-                    break
-
-    '''
+    filter_form = MealFilterForm(initial={'category': category})
     context = {
         'meals': recipe_list,
         'title': 'Meals',
+        'filter': filter_form,
     }
 
     return render(request, 'users/meals.html', context)

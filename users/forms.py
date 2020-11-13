@@ -21,6 +21,20 @@ WORKOUT_CATEGORIES = [
     ('Quads', 'Quads'),
 ]
 
+MEAL_CATEGORIES = [
+    ('All', 'All'),
+    ('dinner-recipes', 'Dinner Recipes'),
+    ('dessert', 'Dessert'),
+    ('side-dishes', 'Sides'),
+    ('appetizers', 'Appetizers'),
+    ('breakfast-brunch', 'Breakfast & Brunch'),
+    ('snacks', 'Snacks'),
+    ('lunch', 'Lunch'),
+    ('soup', 'Soup'),
+    ('salad', 'Salad'),
+    ('drinks', 'Drinks'),
+    ]
+
 class UserRegisterForm(UserCreationForm):
     email = forms.EmailField()
 
@@ -59,3 +73,6 @@ class SingleFood(forms.Form):
 
 class OptionForm(forms.Form):
     optionName = forms.ChoiceField()
+
+class MealFilterForm(forms.Form):
+    category = forms.CharField(label='Filter by Meal Type: ', widget=forms.Select(choices = MEAL_CATEGORIES))

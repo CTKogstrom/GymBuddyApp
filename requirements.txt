@@ -27,3 +27,5 @@ reqests==20.24.0
 urllib3==1.25.11
 webencodings==0.5.1
 whitenoise==5.2.0
+cchardet==2.1.7
+lxml==4.6.1

@@ -11,6 +11,7 @@ from .forms import ProfileForm
 from .forms import WeightForm
 from .forms import Lift2Form
 from .forms import ExerciseFilterForm
+from .forms import MealFilterForm
 from .forms import OptionForm
 from .forms import FoodForm
 from .forms import SingleFood
@@ -25,6 +26,8 @@ import datetime
 from dateutil.parser import parse
 import requests 
 from bs4 import BeautifulSoup
+import cchardet as chardet
+import lxml
 
 URLS = {
     'Abs' : 'https://www.acefitness.org/education-and-resources/lifestyle/exercise-library/body-part/abs/',
@@ -410,17 +413,49 @@ def exercises(request):
 
 @login_required
 def meals(request):
-    meal_dict = {}
 
-    with open(os.path.dirname(os.path.realpath(__file__)) + '/Meals.json') as f:
-        data = json.load(f)
+    category = 'All'
+    if request.method == 'POST':
+        filter_form = MealFilterForm(request.POST)
+        if filter_form.is_valid():
+            category = filter_form.cleaned_data['category']
 
-    meal_dict = data
+    if category != 'All':
+        URL = 'https://www.skinnytaste.com/recipes/' + category + '/'
+    else:
+        URL = 'https://www.skinnytaste.com/recipes/'
 
-    # data = LiftRecord2.objects.filter(user = request.user).order_by('-date')
+    r = requests.get(URL)
+
+    soup = BeautifulSoup(r.text, 'lxml')
+    recipe_list = []
+    recipe_dict = {}
+
+    for tag in soup.find_all('div', class_="archive-post"):
+        recipe_dict['link'] = tag.find('a')['href']
+        recipe_dict['title'] = tag.find('a')['title']
+        recipe_dict['img'] = tag.find('img')['src']
+        recipe_list.append(recipe_dict)
+        recipe_dict = {}
+
+    count = 1
+    while count < 5:
+        URL = 'https://www.skinnytaste.com/recipes/page/' + str(count) + '/'
+        r = requests.get(URL)
+        soup = BeautifulSoup(r.text, 'lxml')
+        count += 1
+        for tag in soup.find_all('div', class_="archive-post"):
+            recipe_dict['link'] = tag.find('a')['href']
+            recipe_dict['title'] = tag.find('a')['title']
+            recipe_dict['img'] = tag.find('img')['src']
+            recipe_list.append(recipe_dict)
+            recipe_dict = {}
+
+    filter_form = MealFilterForm(initial={'category': category})
     context = {
-        'meals': meal_dict,
+        'meals': recipe_list,
         'title': 'Meals',
+        'filter': filter_form,
     }
 
     return render(request, 'users/meals.html', context)

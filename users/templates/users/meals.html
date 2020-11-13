@@ -1,4 +1,5 @@
 {% load static %}
+{% load crispy_forms_tags %}
 <!DOCTYPE html>
 <html lang="zxx">
 
@@ -49,47 +50,34 @@
     <!-- About Section Begin -->
     <section class="about-section spad" style="margin-top: 50px;">
         <div class="container">
-            <div class="row">
-                <div class="col-lg-6">
-                    <div class="about-pic">
-                        <img src="{% static 'img/meals_filler.png' %}" alt="">
-                    </div>
-                </div>
-                <div class="col-lg-6">
-                    <div class="about-text">
+
                         <h2 style="color:white;" >Find New Meals To Fit Your Goals!</h2>
                         <div class="meal-box-overflow">
-                            {% for key, value in meals.items %}
-                                <div class="meal">                     
-                                    <img src="/static/mealImages/{{meal.image_link}}" class="meal-image">
-                                    <p class="meal-text" style="margin-bottom: 5px;">
-                                        <!--Pending: populate meal log with selected meal-->
-                                        <h2 strong style="color:white;">{{value.name}}</strong></br>
-                                    </p>   
-                                    <h4 style="color:white;"> Tags: </h4>
-                                    <p style="color:black;" class="meal-text">
-                                        {% for i in value.tags %}
-                                            {{i}}
-                                        {% endfor %}
-                                    </p>
-                                    <h4 style="color:white;" >Instructions: </h4>
-                                    <p style="color:black;" class="meal-text">
-                                        {{value.instructions}}
-                                    </p>
-                                    <h4 style="color:white;" >Ingredients: </h4>
-                                    <p style="color:black;" class="meal-text">
-                                        {% for i in value.ingredients %}
-                                            {{i}}
-                                            <p></p>
-                                        {% endfor %}
+
+                         <form method='POST' action="{{filter.get_category_display}}">
+                             {% csrf_token %}
+                            {{filter|crispy}}
+                            <Button class="btn btn-default btn-lg" type="submit" name="form_submit">Filter</Button>
+                         </form>
+                           {% for recipe in meals %}
+                                <div class="recipes">
+
+                                    <div class = "container">
+                                    {{filter.get_category_display}}
+                                    <h4>{{recipe.title}}</h4>
+                                    <img src= "{{recipe.img}}" alt = "" width="150" height="200">
+                                    <h5> <a href = {{recipe.link}}>{{recipe.title}}</a></h5>
+
                                     </p>
                                 </div>
-                            {% endfor %}
+
+                {% endfor %}
                         </div>
                     <a href="#" class="primary-btn">Find</a>
-                </div>
+
             </div>
         </div>
+
     </section>
     <!-- About Section End -->
 

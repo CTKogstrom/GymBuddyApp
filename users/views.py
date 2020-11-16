@@ -6,19 +6,8 @@ from django.contrib.auth.decorators import login_required
 from django.utils import timezone
 from django.utils.timezone import now, localtime
 import json, os
-from .forms import UserRegisterForm
-from .forms import ProfileForm
-from .forms import WeightForm
-from .forms import Lift2Form
-from .forms import ExerciseFilterForm
-from .forms import MealFilterForm
-from .forms import OptionForm
-from .forms import FoodForm
-from .forms import SingleFood
-from .models import Profile
-from .models import WeightRecord
-from .models import LiftRecord2
-from .models import Food
+from .forms import *
+from .models import *
 import io, matplotlib, urllib, base64
 import re
 import matplotlib.pyplot as plt
@@ -62,42 +51,17 @@ def login2(request, user):
 
 @login_required
 def profile(request):
-    try:
-        profile = request.user.profile
-    except Profile.DoesNotExist:
-        profile = Profile(user=request.user)
     if request.method == 'POST' and 'form_submit' in request.POST:
-        profForm = ProfileForm(request.POST, instance = profile)
-        if profForm.is_valid():
-            stillValid = True
-            if profForm.cleaned_data['daily_cal_in'] < 0:
-                messages.error(request, "Please enter a valid number of calories.", extra_tags='danger')
-                stillValid = False
-            if profForm.cleaned_data['daily_carbs'] < 0:
-                messages.error(request, "Please enter a valid number of carbohydrates.", extra_tags='danger')
-                stillValid = False
-            if profForm.cleaned_data['daily_fat'] < 0:
-                messages.error(request, "Please enter a valid number of fats.", extra_tags='danger')
-                stillValid = False
-            if profForm.cleaned_data['daily_protein'] < 0:
-                messages.error(request, "Please enter a valid number of proteins.", extra_tags='danger')
-                stillValid = False
-            if profForm.cleaned_data['goal_weight_change'] < 0:
-                messages.error(request, "Please enter a valid weight.", extra_tags='danger')
-                stillValid = False
-            if profForm.cleaned_data['starting_weight'] < 0:
-                messages.error(request, "Please enter a valid weight.", extra_tags='danger')
-                stillValid = False
-            if profForm.cleaned_data['activity_level'] < 0:
-                messages.error(request, "Please enter a valid activity level.", extra_tags='danger')
-                stillValid = False
-            if stillValid:
-                profForm.save()
-                messages.success(request, "Successfully updated profile!", extra_tags='success')
+        update_prof_form = ProfileUpdateForm(request.POST, instance=request.user.profile)
+        if update_prof_form.is_valid():
+            update_prof_form.save()
+            messages.success(request, "Successfully updated profile data!", extra_tags='success')
         else:
-            messages.error(request, "Please re-enter valid information.", extra_tags='danger')
-    form = ProfileForm()
-   
+            messages.error(request, "Please check entries are valid", extra_tags='danger')
+    else:
+        update_prof_form = ProfileUpdateForm(instance=request.user.profile)
+
+
     #retrieve data in profile
     data = Profile.objects.filter(user = request.user)
     calories = carbs = fats = protein = goalWeight = currWeight = activity = starting_weight = {}
@@ -107,7 +71,7 @@ def profile(request):
         fats = e.daily_fat
         protein = e.daily_protein
         activity = e.activity_level
-        startingWeight = e.starting_weight
+        weight = e.weight
         goalWeight = e.goal_weight_change
 
     #create graph for weight
@@ -120,12 +84,15 @@ def profile(request):
         lbsList.append(e.lbs)
         dateList.append(e.date)
     matplotlib.use('Agg')
-    plt.plot(dateList, lbsList, marker='D', markersize=5)
-    for i in range (0,len(lbsList)):
-        plt.annotate(lbsList[i], (dateList[i], lbsList[i]), ha="center")
-    plt.title('Weight Record')
-    plt.xlabel('Date')
-    plt.ylabel('Weight (lbs)')
+    plt.style.use('ggplot')
+    fig, axes = plt.subplots()
+    axes.plot(dateList, lbsList, marker='D', markersize=5)
+    for i in range(0, len(lbsList)):
+        axes.annotate(lbsList[i], (dateList[i], lbsList[i]), ha="center")
+    axes.set_title('Weight Record')
+    axes.set_xlabel('Date')
+    axes.set_ylabel('Weight (lbs)')
+    axes.set_xticks(dateList)
     weightFig = plt.gcf()
     weightBuf = io.BytesIO()
     weightFig.savefig(weightBuf, format='png')
@@ -215,18 +182,42 @@ def profile(request):
     matplotlib.use('Agg')
     plt.close()
 
-
+    daily_activity_desc = ["""Very light - Seated and standing activities, office work, driving, cooking; 
+                           no vigorous activity
+                           """,
+                           """
+                           Low active - In addition to the activities of a sedentary lifestyle, 30 minutes of moderate 
+                           activity equivalent of walking 2 minles in 30 minutes; most office workers with additional planned exercis routines
+                           """,
+                           """
+                           Active - In addition to the activites of a low active lifestyle, an additional 3 hours of 
+                           activity such as bicycle 10-12 miles an hour, walk 4.5 miles an hour
+                           """,
+                           """
+                           Heavy - Planned vigorous activities, physical labor, full-time athletes, hard-labor 
+                           prefessions such as steel or road workers
+                           """]
+    if request.user.profile.activity_level<1.4:
+        daily_act = daily_activity_desc[0]
+    elif request.user.profile.activity_level<1.7:
+        daily_act = daily_activity_desc[1]
+    elif request.user.profile.activity_level<1.8:
+        daily_act = daily_activity_desc[2]
+    else:
+        daily_act = daily_activity_desc[3]
     if len(weightList) != 0:
         currWeight = weightList[0].lbs
     context = {
+        'username': request.user.username,
         'loggedIn': False,
-        'form': form,
+        'daily_act_info':daily_act,
+        'update_prof_form': update_prof_form,
         'calories' : calories,
         'carbs' : carbs,
         'fats' : fats,
         'protein' : protein,
         'activity' : activity,
-        'startingWeight' : startingWeight,
+        'weight' : weight,
         'goalWeight' : goalWeight,
         'currWeight' : currWeight,
         'weightGraph': weightGraph,

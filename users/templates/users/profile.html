@@ -1,16 +1,32 @@
 {% extends "users/base.html" %}
 {% load crispy_forms_tags %}
 {% block content %}
-    <h1>{{ user.username }}</h1>
+    <h1>My Profile</h1>
     <div class="content-section">
+        <div class="card" id="goals-card">
+            <h2 id="Profile-goals-header">
+                Your Current Goals
+            </h2>
+            <section id="Profile-goals-section">
+                Daily Calorie Intake (kCal): {{ calories }}<br>
+                Daily Carbohydrate Intake (grams): {{ carbs }}<br>
+                Daily Fat Intake (grams): {{ fats }}<br>
+                Daily Protein Intake (grams): {{ protein }}<br>
+                +<br>
+                Daily Activity: {{ daily_act_info }}<br>
+                ------------------------------------------------------------------<br>
+                A weight change of {{ goalWeight }} pounds this week.
+            </section>
+
+        </div>
         <form method="POST">
             {% csrf_token %}
             <fieldset class="form-group">
-                <legend class="border-bottom mb-4">Get Jacked!</legend>
-                {{form|crispy}}
+                <legend class="border-bottom mb-4">Update Gains</legend>
+                {{ update_prof_form|crispy }}
             </fieldset>
             <div class="form-group">
-                <button class="btn btn-outline-info" type="submit" name="form_submit">Update Information</button>
+                <button class="btn btn-outline-info" type="submit" name="form_submit">Update Info</button>
             </div>
             {% if calories %}
                 <div>
@@ -19,7 +35,7 @@
                     Daily Fats: {{fats}} --
                     Daily Protein: {{protein}} --
                     Activity Level: {{activity}} --
-                    Starting Weight: {{startingWeight}} -- 
+                    Weight: {{weight}} --
                     Goal Weight: {{goalWeight}} --
                 </div>
             {% endif %}
@@ -28,6 +44,7 @@
                     Current Weight: {{currWeight}} 
                 </div>
             {% endif %}
+
         </form>
         <div>
             <p class="card-text">

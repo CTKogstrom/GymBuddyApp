@@ -28,15 +28,15 @@ from bs4 import BeautifulSoup
 
 URLS = {
     'Abs' : 'https://www.acefitness.org/education-and-resources/lifestyle/exercise-library/body-part/abs/',
-    'Biceps' : 'https://www.acefitness.org/education-and-resources/lifestyle/exercise-library/body-part/arms/biceps/',
-    'Butt/Hip' : 'https://www.acefitness.org/education-and-resources/lifestyle/exercise-library/body-part/butt-hips/',
-    'Calves' : 'https://www.acefitness.org/education-and-resources/lifestyle/exercise-library/body-part/legs-calves-and-shins/soleus/',
-    'Chest' : 'https://www.acefitness.org/education-and-resources/lifestyle/exercise-library/body-part/chest/',
-    'Lats' : 'https://www.acefitness.org/education-and-resources/lifestyle/exercise-library/body-part/back/latissimus-dorsi(lats)/',
-    'Shoulders' : 'https://www.acefitness.org/education-and-resources/lifestyle/exercise-library/body-part/shoulders/',
-    'Trapezius' : 'https://www.acefitness.org/education-and-resources/lifestyle/exercise-library/body-part/back/trapezius(traps)/',
-    'Triceps' : 'https://www.acefitness.org/education-and-resources/lifestyle/exercise-library/body-part/arms/triceps/',
-    'Quads'  : 'https://www.acefitness.org/education-and-resources/lifestyle/exercise-library/body-part/legs-calves-and-shins/soleus/'
+    # 'Biceps' : 'https://www.acefitness.org/education-and-resources/lifestyle/exercise-library/body-part/arms/biceps/',
+    # 'Butt/Hip' : 'https://www.acefitness.org/education-and-resources/lifestyle/exercise-library/body-part/butt-hips/',
+    # 'Calves' : 'https://www.acefitness.org/education-and-resources/lifestyle/exercise-library/body-part/legs-calves-and-shins/soleus/',
+    # 'Chest' : 'https://www.acefitness.org/education-and-resources/lifestyle/exercise-library/body-part/chest/',
+    # 'Lats' : 'https://www.acefitness.org/education-and-resources/lifestyle/exercise-library/body-part/back/latissimus-dorsi(lats)/',
+    # 'Shoulders' : 'https://www.acefitness.org/education-and-resources/lifestyle/exercise-library/body-part/shoulders/',
+    # 'Trapezius' : 'https://www.acefitness.org/education-and-resources/lifestyle/exercise-library/body-part/back/trapezius(traps)/',
+    # 'Triceps' : 'https://www.acefitness.org/education-and-resources/lifestyle/exercise-library/body-part/arms/triceps/',
+    # 'Quads'  : 'https://www.acefitness.org/education-and-resources/lifestyle/exercise-library/body-part/legs-calves-and-shins/soleus/'
     
 }
 
@@ -327,13 +327,18 @@ def macros(request):
 def exercises(request):
     exercise_list = []
     scraping_exercises = []
+    lift_form_name = ""
 
     category = 'All'
     if request.method == 'POST':
+       
         filter_form = ExerciseFilterForm(request.POST)
         if filter_form.is_valid():
             category = filter_form.cleaned_data['category']
             print(category)
+        else:
+            lift_form_name = request.POST['form_submit']
+            print(request.POST['form_submit'])
 
     if category =='All':      
         for key in URLS:
@@ -393,7 +398,7 @@ def exercises(request):
             liftForm.save()
         else:
             messages.error(request, "Please re-enter valid information.", extra_tags='danger')
-    form = Lift2Form()
+    form = Lift2Form(initial={'name': lift_form_name})
     # filter_form = ExerciseFilterForm()
     data = LiftRecord2.objects.filter(user = request.user).order_by('-date')
     context = {

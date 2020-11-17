@@ -22,14 +22,14 @@
 <body style="background-color:grey;" >
 
     <!-- Header Section Begin -->
-    <header class="header-section">
+    <header class="header-section" >
         <div class="container">
-            <div class="logo">
+            <div class="logo" style="margin-left: 15px;">
                 <a href="/home">
-                    <img src="{% static 'img/logo.png' %}" alt="">
+                    <img src="{% static 'img/logo2.png' %}" alt="">
                 </a>
             </div>
-            <div class="nav-menu">
+            <div class="nav-menu" style="margin-top: 45px;">
                 <nav class="mainmenu mobile-menu">
                     <ul>
                         <li><a href="/home">Home</a></li>
@@ -48,29 +48,41 @@
     <!-- Header End -->
     
     <!-- About Section Begin -->
-    <section class="about-section spad">
+    <section class="about-section spad" style="margin-top: 50px;">
         <div class="container">
-            <div class="row">
+            <div class="row" >
+                <img src="{% static 'img/Macro-Graphic.png' %}" width="700" height="1200" alt="" style="float: left; width : 50%; margin-left: 30px; margin-right: 40px;">
+                <div class="col-lg-6" style="float: right; margin-left: 50px;">
+                </div>
                 <div class="col-lg-6">
-                    <div class="about-text">
+                    <div class="about-text" style="color: white;">
                         <form method="POST">
                             {% csrf_token %}
-                            <fieldset class="form-group">
-                                <legend class="border-bottom mb-4">Get Jacked!</legend>
+                            <fieldset class="form-group" style="border-width: 10px; font-size: 20px;" >
+                                <legend class="border-bottom mb-4" style="font-size: 40px; font-weight: bold;">Get Jacked!</legend>
                                 {{form|crispy}}
+                                <div class="form-group" style="margin-bottom: 10px; margin-top: 10px;">
+                                    <button class="primary-btn" type="submit" name="form_submit">Log</button>
+                                </div>
                             </fieldset>
-                            <div class="form-group">
-                                <button class="btn btn-outline-info" type="submit" name="form_submit">Log</button>
-                            </div>
+                            
                         </form>
                         <form method="POST">
                             {% csrf_token %}
-                            {{form2|crispy}}
-                            <button class="btn btn-outline-info" type="submit" name="form2_submit">Add</button>
-                        </form>  
+                            <fieldset class="form-group" style="border-width: 10px;  margin-bottom  : 20px; font-size: 20px;" >
+                                <legend class="border-bottom mb-4" style="font-size: 40px; font-weight: bold;">Search!</legend>
+                                {{form2|crispy}}
+                                <button class="primary-btn" type="submit" name="form2_submit" style="margin-bottom: 10px; margin-top: 10px;">Add</button>
+                            </fieldset>
+                        </form>
+                        
+                        
                         <div>
-                            <table class="table">
+                            
+                            <table class="table" style="font-size: 20px; width: 45%; border: 5px solid darkgrey;">
+                                
                                 <thead>
+                                    <h3 style="color: white; font-weight: bold; font-size: 40px;">Macros Tracker</h3>
                                     <tr>
                                     <th scope="col">Food</th>
                                     <th scope="col">Carbs</th>
@@ -84,9 +96,9 @@
                                     {% for food in foods %}
                                         <tr>
                                             <th scope="row">{{food.name}}</th>
-                                            <td style="text-align: center">{{food.carbs}}</td>
-                                            <td style="text-align: center">{{food.fats}}</td>
-                                            <td style="text-align: center">{{food.protein}}</td>
+                                            <td style="text-align: center">{{food.carbs}} g</td>
+                                            <td style="text-align: center">{{food.fats}} g</td>
+                                            <td style="text-align: center">{{food.protein}} g</td>
                                             <td style="text-align: center">{{food.calories}}</td>
                                             <td style="text-align: center">{{food.date}}</td>
                                         </tr>
@@ -94,9 +106,9 @@
                                 </tbody>
                             </table>
                         </div>
-                        <div class="col-lg-6">
+                        <div class="col-lg-6" >
                             <div class="about-pic">
-                                <img src="{% static 'img/Macro-Graphic.png' %}" alt="">
+                                <img src="{% static 'img/picdoesntexist.png' %}" alt="">
                             </div>
                         </div>
                     </div>
@@ -107,40 +119,29 @@
     <!-- About Section End -->
 
     <!-- Footer Section Begin -->
-    <footer class="footer-section">
-        <div class="container">
-            <div class="row">
-                <div class="col-md-4">
-                    <div class="contact-option">
+    <footer class="classes-section spad" style="background-color: black;">
+        <div class="container" style="background-color: black;">
+            <div class="row" style="background-color: black;">
+                <div class="col-md-4" style="background-color: black;">
+                    <div class="contact-option" style="float: left; width: 30%; margin-left: 20px;">
                         <span>Phone</span>
                         <p>(123) 118 9999 - (123) 118 9999</p>
                     </div>
                 </div>
                 <div class="col-md-4">
-                    <div class="contact-option">
+                    <div class="contact-option" style="float: left; width: 30%;">
                         <span>Address</span>
                         <p>72 Kangnam, 45 Opal Point Suite 391</p>
                     </div>
                 </div>
                 <div class="col-md-4">
-                    <div class="contact-option">
+                    <div class="contact-option" style="float: left; width: 30%;">
                         <span>Email</span>
-                        <p>contactcompany@Gutim.com</p>
+                        <p>contactcompany@GymBuddy.com</p>
                     </div>
                 </div>
             </div>
-            <div class="copyright-text">
-                <ul>
-                    <li><a href="#">Term&Use</a></li>
-                    <li><a href="#">Privacy Policy</a></li>
-                </ul>
-                <div class="footer-social">
-                    <a href="#"><i class="fa fa-facebook"></i></a>
-                    <a href="#"><i class="fa fa-twitter"></i></a>
-                    <a href="#"><i class="fa fa-instagram"></i></a>
-                    <a href="#"><i class="fa fa-dribbble"></i></a>
-                </div>
-            </div>
+            
         </div>
     </footer>
     <!-- Footer Section End -->

@@ -25,19 +25,22 @@ import datetime
 from dateutil.parser import parse
 import requests 
 from bs4 import BeautifulSoup
+import concurrent.futures
 
-URLS = {
-    'Abs' : 'https://www.acefitness.org/education-and-resources/lifestyle/exercise-library/body-part/abs/',
-    'Biceps' : 'https://www.acefitness.org/education-and-resources/lifestyle/exercise-library/body-part/arms/biceps/',
-    'Butt/Hip' : 'https://www.acefitness.org/education-and-resources/lifestyle/exercise-library/body-part/butt-hips/',
-    'Calves' : 'https://www.acefitness.org/education-and-resources/lifestyle/exercise-library/body-part/legs-calves-and-shins/soleus/',
-    'Chest' : 'https://www.acefitness.org/education-and-resources/lifestyle/exercise-library/body-part/chest/',
-    'Lats' : 'https://www.acefitness.org/education-and-resources/lifestyle/exercise-library/body-part/back/latissimus-dorsi(lats)/',
-    'Shoulders' : 'https://www.acefitness.org/education-and-resources/lifestyle/exercise-library/body-part/shoulders/',
-    'Trapezius' : 'https://www.acefitness.org/education-and-resources/lifestyle/exercise-library/body-part/back/trapezius(traps)/',
-    'Triceps' : 'https://www.acefitness.org/education-and-resources/lifestyle/exercise-library/body-part/arms/triceps/',
-    'Quads'  : 'https://www.acefitness.org/education-and-resources/lifestyle/exercise-library/body-part/legs-calves-and-shins/soleus/'
-}
+URLS = [
+    {'Abs' : 'https://www.acefitness.org/education-and-resources/lifestyle/exercise-library/body-part/abs/'},
+    {'Biceps' : 'https://www.acefitness.org/education-and-resources/lifestyle/exercise-library/body-part/arms/biceps/'},
+    {'Butt/Hip' : 'https://www.acefitness.org/education-and-resources/lifestyle/exercise-library/body-part/butt-hips/'},
+    {'Calves' : 'https://www.acefitness.org/education-and-resources/lifestyle/exercise-library/body-part/legs-calves-and-shins/soleus/'},
+    {'Chest' : 'https://www.acefitness.org/education-and-resources/lifestyle/exercise-library/body-part/chest/'},
+    {'Lats' : 'https://www.acefitness.org/education-and-resources/lifestyle/exercise-library/body-part/back/latissimus-dorsi(lats)/'},
+    {'Shoulders' : 'https://www.acefitness.org/education-and-resources/lifestyle/exercise-library/body-part/shoulders/'},
+    {'Trapezius' : 'https://www.acefitness.org/education-and-resources/lifestyle/exercise-library/body-part/back/trapezius(traps)/'},
+    {'Triceps' : 'https://www.acefitness.org/education-and-resources/lifestyle/exercise-library/body-part/arms/triceps/'},
+    {'Quads'  : 'https://www.acefitness.org/education-and-resources/lifestyle/exercise-library/body-part/legs-calves-and-shins/soleus/'}
+]
+
+EXERCISES_GLOBAL = []
 
 
 def register(request):
@@ -324,8 +327,7 @@ def macros(request):
     
 @login_required
 def exercises(request):
-    exercise_list = []
-    scraping_exercises = []
+    # exercise_list = []
     lift_form_name = ""
 
     category = 'All'
@@ -338,31 +340,21 @@ def exercises(request):
         else:
             lift_form_name = request.POST['form_submit']
             print(request.POST['form_submit'])
-
-    if category =='All':      
-        for key in URLS:
-            
-        # URL = "https://www.acefitness.org/education-and-resources/lifestyle/exercise-library/body-part/abs/"
-            r = requests.get(URLS[key]) 
-    
-            soup = BeautifulSoup(r.content, 'html5lib') # If this line causes an error, run 'pip install html5lib' or install html5lib 
-
-            table = soup.find('div', attrs = {'id':'exerciseLibrary'})
-            for row in table.findAll('div', attrs = {"class" : "exercise-card-grid__cell"}):
-                exercise = {}
-                exercise['category'] = key
-                # exercise = {}
-                exercise['name'] = row.find('div', attrs = {"class" : "exercise-card__body"}).header.h2.text
-            # exercise['name'] = row.header.h2.text
-            
-                exercise['equipment'] = row.find('div', attrs = {"class" : "exercise-info__term exercise-info__term--equipment"}).dd.text
-                exercise['img'] = row.find('div', attrs = {"class" : "exercise-card__image"})['style'].split("'")[1]
-                exercise['description_link'] = 'https://www.acefitness.org/' + row.a['href']
-                scraping_exercises.append(exercise)
-            
-    # print(scraping_exercises)
+    # EXERCISES_GLOBAL = []
+    if category =='All':
+        threads = len(URLS)
+        with concurrent.futures.ThreadPoolExecutor(max_workers=threads) as executor:
+            executor.map(scrap_url, URLS)      
+       
     else:
-        r = requests.get(URLS[category]) 
+        EXERCISES_GLOBAL.clear()
+        correct_index = 0
+        for index, url in enumerate(URLS):
+            for key in url:
+                if key == category:
+                    correct_index = index
+
+        r = requests.get(URLS[correct_index][category]) 
         soup = BeautifulSoup(r.content, 'html5lib') # If this line causes an error, run 'pip install html5lib' or install html5lib 
         table = soup.find('div', attrs = {'id':'exerciseLibrary'})
         for row in table.findAll('div', attrs = {"class" : "exercise-card-grid__cell"}):
@@ -375,20 +367,10 @@ def exercises(request):
             exercise['equipment'] = row.find('div', attrs = {"class" : "exercise-info__term exercise-info__term--equipment"}).dd.text
             exercise['img'] = row.find('div', attrs = {"class" : "exercise-card__image"})['style'].split("'")[1]
             exercise['description_link'] = 'https://www.acefitness.org/' + row.a['href']
-            scraping_exercises.append(exercise)
+            
+            EXERCISES_GLOBAL.append(exercise)
     
-
-        
-
     filter_form = ExerciseFilterForm(initial={'category': category})
-    with open(os.path.dirname(os.path.realpath(__file__)) + '/Exercises.json') as f:
-        data = json.load(f)
-
-        # print(data)
-    for exercise in data:
-        if exercise['group'] == category or category == 'All':
-            exercise_list.append(exercise)
-        
 
     liftrecord2 = LiftRecord2(user=request.user)
     if request.method == 'POST' and 'form_submit' in request.POST:
@@ -400,8 +382,9 @@ def exercises(request):
     form = Lift2Form(initial={'name': lift_form_name})
     # filter_form = ExerciseFilterForm()
     data = LiftRecord2.objects.filter(user = request.user).order_by('-date')
+    print(EXERCISES_GLOBAL)
     context = {
-        'exercises': scraping_exercises,
+        'exercises': EXERCISES_GLOBAL,
         'title': 'Exercises',
         'form' : form,
         'filter': filter_form,
@@ -410,6 +393,28 @@ def exercises(request):
 
     return render(request, 'users/exercises.html', context)
 
+
+def scrap_url(url):
+    for key in url:
+        r = requests.get(url[key]) 
+
+        soup = BeautifulSoup(r.content, 'html5lib') # If this line causes an error, run 'pip install html5lib' or install html5lib 
+
+        table = soup.find('div', attrs = {'id':'exerciseLibrary'})
+        print("OVER THERE")
+        for row in table.findAll('div', attrs = {"class" : "exercise-card-grid__cell"}):
+            print("Over here")
+            exercise = {}
+            exercise['category'] = key
+            # exercise = {}
+            exercise['name'] = row.find('div', attrs = {"class" : "exercise-card__body"}).header.h2.text
+                # exercise['name'] = row.header.h2.text
+                
+            exercise['equipment'] = row.find('div', attrs = {"class" : "exercise-info__term exercise-info__term--equipment"}).dd.text
+            exercise['img'] = row.find('div', attrs = {"class" : "exercise-card__image"})['style'].split("'")[1]
+            exercise['description_link'] = 'https://www.acefitness.org/' + row.a['href']
+            EXERCISES_GLOBAL.append(exercise)
+            
 
 
 @login_required

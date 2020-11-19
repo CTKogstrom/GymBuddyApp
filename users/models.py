@@ -9,14 +9,21 @@ from django.utils.translation import gettext_lazy
 def validate_activity_level(value):
     if value < 1.2 or value > 2.1:
         raise ValidationError(
-            gettext_lazy('%(value)d is not in the range 1.2-2.1'),
+            gettext_lazy(f'{value} is not in the range 1.2-2.1'),
             params={'value':value}
         )
 
 def validate_goal_weight_change(value):
     if value < -1 or value > 1:
         raise ValidationError(
-            gettext_lazy("$(value)s is not in the range (-1) - (1) "),
+            gettext_lazy(f"{value} is not in the range (-1) - (1) "),
+            params={'value': value}
+        )
+
+def validate_food_values(value):
+    if value < 0:
+        raise ValidationError(
+            gettext_lazy(f"This value cannot be a negative number"),
             params={'value': value}
         )
 
@@ -69,8 +76,8 @@ class LiftRecord2(models.Model):
 class Food(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     name = models.CharField(max_length=100)
-    carbs = models.IntegerField()
-    fats = models.IntegerField()
-    protein = models.IntegerField()
-    calories = models.IntegerField(default=0)
+    carbs = models.IntegerField(validators=[validate_food_values])
+    fats = models.IntegerField(validators=[validate_food_values])
+    protein = models.IntegerField(validators=[validate_food_values])
+    calories = models.IntegerField(default=0, validators=[validate_food_values])
     date = models.DateField(default=timezone.now)

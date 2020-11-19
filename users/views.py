@@ -56,6 +56,7 @@ def profile(request):
         if update_prof_form.is_valid():
             update_prof_form.save()
             messages.success(request, "Successfully updated profile data!", extra_tags='success')
+            return redirect('profile')
         else:
             messages.error(request, "Please check entries are valid", extra_tags='danger')
     else:

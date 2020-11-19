@@ -3,7 +3,7 @@
 {% block content %}
     <h1>My Profile</h1>
     <div class="content-section">
-        <div class="card" id="goals-card">
+        <div style="display: flex" class="card" id="goals-card">
             <h2 id="Profile-goals-header">
                 Your Current Goals
             </h2>
@@ -13,7 +13,7 @@
                 Daily Fat Intake (grams): {{ fats }}<br>
                 Daily Protein Intake (grams): {{ protein }}<br>
                 +<br>
-                Daily Activity: {{ daily_act_info }}<br>
+                {{ daily_act_info }}<br>
                 ------------------------------------------------------------------<br>
                 A weight change of {{ goalWeight }} pounds this week.
             </section>
@@ -28,23 +28,6 @@
             <div class="form-group">
                 <button class="btn btn-outline-info" type="submit" name="form_submit">Update Info</button>
             </div>
-            {% if calories %}
-                <div>
-                    Daily Calories: {{calories}} --
-                    Daily Carbohydrates: {{carbs}} --
-                    Daily Fats: {{fats}} --
-                    Daily Protein: {{protein}} --
-                    Activity Level: {{activity}} --
-                    Weight: {{weight}} --
-                    Goal Weight: {{goalWeight}} --
-                </div>
-            {% endif %}
-            {% if currWeight %}
-                <div>
-                    Current Weight: {{currWeight}} 
-                </div>
-            {% endif %}
-
         </form>
         <div>
             <p class="card-text">

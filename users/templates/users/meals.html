@@ -1,4 +1,5 @@
 {% load static %}
+{% load crispy_forms_tags %}
 <!DOCTYPE html>
 <html lang="zxx">
 
@@ -23,12 +24,12 @@
     <!-- Header Section Begin -->
     <header class="header-section">
         <div class="container">
-            <div class="logo" style="margin-left: 15px;">
+            <div class="logo">
                 <a href="/home">
-                    <img src="{% static 'img/logo2.png' %}" alt="">
+                    <img src="{% static 'img/logo.png' %}" alt="">
                 </a>
             </div>
-            <div class="nav-menu" style="margin-top: 45px;">
+            <div class="nav-menu">
                 <nav class="mainmenu mobile-menu">
                     <ul>
                         <li><a href="/home">Home</a></li>
@@ -45,78 +46,76 @@
         </div>
     </header>
     <!-- Header End -->
-    
-    <!-- About Section Begin -->
-    <section class="about-section spad" style="margin-top: 50px;">
+
+
+    <section class="about-section spad">
         <div class="container">
-            <div class="row">
-                <div class="col-lg-6">
-                    <div class="about-pic">
-                        <img src="{% static 'img/meals_filler.png' %}" alt="">
-                    </div>
-                </div>
-                <div class="col-lg-6">
-                    <div class="about-text">
+
                         <h2 style="color:white;" >Find New Meals To Fit Your Goals!</h2>
                         <div class="meal-box-overflow">
-                            {% for key, value in meals.items %}
-                                <div class="meal">                     
-                                    <img src="/static/mealImages/{{meal.image_link}}" class="meal-image">
-                                    <p class="meal-text" style="margin-bottom: 5px;">
-                                        <!--Pending: populate meal log with selected meal-->
-                                        <h2 strong style="color:white;">{{value.name}}</strong></br>
-                                    </p>   
-                                    <h4 style="color:white;"> Tags: </h4>
-                                    <p style="color:black;" class="meal-text">
-                                        {% for i in value.tags %}
-                                            {{i}}
-                                        {% endfor %}
+
+                         <form method='POST' action="{{filter.get_category_display}}" style="padding-bottom: 30px; padding-left: 15px;">
+                             {% csrf_token %}
+                            {{filter|crispy}}
+                            <Button class="btn btn-default btn-lg" type="submit" name="form_submit">Filter</Button>
+                         </form>
+
+                           {% for recipe in meals %}
+                               {{filter.get_category_display}}
+                               <li style="display: inline-block; padding-right: 25px; padding-bottom: 20px; width: 350px; padding-left: 10px" >
+                               <img src={{recipe.img}} width="250px" height="300px">
+
+                                    <h5 style="color:white;">{{recipe.title}}</h5>
+                                    <a href = {{recipe.link}}>Get Recipe!</a>
+
                                     </p>
-                                    <h4 style="color:white;" >Instructions: </h4>
-                                    <p style="color:black;" class="meal-text">
-                                        {{value.instructions}}
-                                    </p>
-                                    <h4 style="color:white;" >Ingredients: </h4>
-                                    <p style="color:black;" class="meal-text">
-                                        {% for i in value.ingredients %}
-                                            {{i}}
-                                            <p></p>
-                                        {% endfor %}
-                                    </p>
-                                </div>
-                            {% endfor %}
-                        </div>
+
+
+                {% endfor %}
+
                     <a href="#" class="primary-btn">Find</a>
-                </div>
+
             </div>
         </div>
+
     </section>
     <!-- About Section End -->
 
     <!-- Footer Section Begin -->
-    <footer class="classes-section spad" style="background-color: black;">
-        <div class="container" style="background-color: black;">
-            <div class="row" style="background-color: black;">
-                <div class="col-md-4" style="background-color: black;">
-                    <div class="contact-option" style="float: left; width: 30%; margin-left: 20px;">
+    <footer class="footer-section">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-4">
+                    <div class="contact-option">
                         <span>Phone</span>
                         <p>(123) 118 9999 - (123) 118 9999</p>
                     </div>
                 </div>
                 <div class="col-md-4">
-                    <div class="contact-option" style="float: left; width: 30%;">
+                    <div class="contact-option">
                         <span>Address</span>
                         <p>72 Kangnam, 45 Opal Point Suite 391</p>
                     </div>
                 </div>
                 <div class="col-md-4">
-                    <div class="contact-option" style="float: left; width: 30%;">
+                    <div class="contact-option">
                         <span>Email</span>
-                        <p>contactcompany@GymBuddy.com</p>
+                        <p>contactcompany@Gutim.com</p>
                     </div>
                 </div>
             </div>
-            
+            <div class="copyright-text">
+                <ul>
+                    <li><a href="#">Term&Use</a></li>
+                    <li><a href="#">Privacy Policy</a></li>
+                </ul>
+                <div class="footer-social">
+                    <a href="#"><i class="fa fa-facebook"></i></a>
+                    <a href="#"><i class="fa fa-twitter"></i></a>
+                    <a href="#"><i class="fa fa-instagram"></i></a>
+                    <a href="#"><i class="fa fa-dribbble"></i></a>
+                </div>
+            </div>
         </div>
     </footer>
     <!-- Footer Section End -->

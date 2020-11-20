@@ -24,12 +24,12 @@
     <!-- Header Section Begin -->
     <header class="header-section">
         <div class="container">
-            <div class="logo" style="margin-left: 15px;">
+            <div class="logo">
                 <a href="/home">
-                    <img src="{% static 'img/logo2.png' %}" alt="">
+                    <img src="{% static 'img/logo.png' %}" alt="">
                 </a>
             </div>
-            <div class="nav-menu" style="margin-top: 45px;">
+            <div class="nav-menu">
                 <nav class="mainmenu mobile-menu">
                     <ul>
                         <li><a href="/home">Home</a></li>
@@ -48,7 +48,7 @@
     <!-- Header End -->
     
     <!-- About Section Begin -->
-    <section class="about-section spad" style="margin-top: 50px;">
+    <section class="about-section spad">
         <div class="container">
             <div class="row">
                 <div class="col-lg-6">
@@ -79,10 +79,11 @@
 
     {% block body %}
     <h2 class="log-text" >Excercise List</h2>
-    <p style="color: white;">Check out our extensive list of workouts and log your favorites to your profile!</p>
+    <p class="text-muted">Check out our extensive list of workouts and log your favorites to your profile!</p>
 
     
-    <div class="exercies">
+    <div>
+            <div class="exercises-box-overflow">
             <!--Alert message-->
             <!-- {% if messages %}
                 {% for message in messages %}
@@ -91,38 +92,73 @@
                     </div>
                 {% endfor %}
             {% endif %} -->
-            <form method='POST' action="{{filter.get_category_display}}" style="padding-bottom: 30px; padding-left: 15px;">
+            <form method='POST' action="{{filter.get_category_display}}">
                 {% csrf_token %}
                 {{filter|crispy}}
-                <Button class="primary-btn" type="submit" name="form_submit">Filter</Button>  
+                <Button class="btn btn-default btn-lg" type="submit" name="form_submit">Filter</Button>  
             </form>
                 {% for exercise in exercises %}
-                    <li style="display: inline-block; padding-right: 25px; padding-bottom: 20px; width: 350px; padding-left: 15px" >                     
-                        <img src={{exercise.img}} width="350px" height="400px">
+                    <div class="exercise">                     
+                        <img src={{exercise.img}} class="exercise-image">
+                        <p class="exercise-text" style="margin-bottom: 2px;">
                             <!--Pending: populate exercise log with selected exercise-->
                             <!-- <strong>{{filter.get_category_display}}</strong></br> -->
-                        <h2 style="color:whitesmoke; margin: 0; font-size : 26px;"><strong>{{exercise.name}}</strong></br>
+                            <h2 strong style="color:white;">{{exercise.name}}</strong></br>
+                        </p>
                         <h4 style="color:white;"> Category: {{exercise.category}} </h4> 
                         <h4 style="color:white;"> Equipment: {{exercise.equipment}} </h4> 
                         <a href = {{exercise.description_link}}>Description Link</a>
-                        <div class="form-group" style="text-align: center;">
-                            <form action="{% url 'exercises' %}" method="post">
-                                {% csrf_token %}
-                                
-                                
-                                <button class="primary-btn" type= "submit" name="form_submit" value="{{exercise.name}}">Log</button>
-                                 </form>
-
-
-
-                            
-                        </div>
                                             
-                    </li>
+                    </div>
                 {% endfor %}
+            </div>
     </div>
     {% endblock body %}
 
+
+
+
+
+
+
+    <!-- Footer Section Begin -->
+    <footer class="footer-section">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-4">
+                    <div class="contact-option">
+                        <span>Phone</span>
+                        <p>(123) 118 9999 - (123) 118 9999</p>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="contact-option">
+                        <span>Address</span>
+                        <p>72 Kangnam, 45 Opal Point Suite 391</p>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="contact-option">
+                        <span>Email</span>
+                        <p>contactcompany@Gutim.com</p>
+                    </div>
+                </div>
+            </div>
+            <div class="copyright-text">
+                <ul>
+                    <li><a href="#">Term&Use</a></li>
+                    <li><a href="#">Privacy Policy</a></li>
+                </ul>
+                <div class="footer-social">
+                    <a href="#"><i class="fa fa-facebook"></i></a>
+                    <a href="#"><i class="fa fa-twitter"></i></a>
+                    <a href="#"><i class="fa fa-instagram"></i></a>
+                    <a href="#"><i class="fa fa-dribbble"></i></a>
+                </div>
+            </div>
+        </div>
+    </footer>
+    <!-- Footer Section End -->
 
 </body>
 

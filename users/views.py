@@ -11,36 +11,35 @@ from .forms import ProfileForm
 from .forms import WeightForm
 from .forms import Lift2Form
 from .forms import ExerciseFilterForm
+from .forms import MealFilterForm
 from .forms import OptionForm
 from .forms import FoodForm
-from .forms import SingleFood
 from .models import Profile
 from .models import WeightRecord
 from .models import LiftRecord2
 from .models import Food
 import io, matplotlib, urllib, base64
-import re
 import matplotlib.pyplot as plt
 import datetime
 from dateutil.parser import parse
 import requests 
 from bs4 import BeautifulSoup
-import concurrent.futures
+import cchardet as chardet
+import lxml
 
-URLS = [
-    {'Abs' : 'https://www.acefitness.org/education-and-resources/lifestyle/exercise-library/body-part/abs/'},
-    {'Biceps' : 'https://www.acefitness.org/education-and-resources/lifestyle/exercise-library/body-part/arms/biceps/'},
-    {'Butt/Hip' : 'https://www.acefitness.org/education-and-resources/lifestyle/exercise-library/body-part/butt-hips/'},
-    {'Calves' : 'https://www.acefitness.org/education-and-resources/lifestyle/exercise-library/body-part/legs-calves-and-shins/soleus/'},
-    {'Chest' : 'https://www.acefitness.org/education-and-resources/lifestyle/exercise-library/body-part/chest/'},
-    {'Lats' : 'https://www.acefitness.org/education-and-resources/lifestyle/exercise-library/body-part/back/latissimus-dorsi(lats)/'},
-    {'Shoulders' : 'https://www.acefitness.org/education-and-resources/lifestyle/exercise-library/body-part/shoulders/'},
-    {'Trapezius' : 'https://www.acefitness.org/education-and-resources/lifestyle/exercise-library/body-part/back/trapezius(traps)/'},
-    {'Triceps' : 'https://www.acefitness.org/education-and-resources/lifestyle/exercise-library/body-part/arms/triceps/'},
-    {'Quads'  : 'https://www.acefitness.org/education-and-resources/lifestyle/exercise-library/body-part/legs-calves-and-shins/soleus/'}
-]
-
-EXERCISES_GLOBAL = []
+URLS = {
+    'Abs' : 'https://www.acefitness.org/education-and-resources/lifestyle/exercise-library/body-part/abs/',
+    'Biceps' : 'https://www.acefitness.org/education-and-resources/lifestyle/exercise-library/body-part/arms/biceps/',
+    'Butt/Hip' : 'https://www.acefitness.org/education-and-resources/lifestyle/exercise-library/body-part/butt-hips/',
+    'Calves' : 'https://www.acefitness.org/education-and-resources/lifestyle/exercise-library/body-part/legs-calves-and-shins/soleus/',
+    'Chest' : 'https://www.acefitness.org/education-and-resources/lifestyle/exercise-library/body-part/chest/',
+    'Lats' : 'https://www.acefitness.org/education-and-resources/lifestyle/exercise-library/body-part/back/latissimus-dorsi(lats)/',
+    'Shoulders' : 'https://www.acefitness.org/education-and-resources/lifestyle/exercise-library/body-part/shoulders/',
+    'Trapezius' : 'https://www.acefitness.org/education-and-resources/lifestyle/exercise-library/body-part/back/trapezius(traps)/',
+    'Triceps' : 'https://www.acefitness.org/education-and-resources/lifestyle/exercise-library/body-part/arms/triceps/',
+    'Quads'  : 'https://www.acefitness.org/education-and-resources/lifestyle/exercise-library/body-part/legs-calves-and-shins/soleus/'
+    
+}
 
 
 def register(request):
@@ -257,54 +256,10 @@ def weight(request):
   
 @login_required
 def macros(request):
-    foodName = ""
-    foodDate = ""
-    display = False
-    if request.method == 'POST' and 'form2_submit' in request.POST:
-        display = True
-        singleFood = SingleFood(request.POST)
-        if singleFood.is_valid():
-            foodName = singleFood.cleaned_data['foodName'].capitalize()
-            foodDate = singleFood.cleaned_data['date']
-        else:
-            messages.error(request, "Please re-enter valid information.", extra_tags='danger')        
-        print(foodName)
-
-        # URL = "https://www.acefitness.org/education-and-resources/lifestyle/exercise-library/body-part/abs/"
-        r = requests.get("https://www.myfitnesspal.com/food/search?page=1&search="+str(foodName)) 
-
-        soup = BeautifulSoup(r.content, 'html5lib') # If this line causes an error, run 'pip install html5lib' or install html5lib 
-        print("hi")
-        if soup.find('div', attrs = {"class": "jss16"}) == None:
-            print("rip")
-        else:
-            macroData = soup.find('div', attrs = {"class": "jss16"}).text
-            servingSize = soup.find('div', attrs = {"class": "jss11"}).text
-            servingSize = servingSize[servingSize.find(",")+2:]
-            macroList = re.findall(r'[0-9]+', macroData) 
-            print(macroData)
-            print(macroList)
-            print(servingSize)
-            print("Calories: " + str(macroList[0]))
-            print("Carbs: " + str(macroList[1]))
-            print("Fat: " + str(macroList[2]))
-            print("Protein: " + str(macroList[3]))
-            food2 = Food(user=request.user)
-            food2.name = foodName
-            food2.calories = macroList[0]
-            food2.carbs = macroList[1]
-            food2.fats = macroList[2]
-            food2.protein = macroList[3]
-            food2.date = foodDate
-            food2.save()
-    form2 = SingleFood()
-           
-            
     food = Food(user=request.user)
     if request.method == 'POST' and 'form_submit' in request.POST:
         foodForm = FoodForm(request.POST, instance = food)
         if foodForm.is_valid():
-            food.name = foodForm.cleaned_data['name'].capitalize()
             foodForm.save()
         else:
             messages.error(request, "Please re-enter valid information.", extra_tags='danger')
@@ -318,43 +273,47 @@ def macros(request):
         e.save()
     context = {
         'form' : form,
-        'form2': form2,
         'foods' : data,
-        'display' : display,
     }
 
     return render(request, 'users/macros.html', context)
     
 @login_required
 def exercises(request):
-    # exercise_list = []
-    lift_form_name = ""
+    exercise_list = []
+    scraping_exercises = []
 
     category = 'All'
     if request.method == 'POST':
-       
         filter_form = ExerciseFilterForm(request.POST)
         if filter_form.is_valid():
             category = filter_form.cleaned_data['category']
             print(category)
-        else:
-            lift_form_name = request.POST['form_submit']
-            print(request.POST['form_submit'])
-    # EXERCISES_GLOBAL = []
-    if category =='All':
-        threads = len(URLS)
-        with concurrent.futures.ThreadPoolExecutor(max_workers=threads) as executor:
-            executor.map(scrap_url, URLS)      
-       
-    else:
-        EXERCISES_GLOBAL.clear()
-        correct_index = 0
-        for index, url in enumerate(URLS):
-            for key in url:
-                if key == category:
-                    correct_index = index
 
-        r = requests.get(URLS[correct_index][category]) 
+    if category =='All':      
+        for key in URLS:
+            
+        # URL = "https://www.acefitness.org/education-and-resources/lifestyle/exercise-library/body-part/abs/"
+            r = requests.get(URLS[key]) 
+    
+            soup = BeautifulSoup(r.content, 'html5lib') # If this line causes an error, run 'pip install html5lib' or install html5lib 
+
+            table = soup.find('div', attrs = {'id':'exerciseLibrary'})
+            for row in table.findAll('div', attrs = {"class" : "exercise-card-grid__cell"}):
+                exercise = {}
+                exercise['category'] = key
+                # exercise = {}
+                exercise['name'] = row.find('div', attrs = {"class" : "exercise-card__body"}).header.h2.text
+            # exercise['name'] = row.header.h2.text
+            
+                exercise['equipment'] = row.find('div', attrs = {"class" : "exercise-info__term exercise-info__term--equipment"}).dd.text
+                exercise['img'] = row.find('div', attrs = {"class" : "exercise-card__image"})['style'].split("'")[1]
+                exercise['description_link'] = 'https://www.acefitness.org/' + row.a['href']
+                scraping_exercises.append(exercise)
+            
+    # print(scraping_exercises)
+    else:
+        r = requests.get(URLS[category]) 
         soup = BeautifulSoup(r.content, 'html5lib') # If this line causes an error, run 'pip install html5lib' or install html5lib 
         table = soup.find('div', attrs = {'id':'exerciseLibrary'})
         for row in table.findAll('div', attrs = {"class" : "exercise-card-grid__cell"}):
@@ -367,10 +326,20 @@ def exercises(request):
             exercise['equipment'] = row.find('div', attrs = {"class" : "exercise-info__term exercise-info__term--equipment"}).dd.text
             exercise['img'] = row.find('div', attrs = {"class" : "exercise-card__image"})['style'].split("'")[1]
             exercise['description_link'] = 'https://www.acefitness.org/' + row.a['href']
-            
-            EXERCISES_GLOBAL.append(exercise)
+            scraping_exercises.append(exercise)
     
+
+        
+
     filter_form = ExerciseFilterForm(initial={'category': category})
+    with open(os.path.dirname(os.path.realpath(__file__)) + '/Exercises.json') as f:
+        data = json.load(f)
+
+        # print(data)
+    for exercise in data:
+        if exercise['group'] == category or category == 'All':
+            exercise_list.append(exercise)
+        
 
     liftrecord2 = LiftRecord2(user=request.user)
     if request.method == 'POST' and 'form_submit' in request.POST:
@@ -379,12 +348,11 @@ def exercises(request):
             liftForm.save()
         else:
             messages.error(request, "Please re-enter valid information.", extra_tags='danger')
-    form = Lift2Form(initial={'name': lift_form_name})
+    form = Lift2Form()
     # filter_form = ExerciseFilterForm()
     data = LiftRecord2.objects.filter(user = request.user).order_by('-date')
-    print(EXERCISES_GLOBAL)
     context = {
-        'exercises': EXERCISES_GLOBAL,
+        'exercises': scraping_exercises,
         'title': 'Exercises',
         'form' : form,
         'filter': filter_form,
@@ -394,42 +362,52 @@ def exercises(request):
     return render(request, 'users/exercises.html', context)
 
 
-def scrap_url(url):
-    for key in url:
-        r = requests.get(url[key]) 
-
-        soup = BeautifulSoup(r.content, 'html5lib') # If this line causes an error, run 'pip install html5lib' or install html5lib 
-
-        table = soup.find('div', attrs = {'id':'exerciseLibrary'})
-        print("OVER THERE")
-        for row in table.findAll('div', attrs = {"class" : "exercise-card-grid__cell"}):
-            print("Over here")
-            exercise = {}
-            exercise['category'] = key
-            # exercise = {}
-            exercise['name'] = row.find('div', attrs = {"class" : "exercise-card__body"}).header.h2.text
-                # exercise['name'] = row.header.h2.text
-                
-            exercise['equipment'] = row.find('div', attrs = {"class" : "exercise-info__term exercise-info__term--equipment"}).dd.text
-            exercise['img'] = row.find('div', attrs = {"class" : "exercise-card__image"})['style'].split("'")[1]
-            exercise['description_link'] = 'https://www.acefitness.org/' + row.a['href']
-            EXERCISES_GLOBAL.append(exercise)
-            
-
 
 @login_required
 def meals(request):
-    meal_dict = {}
 
-    with open(os.path.dirname(os.path.realpath(__file__)) + '/Meals.json') as f:
-        data = json.load(f)
+    category = 'All'
+    if request.method == 'POST':
+        filter_form = MealFilterForm(request.POST)
+        if filter_form.is_valid():
+            category = filter_form.cleaned_data['category']
 
-    meal_dict = data
+    if category != 'All':
+        URL = 'https://www.skinnytaste.com/recipes/' + category + '/'
+    else:
+        URL = 'https://www.skinnytaste.com/recipes/'
 
-    # data = LiftRecord2.objects.filter(user = request.user).order_by('-date')
+    r = requests.get(URL)
+
+    soup = BeautifulSoup(r.text, 'lxml')
+    recipe_list = []
+    recipe_dict = {}
+
+    for tag in soup.find_all('div', class_="archive-post"):
+        recipe_dict['link'] = tag.find('a')['href']
+        recipe_dict['title'] = tag.find('a')['title']
+        recipe_dict['img'] = tag.find('img')['src']
+        recipe_list.append(recipe_dict)
+        recipe_dict = {}
+
+    count = 1
+    while count < 5:
+        URL = 'https://www.skinnytaste.com/recipes/page/' + str(count) + '/'
+        r = requests.get(URL)
+        soup = BeautifulSoup(r.text, 'lxml')
+        count += 1
+        for tag in soup.find_all('div', class_="archive-post"):
+            recipe_dict['link'] = tag.find('a')['href']
+            recipe_dict['title'] = tag.find('a')['title']
+            recipe_dict['img'] = tag.find('img')['src']
+            recipe_list.append(recipe_dict)
+            recipe_dict = {}
+
+    filter_form = MealFilterForm(initial={'category': category})
     context = {
-        'meals': meal_dict,
+        'meals': recipe_list,
         'title': 'Meals',
+        'filter': filter_form,
     }
 
     return render(request, 'users/meals.html', context)

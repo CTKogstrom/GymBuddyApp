@@ -5,6 +5,7 @@ from .models import Profile
 from .models import WeightRecord
 from .models import LiftRecord2
 from .models import Food
+from django.utils import timezone
 
 WORKOUT_CATEGORIES = [
     ('All', 'All'),
@@ -65,6 +66,10 @@ class FoodForm(forms.ModelForm):
     class Meta:
         model = Food
         fields = ['name','carbs', 'fats', 'protein', 'date']
+
+class SingleFood(forms.Form):
+    foodName = forms.CharField(label='Search for a specific food')
+    date = forms.DateField(label='Date', initial=timezone.now)
 
 class OptionForm(forms.Form):
     optionName = forms.ChoiceField()

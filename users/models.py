@@ -20,7 +20,7 @@ def validate_goal_weight_change(value):
             params={'value': value}
         )
 
-def validate_food_values(value):
+def validate_not_neg(value):
     if value < 0:
         raise ValidationError(
             gettext_lazy(f"This value cannot be a negative number"),
@@ -49,7 +49,8 @@ class Profile(models.Model):
 
 class WeightRecord(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
-    lbs = models.IntegerField()
+    lbs = models.IntegerField(help_text='May not be a negative number.',
+                              validators=[validate_not_neg])
     date = models.DateField(default=timezone.now)
 
     def __str__(self):
@@ -76,8 +77,8 @@ class LiftRecord2(models.Model):
 class Food(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     name = models.CharField(max_length=100)
-    carbs = models.IntegerField(validators=[validate_food_values])
-    fats = models.IntegerField(validators=[validate_food_values])
-    protein = models.IntegerField(validators=[validate_food_values])
-    calories = models.IntegerField(default=0, validators=[validate_food_values])
+    carbs = models.IntegerField(validators=[validate_not_neg])
+    fats = models.IntegerField(validators=[validate_not_neg])
+    protein = models.IntegerField(validators=[validate_not_neg])
+    calories = models.IntegerField(default=0, validators=[validate_not_neg])
     date = models.DateField(default=timezone.now)

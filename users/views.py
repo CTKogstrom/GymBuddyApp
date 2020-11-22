@@ -196,11 +196,11 @@ def profile(request):
                            Heavy - Planned vigorous activities, physical labor, full-time athletes, hard-labor 
                            prefessions such as steel or road workers
                            """]
-    if request.user.profile.activity_level<1.4:
+    if Profile.objects.filter(user=request.user).first().activity_level<1.4:
         daily_act = daily_activity_desc[0]
-    elif request.user.profile.activity_level<1.7:
+    elif Profile.objects.filter(user=request.user).first().activity_level<1.7:
         daily_act = daily_activity_desc[1]
-    elif request.user.profile.activity_level<1.8:
+    elif Profile.objects.filter(user=request.user).first().activity_level<1.8:
         daily_act = daily_activity_desc[2]
     else:
         daily_act = daily_activity_desc[3]

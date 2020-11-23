@@ -48,37 +48,38 @@
     <!-- Header End -->
     
     <!-- About Section Begin -->
-    <section class="about-section spad" style="margin-top: 50px;">
+    <section class="about-section spad">
         <div class="container">
 
-                        <h2 style="color:white;" >Find New Meals To Fit Your Goals!</h2>
+                        <h2 style="color:white; padding-bottom: 10px; padding-top: 10px;" >Find New Meals To Fit Your Goals!</h2>
                         <div class="meal-box-overflow">
 
-                         <form method='POST' action="{{filter.get_category_display}}">
+                         <form method='POST' action="{{filter.get_category_display}}" style="padding-bottom: 30px; padding-left: 15px;">
                              {% csrf_token %}
                             {{filter|crispy}}
                             <Button class="btn btn-default btn-lg" type="submit" name="form_submit">Filter</Button>
                          </form>
-                           {% for recipe in meals %}
-                                <div class="recipes">
 
-                                    <div class = "container">
-                                    {{filter.get_category_display}}
-                                    <h4>{{recipe.title}}</h4>
-                                    <img src= "{{recipe.img}}" alt = "" width="150" height="200">
-                                    <h5> <a href = {{recipe.link}}>{{recipe.title}}</a></h5>
+                           {% for recipe in meals %}
+                               {{filter.get_category_display}}
+                               <li style="display: inline-block; padding-right: 25px; padding-bottom: 20px; width: 350px; padding-left: 10px" >
+                               <img src={{recipe.img}} width="250px" height="300px">
+
+                                    <h5 style="color:white;">{{recipe.title}}</h5>
+                                    <a href = {{recipe.link}}>Get Recipe!</a>
 
                                     </p>
-                                </div>
+
 
                 {% endfor %}
-                        </div>
+
                     <a href="#" class="primary-btn">Find</a>
 
             </div>
         </div>
 
     </section>
+    <!-- About Section End -->
     <!-- About Section End -->
 
     <!-- Footer Section Begin -->

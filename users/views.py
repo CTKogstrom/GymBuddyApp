@@ -261,6 +261,10 @@ def macros(request):
     foodName = ""
     foodDate = ""
     display = False
+    if request.method == 'POST' and 'delete_but' in request.POST:
+        deleted = Food.objects.filter(user = request.user, pk=request.POST['pk']).first()
+        Food.objects.filter(user = request.user, pk=request.POST['pk']).delete()
+
     if request.method == 'POST' and 'form2_submit' in request.POST:
         display = True
         singleFood = SingleFood(request.POST)
@@ -311,17 +315,24 @@ def macros(request):
             messages.error(request, "Please re-enter valid information.", extra_tags='danger')
     form = FoodForm()
     data = Food.objects.filter(user = request.user).order_by('-date')
+    dates = []
     for e in data:
         carbCal = 4 * e.carbs
         fatCal = 9 * e.fats
         proteinCal = 4 * e.protein
         e.calories = carbCal + fatCal + proteinCal
         e.save()
+        if e.date not in dates:
+            dates.append(e.date)
+    
+
+
     context = {
         'form' : form,
         'form2': form2,
         'foods' : data,
         'display' : display,
+        'dates' : dates
     }
 
     return render(request, 'users/macros.html', context)

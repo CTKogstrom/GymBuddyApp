@@ -62,7 +62,7 @@
                                 <legend class="border-bottom mb-4" style="font-size: 40px; font-weight: bold;">Get Jacked!</legend>
                                 {{form|crispy}}
                                 <div class="form-group" style="margin-bottom: 10px; margin-top: 10px;">
-                                    <button class="primary-btn" type="submit" name="form_submit">Log</button>
+                                    <button class="primary-btn" type="submit" name="form_submit" style="cursor: pointer">Log</button>
                                 </div>
                             </fieldset>
                             
@@ -72,39 +72,54 @@
                             <fieldset class="form-group" style="border-width: 10px;  margin-bottom  : 20px; font-size: 20px;" >
                                 <legend class="border-bottom mb-4" style="font-size: 40px; font-weight: bold;">Search!</legend>
                                 {{form2|crispy}}
-                                <button class="primary-btn" type="submit" name="form2_submit" style="margin-bottom: 10px; margin-top: 10px;">Add</button>
+                                <button class="primary-btn" type="submit" name="form2_submit" style="margin-bottom: 10px; margin-top: 10px;cursor: pointer">Add</button>
                             </fieldset>
                         </form>
                         
                         
                         <div>
-                            
-                            <table class="table" style="font-size: 20px; width: 45%; border: 5px solid darkgrey;">
-                                
-                                <thead>
-                                    <h3 style="color: white; font-weight: bold; font-size: 40px;">Macros Tracker</h3>
-                                    <tr>
-                                    <th scope="col">Food</th>
-                                    <th scope="col">Carbs</th>
-                                    <th scope="col">Fats</th>
-                                    <th scope="col">Protein</th>
-                                    <th scope="col">Calories</th>
-                                    <th scope="col">Date</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    {% for food in foods %}
+                            {% for date in dates %}
+                                <!--<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css" > -->
+                                <table class="table" style="font-size: 20px; width: 45%; border: 5px solid darkgrey;">
+                                    
+                                    <thead>
+                                        <h5 style="color: white; font-weight: bold; font-size: 30px;">{{date}}</h5>
                                         <tr>
-                                            <th scope="row">{{food.name}}</th>
-                                            <td style="text-align: center">{{food.carbs}} g</td>
-                                            <td style="text-align: center">{{food.fats}} g</td>
-                                            <td style="text-align: center">{{food.protein}} g</td>
-                                            <td style="text-align: center">{{food.calories}}</td>
-                                            <td style="text-align: center">{{food.date}}</td>
+                                        <th scope="col" style="padding: 5px;">Food</th>
+                                        <th scope="col" style="padding: 5px;">Carbs</th>
+                                        <th scope="col" style="padding: 5px;">Fats</th>
+                                        <th scope="col" style="padding: 5px;"> Protein </th>
+                                        <th scope="col" style="padding: 5px;">Calories</th>          
                                         </tr>
-                                    {% endfor %}
-                                </tbody>
-                            </table>
+                                    </thead>
+                                    <tbody>
+                                        {% for food in foods %}
+                                        {% if food.date == date %}
+                                            <tr>
+                                                <th scope="row">{{food.name}}</th>
+                                                <td style="text-align: center">{{food.carbs}} g</td>
+                                                <td style="text-align: center">{{food.fats}} g</td>
+                                                <td style="text-align: center;">{{food.protein}} g</td>
+                                                <td style="text-align: center">{{food.calories}}</td>
+                                                <td>
+                                                    <form action="" method="post">
+                                                        {% csrf_token %}
+                                                        <input type ="hidden" value="{{ food.pk }}" name="pk">
+                                                        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+                                                        <button type="submit" name="delete_but" style="border:none;background-color:transparent;font-size:30px;cursor: pointer;color: #990000;" value="Delete" class="p-0 m-0 text-danger pl-3 pr-1"><i class="fa fa-trash"></i></button>
+                                                    </form>
+                                                </td>
+                                            </tr>
+                                        {% endif %}
+                                        {% endfor %}
+                                    </tbody>
+                                    <tfoot>
+                                        <tr style="text-align: left;">
+                                          <th id="total" colspan="3">Total Calories: 200</th>
+                                        </tr>
+                                       </tfoot>
+                                </table>
+                            {% endfor %}
                         </div>
                         <div class="col-lg-6" >
                             <div class="about-pic">

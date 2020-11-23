@@ -55,16 +55,24 @@
                     <div class="about-text">
                         <form method="POST">
                             {% csrf_token %}
-                            <fieldset class="form-group">
-                                <legend class="border-bottom mb-4">Get Jacked!</legend>
+                            <fieldset class="form-group" style=" float: left; border-width: 10px; font-size: 20px;">
+                                <legend class="border-bottom mb-4" style="font-size: 40px; font-weight: bold; color: white;">Get Jacked!</legend>
                                 {{form|crispy}}
+                                <div class="form-group" style="margin-bottom: 10px; margin-top: 10px;">
+                                    <button class="primary-btn" type="submit" name="form_submit">Log</button>
+                                </div>
                             </fieldset>
-                            <div class="form-group">
-                                <button class="btn btn-outline-info" type="submit" name="form_submit">Log</button>
+
+                            <div class="col-lg-6" style="float: right;">
+                                <div class="about-pic">
+                                    <img src="{% static 'img/weight-filler.png' %}" alt="">
+                                </div>
                             </div>
+                            
                             <div>
-                                <table class="table">
+                                <table class="table" style=" color : white; font-size: 20px; width: 45%; border: 5px solid darkgrey;">
                                     <thead>
+                                      <h3 style="color: white; margin-top: 30px; font-weight: bold; font-size: 40px; float: left;">Weight Tracker</h3>
                                       <tr>
                                         <th scope="col">Date</th>
                                         <th scope="col">Weight</th>
@@ -74,18 +82,14 @@
                                         {% for weight in weights %}
                                             <tr>
                                                 <th scope="row">{{weight.date}}</th>
-                                                <td>{{weight.lbs}} lbs</td>
+                                                <td style="text-align: center">{{weight.lbs}} lbs</td>
                                             </tr>
                                         {% endfor %}
                                     </tbody>
                                 </table>
                             </div>
                         </form>
-                        <div class="col-lg-6">
-                            <div class="about-pic">
-                                <img src="{% static 'img/weight-filler.png' %}" alt="">
-                            </div>
-                        </div>
+                        
                     </div>
                 </div>
             </div>

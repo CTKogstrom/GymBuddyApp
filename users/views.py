@@ -100,7 +100,7 @@ def profile(request):
    
     #retrieve data in profile
     data = Profile.objects.filter(user = request.user)
-    calories = carbs = fats = protein = goalWeight = currWeight = activity = starting_weight = {}
+    calories = carbs = fats = protein = goalWeight = currWeight = activity = startingWeight = {}
     for e in data:
         calories = e.daily_cal_in
         carbs = e.daily_carbs

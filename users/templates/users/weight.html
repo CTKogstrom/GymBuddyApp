@@ -51,28 +51,28 @@
     <section class="about-section spad" style="margin-top: 50px;">
         <div class="container">
             <div class="row">
-                <div class="col-lg-6">
+                
                     <div class="about-text">
                         <form method="POST">
                             {% csrf_token %}
-                            <fieldset class="form-group" style=" float: left; border-width: 10px; font-size: 20px;">
-                                <legend class="border-bottom mb-4" style="font-size: 40px; font-weight: bold; color: white;">Get Jacked!</legend>
+                            <fieldset class="form-group" style=" float: left; border-width: 10px; font-size: 20px; width: 40%; margin-top: 0px; margin-left: 10%;" >
+                                <legend class="border-bottom mb-4" style="font-size: 40px; font-weight: bold; color: white;">Log Weight!</legend>
                                 {{form|crispy}}
                                 <div class="form-group" style="margin-bottom: 10px; margin-top: 10px;">
                                     <button class="primary-btn" type="submit" name="form_submit">Log</button>
                                 </div>
                             </fieldset>
 
-                            <div class="col-lg-6" style="float: right;">
+                            <!--<div class="col-lg-6" style="float: right;">
                                 <div class="about-pic">
                                     <img src="{% static 'img/weight-filler.png' %}" alt="">
                                 </div>
-                            </div>
-                            
-                            <div>
-                                <table class="table" style=" color : white; font-size: 20px; width: 45%; border: 5px solid darkgrey;">
+                            </div>-->
+                           
+                                                        
+                                <table class="table" style=" width: 45%; margin-left: 65%; color : white; font-size: 20px; border: 5px solid darkgrey;">
                                     <thead>
-                                      <h3 style="color: white; margin-top: 30px; font-weight: bold; font-size: 40px; float: left;">Weight Tracker</h3>
+                                        <h3 style="color: white; margin-left: 65%; margin-top: 30px; font-weight: bold; font-size: 40px;">Weight Tracker</h3>
                                       <tr>
                                         <th scope="col">Date</th>
                                         <th scope="col">Weight</th>
@@ -86,7 +86,7 @@
                                                 <td>
                                                     <form action="" method="post">
                                                         {% csrf_token %}
-                                                        <input type ="hidden" value="{{ food.pk }}" name="pk">
+                                                        <input type ="hidden" value="{{ weight.pk }}" name="pk">
                                                         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
                                                         <button type="submit" name="delete_but" style="border:none;background-color:transparent;font-size:30px;cursor: pointer;color: #990000;" value="Delete" class="p-0 m-0 text-danger pl-3 pr-1"><i class="fa fa-trash"></i></button>
                                                     </form>
@@ -99,7 +99,7 @@
                         </form>
                         
                     </div>
-                </div>
+                
             </div>
         </div>
     </section>

@@ -97,28 +97,29 @@
                 <Button class="primary-btn" type="submit" name="form_submit">Filter</Button>  
             </form>
                 {% for exercise in exercises %}
-                    <li style="display: inline-block; padding-right: 25px; padding-bottom: 20px; width: 350px; padding-left: 15px" >                     
+                    <div class="card" style="background-color: #D8D8D8; box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2); border-radius: 10px; transition: 0.3s; float: left; width: 30%; margin-left: 1%; margin-bottom: 1%; margin-top: 1%; margin-right: 1%; padding-bottom: 20px; padding-top: 20px; text-align: center;" >
+                                           
                         <img src={{exercise.img}} width="350px" height="400px">
                             <!--Pending: populate exercise log with selected exercise-->
                             <!-- <strong>{{filter.get_category_display}}</strong></br> -->
-                        <h2 style="color:whitesmoke; margin: 0; font-size : 26px;"><strong>{{exercise.name}}</strong></br>
-                        <h4 style="color:white;"> Category: {{exercise.category}} </h4> 
-                        <h4 style="color:white;"> Equipment: {{exercise.equipment}} </h4> 
-                        <a href = {{exercise.description_link}}>Description Link</a>
+                        <h2 style="color:black; margin: 0; font-size: larger; margin-top: 10px;"><strong>{{exercise.name}}</strong></br>
+                        <h4 style="color:black; font-size: small;"> Category: {{exercise.category}} </h4> 
+                        <h4 style="color:black; font-size: small;"> Equipment: {{exercise.equipment}} </h4> 
+                        <a href = {{exercise.description_link}} style="font-size: small;">Description Link</a>
                         <div class="form-group" style="text-align: center;">
                             <form action="{% url 'exercises' %}" method="post">
                                 {% csrf_token %}
                                 
-                                
-                                <button class="primary-btn" type= "submit" name="form_submit" value="{{exercise.name}}">Log</button>
+                                <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css" >
+                                <button class="add btn btn-block btn-primary mb-2" type= "submit" name="form_submit" value="{{exercise.name}}" style="margin-top: 10px; cursor: pointer; width: 50%; text-align: center; margin-left: 25%;">Log</button>
                                  </form>
-
 
 
                             
                         </div>
                                             
-                    </li>
+                    </div>
+                    
                 {% endfor %}
     </div>
     {% endblock body %}

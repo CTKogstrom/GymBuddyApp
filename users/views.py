@@ -242,6 +242,10 @@ def profile(request):
 @login_required
 def weight(request):
     weightrecord = WeightRecord(user=request.user)
+    if request.method == 'POST' and 'delete_but' in request.POST:
+        deleted = WeightRecord.objects.filter(user = request.user, pk=request.POST['pk']).first()
+        WeightRecord.objects.filter(user = request.user, pk=request.POST['pk']).delete()
+
     if request.method == 'POST' and 'form_submit' in request.POST:
         lbForm = WeightForm(request.POST, instance = weightrecord)
         if lbForm.is_valid():

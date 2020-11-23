@@ -83,6 +83,14 @@
                                             <tr>
                                                 <th scope="row">{{weight.date}}</th>
                                                 <td style="text-align: center">{{weight.lbs}} lbs</td>
+                                                <td>
+                                                    <form action="" method="post">
+                                                        {% csrf_token %}
+                                                        <input type ="hidden" value="{{ food.pk }}" name="pk">
+                                                        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+                                                        <button type="submit" name="delete_but" style="border:none;background-color:transparent;font-size:30px;cursor: pointer;color: #990000;" value="Delete" class="p-0 m-0 text-danger pl-3 pr-1"><i class="fa fa-trash"></i></button>
+                                                    </form>
+                                                </td>
                                             </tr>
                                         {% endfor %}
                                     </tbody>

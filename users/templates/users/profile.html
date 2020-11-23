@@ -3,68 +3,82 @@
 {% block content %}
     <h1>My Profile</h1>
     <div class="content-section">
-        <div style="display: flex" class="card" id="goals-card">
-            <h2 id="Profile-goals-header">
-                Your Current Goals
-            </h2>
-            <section id="Profile-goals-section">
-                Daily Calorie Intake (kCal): {{ calories }}<br>
-                Daily Carbohydrate Intake (grams): {{ carbs }}<br>
-                Daily Fat Intake (grams): {{ fats }}<br>
-                Daily Protein Intake (grams): {{ protein }}<br>
-                +<br>
-                {{ daily_act_info }}<br>
-                ------------------------------------------------------------------<br>
-                A weight change of {{ goalWeight }} pounds this week.
-            </section>
+        <div style="padding-bottom: 3em; display: flex; justify-content: space-around; border: 0.5vw solid rgb(50,10,10);
+                margin-bottom: 2vh;" id = "goals-section">
+            <div style="display: flex; flex-direction:column; background-color: #5f788a; padding: 1em;
+            border-style: solid; border: #86989B; border-width: 3em;" id="goals-card">
+                <h2 id="Profile-goals-header">
+                    Your Current Goals
+                </h2>
+                <section id="Profile-goals-section">
+                    Daily Calorie Intake (kCal): {{ calories }}<br>
+                    Daily Carbohydrate Intake (grams): {{ carbs }}<br>
+                    Daily Fat Intake (grams): {{ fats }}<br>
+                    Daily Protein Intake (grams): {{ protein }}<br>
+                    +<br>
+                    {{ daily_act_info }}<br>
+                    ------------------------------------------------------------------<br>
+                    A weight change of {{ goalWeight }} pounds this week.
+                </section>
+
+            </div>
+            <form method="POST" style="padding: 1em; background-color: #5b80b2">
+                {% csrf_token %}
+                <fieldset class="form-group">
+                    <legend class="border-bottom mb-4">Update Gains</legend>
+                    {{ update_prof_form|crispy }}
+                </fieldset>
+                <div class="form-group">
+                    <button class="btn btn-outline-info" type="submit" name="form_submit">Update Info</button>
+                </div>
+            </form>
 
         </div>
-        <form method="POST">
-            {% csrf_token %}
-            <fieldset class="form-group">
-                <legend class="border-bottom mb-4">Update Gains</legend>
-                {{ update_prof_form|crispy }}
-            </fieldset>
-            <div class="form-group">
-                <button class="btn btn-outline-info" type="submit" name="form_submit">Update Info</button>
+        <div id="graphs-section-container" style="display: flex; flex-direction: column; align-items: center; justify-content: space-between">
+            <div class="graph-container">
+                <div>
+                    <p class="card-text">
+                    <img src="data:image/png;base64,{{ weightGraph }}" width="100%" style="border-radius: 5%">
+                    </p>
+                </div>
             </div>
-        </form>
-        <div>
-            <p class="card-text">
-            <img src="data:image/png;base64,{{ weightGraph }}" width="100%">
-            </p>
-        </div>
-        <form method="POST" action="/profile/">{% csrf_token %}
-            <label for="colorSelect">Select an Exercise</label>
-                <select type="text" class="form-control" name="exercise" id ="exercise">
-                    <option selected disabled>---------</option>
-                    {% for exercise in exerciseNames %}
-                        <option value="{{ exercise }}"> {{exercise}}</option> 
-                    {% endfor %}
-                </select>
-            <Button class="btn btn-outline-secondary form-control" name="option_submit" type="submit">Select</Button>
-        </form>
-        <div>
-            <p class="card-text">
-            <img src="data:image/png;base64,{{ strengthGraph }}" width="100%">
-            </p>
-        </div>
-        <form method="POST" action="/profile/">{% csrf_token %}
-            <label for="colorSelect">Select a Date</label>
-                <select type="text" class="form-control" name="date" id ="date">
-                    <option selected disabled>---------</option>
-                    {% for date in foodDates %}
-                        <option value="{{ date }}"> {{date}}</option> 
-                    {% endfor %}
-                </select>
-            <Button class="btn btn-outline-secondary form-control" name="date_submit" type="submit">Select</Button>
-        </form>
-        <div>
-            <p class="card-text">
-            <img src="data:image/png;base64,{{ macroGraph }}" width="100%">
-            </p>
+            <div class="graph-container">
+                <form method="POST" action="/profile/">{% csrf_token %}
+                    <label for="colorSelect">Select an Exercise</label>
+                        <select type="text" class="form-control" name="exercise" id ="exercise">
+                            <option selected disabled>---------</option>
+                            {% for exercise in exerciseNames %}
+                                <option value="{{ exercise }}"> {{exercise}}</option>
+                            {% endfor %}
+                        </select>
+                    <Button class="btn btn-outline-secondary form-control" name="option_submit" type="submit">Select</Button>
+                </form>
+                <div>
+                    <p class="card-text">
+                    <img src="data:image/png;base64,{{ strengthGraph }}" width="80%" style="border-radius: 5%">
+                    </p>
+                </div>
+            </div>
+            <div class="graph-container">
+                <form method="POST" action="/profile/">{% csrf_token %}
+                    <label for="colorSelect">Select a Date</label>
+                        <select type="text" class="form-control" name="date" id ="date">
+                            <option selected disabled>---------</option>
+                            {% for date in foodDates %}
+                                <option value="{{ date }}"> {{date}}</option>
+                            {% endfor %}
+                        </select>
+                    <Button class="btn btn-outline-secondary form-control" name="date_submit" type="submit">Select</Button>
+                </form>
+                <div>
+                    <p class="card-text">
+                    <img src="data:image/png;base64,{{ macroGraph }}" width="80%" style="border-radius: 5%">
+                    </p>
+                </div>
+            </div>
         </div>
         <div class="border-top pt-3">
         </div>
+
     </div>
 {% endblock content %}

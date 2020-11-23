@@ -186,15 +186,15 @@ def profile(request):
                            """,
                            """
                            Low active - In addition to the activities of a sedentary lifestyle, 30 minutes of moderate 
-                           activity equivalent of walking 2 minles in 30 minutes; most office workers with additional planned exercis routines
+                           activity equivalent of walking 2 mines in 30 minutes; most office workers with additional planned exercis routines
                            """,
                            """
-                           Active - In addition to the activites of a low active lifestyle, an additional 3 hours of 
+                           Active - In addition to the activities of a low active lifestyle, an additional 3 hours of 
                            activity such as bicycle 10-12 miles an hour, walk 4.5 miles an hour
                            """,
                            """
                            Heavy - Planned vigorous activities, physical labor, full-time athletes, hard-labor 
-                           prefessions such as steel or road workers
+                           professions such as steel or road workers
                            """]
     if Profile.objects.filter(user=request.user).first().activity_level<1.4:
         daily_act = daily_activity_desc[0]

@@ -246,7 +246,7 @@ def weight(request):
         deleted = WeightRecord.objects.filter(user = request.user, pk=request.POST['pk']).first()
         WeightRecord.objects.filter(user = request.user, pk=request.POST['pk']).delete()
 
-    if request.method == 'POST' and 'form_submit' in request.POST:
+    elif request.method == 'POST' and 'form_submit' in request.POST:
         lbForm = WeightForm(request.POST, instance = weightrecord)
         if lbForm.is_valid():
             lbForm.save()

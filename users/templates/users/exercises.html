@@ -51,20 +51,20 @@
     <section class="about-section spad" style="margin-top: 50px;">
         <div class="container">
             <div class="row">
-                <div class="col-lg-6">
+                
 
 
-                    <form method="POST">
+                    <form method="POST" style="width: 50%; margin-left: 25%;">
                         {% csrf_token %}
-                        <fieldset class="form-group">
-                            <legend class="border-bottom mb-4">Get Jacked!</legend>
+                        <fieldset class="form-group" style="color: white; ">
+                            <legend class="border-bottom mb-4" style="font-size: 40px; color: white; text-align: center; font-weight: bold;">Log Exercise</legend>
                             {{form|crispy}}
+                            <div class="form-group">
+                                <button class="add btn btn-block btn-primary btn-lg mb-2" type="submit" name="form_submit" style="cursor: pointer; width: 50%; text-align: center; margin-left: 25%;">Log</button>
+                            </div>
                         </fieldset>
-                        <div class="form-group">
-                            <button class="primary-btn" type="submit" name="form_submit">Log</button>
-                        </div>
+                        
                     </form>
-                </div>
                 <!-- <div class="col-lg-6"> -->
 
                     <!-- <div>
@@ -78,8 +78,8 @@
     <!-- About Section End -->
 
     {% block body %}
-    <h2 class="log-text" >Excercise List</h2>
-    <p style="color: white;">Check out our extensive list of workouts and log your favorites to your profile!</p>
+    <h2 class="log-text" style="text-align: center;">Excercise List</h2>
+    <p style="color: white; text-align: center;">Check out our extensive list of workouts and log your favorites to your profile!</p>
 
     
     <div class="exercies">
@@ -91,34 +91,35 @@
                     </div>
                 {% endfor %}
             {% endif %} -->
-            <form method='POST' action="{{filter.get_category_display}}" style="padding-bottom: 30px; padding-left: 15px;">
+            <form method='POST' action="{{filter.get_category_display}}" style="padding-bottom: 30px; padding-left: 15px; width: 25%; margin-left: 36.5%;">
                 {% csrf_token %}
                 {{filter|crispy}}
-                <Button class="primary-btn" type="submit" name="form_submit">Filter</Button>  
+                <Button class="add btn btn-block btn-primary mb-2" type="submit" name="form_submit" >Filter</Button>  
             </form>
                 {% for exercise in exercises %}
-                    <li style="display: inline-block; padding-right: 25px; padding-bottom: 20px; width: 350px; padding-left: 15px" >                     
+                    <div class="card" style="background-color: #D8D8D8; box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2); border-radius: 10px; transition: 0.3s; float: left; width: 30%; margin-left: 1%; margin-bottom: 1%; margin-top: 1%; margin-right: 1%; padding-bottom: 20px; padding-top: 20px; text-align: center;" >
+                                           
                         <img src={{exercise.img}} width="350px" height="400px">
                             <!--Pending: populate exercise log with selected exercise-->
                             <!-- <strong>{{filter.get_category_display}}</strong></br> -->
-                        <h2 style="color:whitesmoke; margin: 0; font-size : 26px;"><strong>{{exercise.name}}</strong></br>
-                        <h4 style="color:white;"> Category: {{exercise.category}} </h4> 
-                        <h4 style="color:white;"> Equipment: {{exercise.equipment}} </h4> 
-                        <a href = {{exercise.description_link}}>Description Link</a>
+                        <h2 style="color:black; margin: 0; font-size: larger; margin-top: 10px;"><strong>{{exercise.name}}</strong></br>
+                        <h4 style="color:black; font-size: small;"> Category: {{exercise.category}} </h4> 
+                        <h4 style="color:black; font-size: small;"> Equipment: {{exercise.equipment}} </h4> 
+                        <a href = {{exercise.description_link}} style="font-size: small;">Description Link</a>
                         <div class="form-group" style="text-align: center;">
                             <form action="{% url 'exercises' %}" method="post">
                                 {% csrf_token %}
                                 
-                                
-                                <button class="primary-btn" type= "submit" name="form_submit" value="{{exercise.name}}">Log</button>
+                                <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css" >
+                                <button class="add btn btn-block btn-primary mb-2" type= "submit" name="form_submit" value="{{exercise.name}}" style="margin-top: 10px; cursor: pointer; width: 50%; text-align: center; margin-left: 25%;">Log</button>
                                  </form>
-
 
 
                             
                         </div>
                                             
-                    </li>
+                    </div>
+                    
                 {% endfor %}
     </div>
     {% endblock body %}

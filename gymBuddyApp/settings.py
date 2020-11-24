@@ -32,9 +32,9 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
-    'activityLibrary.apps.ActivitylibraryConfig',
-    'users.apps.UsersConfig',
-    'pages.apps.PagesConfig',
+    'GymBuddyApp.activityLibrary.apps.ActivitylibraryConfig',
+    'GymBuddyApp.users.apps.UsersConfig',
+    'GymBuddyApp.pages.apps.PagesConfig',
     'crispy_forms',
     'django.contrib.admin',
     'django.contrib.auth',
@@ -54,7 +54,7 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
-ROOT_URLCONF = 'gymBuddyApp.urls'
+ROOT_URLCONF = 'GymBuddyApp.gymBuddyApp.urls'
 
 TEMPLATES = [
     {
@@ -72,7 +72,7 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = 'gymBuddyApp.wsgi.application'
+WSGI_APPLICATION = 'GymBuddyApp.gymBuddyApp.wsgi.application'
 
 
 # Database

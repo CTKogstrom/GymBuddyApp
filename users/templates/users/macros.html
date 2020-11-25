@@ -2,6 +2,7 @@
 {% load static %}
 <!DOCTYPE html>
 <html lang="zxx">
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css" >
 
 <head>
     <meta charset="UTF-8">
@@ -48,18 +49,18 @@
     <!-- Header End -->
     
     <!-- About Section Begin -->
-    <section class="about-section spad" style="margin-top: 50px;">
+    <section class="about-section spad" style="margin-top: 50px;padding-bottom: 25%;">
         <div class="container">
             <div class="row" >
-                <img src="{% static 'img/Macro-Graphic.png' %}" width="700" height="1200" alt="" style="float: left; width : 50%; margin-left: 30px; margin-right: 40px;">
+                <!-- <img src="{% static 'img/Macro-Graphic.png' %}" width="700" height="1200" alt="" style="float: left; width : 50%; margin-left: 30px; margin-right: 40px;"> -->
                 <div class="col-lg-6" style="float: right; margin-left: 50px;">
                 </div>
                 <div class="col-lg-6">
                     <div class="about-text" style="color: white;">
                         <form method="POST">
                             {% csrf_token %}
-                            <fieldset class="form-group" style="border-width: 10px; font-size: 20px;" >
-                                <legend class="border-bottom mb-4" style="font-size: 40px; font-weight: bold;">Get Jacked!</legend>
+                            <fieldset class="form-group" style="border-width: 10px; font-size: 20px; width: 25%; margin-top: 0px; margin-left: 0%;" >
+                                <legend class="border-bottom mb-4" style="font-size: 40px; font-weight: bold;">Log a Food!</legend>
                                 {{form|crispy}}
                                 <div class="form-group" style="margin-bottom: 10px; margin-top: 10px;">
                                     <button class="primary-btn" type="submit" name="form_submit" style="cursor: pointer">Log</button>
@@ -89,7 +90,8 @@
                                         <th scope="col" style="padding: 5px;">Carbs</th>
                                         <th scope="col" style="padding: 5px;">Fats</th>
                                         <th scope="col" style="padding: 5px;"> Protein </th>
-                                        <th scope="col" style="padding: 5px;">Calories</th>          
+                                        <th scope="col" style="padding: 5px;">Calories</th>   
+                                        <th scope="col" style="padding: 5px;"></th>         
                                         </tr>
                                     </thead>
                                     <tbody>

@@ -246,6 +246,9 @@ def weight(request):
         deleted = WeightRecord.objects.filter(user = request.user, pk=request.POST['pk']).first()
         WeightRecord.objects.filter(user = request.user, pk=request.POST['pk']).delete()
 
+    elif request.method == 'POST' and 'weight_graph' in request.POST:
+        return redirect('profile')
+
     elif request.method == 'POST' and 'form_submit' in request.POST:
         lbForm = WeightForm(request.POST, instance = weightrecord)
         if lbForm.is_valid():
@@ -254,9 +257,21 @@ def weight(request):
             messages.error(request, "Please re-enter valid information.", extra_tags='danger')
     form = WeightForm()
     data = WeightRecord.objects.filter(user = request.user).order_by('-date')
+    size = len(data)
+    stats = Profile.objects.filter(user = request.user)[0]
+    goal = stats.goal_weight_change
+    listG = []
+    for e in data:
+        diff = goal - e.lbs
+        if diff > 0:
+            diff = '+' + str(diff) 
+        listG.append((e.date, e.lbs, diff)) 
     context = {
         'form' : form,
         'weights' : data,
+        'size' : size,
+        'goal' : goal,
+        'listG' : listG
     }
     return render(request, 'users/weight.html', context)
   
@@ -354,7 +369,14 @@ def exercises(request):
     lift_form_name = ""
 
     category = 'All'
-    if request.method == 'POST':
+    if request.method == 'POST' and 'delete_but' in request.POST:
+        deleted = LiftRecord2.objects.filter(user = request.user, pk=request.POST['pk']).first()
+        LiftRecord2.objects.filter(user = request.user, pk=request.POST['pk']).delete()
+
+    elif request.method == 'POST' and 'strength_graph' in request.POST:
+        return redirect('profile')
+
+    elif request.method == 'POST':
        
         filter_form = ExerciseFilterForm(request.POST)
         if filter_form.is_valid():
@@ -405,6 +427,7 @@ def exercises(request):
     form = Lift2Form(initial={'name': lift_form_name})
     # filter_form = ExerciseFilterForm()
     data = LiftRecord2.objects.filter(user = request.user).order_by('-date')
+    size = len(data)
     print(EXERCISES_GLOBAL)
     context = {
         'exercises': EXERCISES_GLOBAL,
@@ -412,7 +435,8 @@ def exercises(request):
         'form' : form,
         'filter': filter_form,
         'lifts' : data,
-    }
+        'size' : size
+     } 
 
     return render(request, 'users/exercises.html', context)
 

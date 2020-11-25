@@ -41,8 +41,8 @@ URLS = [
     {'Quads'  : 'https://www.acefitness.org/education-and-resources/lifestyle/exercise-library/body-part/legs-calves-and-shins/soleus/'}
 ]
 
+MEALNAME = ""
 EXERCISES_GLOBAL = []
-
 
 def register(request):
     if request.method == 'POST':
@@ -262,12 +262,17 @@ def weight(request):
   
 @login_required
 def macros(request):
+    global MEALNAME
+    print(MEALNAME)
     foodName = ""
     foodDate = ""
     display = False
+
     if request.method == 'POST' and 'delete_but' in request.POST:
         deleted = Food.objects.filter(user = request.user, pk=request.POST['pk']).first()
         Food.objects.filter(user = request.user, pk=request.POST['pk']).delete()
+    
+    #if request.method
 
     if request.method == 'POST' and 'form2_submit' in request.POST:
         display = True
@@ -306,7 +311,9 @@ def macros(request):
             food2.protein = macroList[3]
             food2.date = foodDate
             food2.save()
-    form2 = SingleFood()
+    #form2 = SingleFood()
+    enter = MEALNAME
+    form2 = SingleFood(initial={'foodName': enter})
            
             
     food = Food(user=request.user)
@@ -338,7 +345,7 @@ def macros(request):
         'display' : display,
         'dates' : dates
     }
-
+    MEALNAME = ""
     return render(request, 'users/macros.html', context)
     
 @login_required
@@ -435,9 +442,16 @@ def scrap_url(url):
 
 @login_required
 def meals(request):
+    global MEALNAME
 
     category = 'All'
+    if request.method == 'POST' and 'log_submit' in request.POST:
+        print("hit meal")
+        MEALNAME = request.POST['log_submit']
+        return redirect('macros')
+
     if request.method == 'POST':
+        print("hit post 1")
         filter_form = MealFilterForm(request.POST)
         if filter_form.is_valid():
             category = filter_form.cleaned_data['category']

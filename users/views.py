@@ -287,7 +287,8 @@ def macros(request):
         deleted = Food.objects.filter(user = request.user, pk=request.POST['pk']).first()
         Food.objects.filter(user = request.user, pk=request.POST['pk']).delete()
     
-    #if request.method
+    elif request.method == 'POST' and 'macro_distrib' in request.POST:
+        return redirect('profile')
 
     if request.method == 'POST' and 'form2_submit' in request.POST:
         display = True
@@ -342,6 +343,8 @@ def macros(request):
     form = FoodForm()
     data = Food.objects.filter(user = request.user).order_by('-date')
     dates = []
+    size = len(data)
+    print("size is " + str(size))
     for e in data:
         carbCal = 4 * e.carbs
         fatCal = 9 * e.fats
@@ -358,7 +361,8 @@ def macros(request):
         'form2': form2,
         'foods' : data,
         'display' : display,
-        'dates' : dates
+        'dates' : dates,
+        'size' : size
     }
     MEALNAME = ""
     return render(request, 'users/macros.html', context)

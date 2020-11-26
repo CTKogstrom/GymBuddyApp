@@ -10,7 +10,7 @@ class Profile(models.Model):
     daily_carbs = models.IntegerField()
     daily_fat = models.IntegerField()
     daily_protein = models.IntegerField()
-    starting_weight = models.IntegerField()
+    #starting_weight = models.IntegerField()
     goal_weight_change = models.IntegerField()
     activity_level = models.DecimalField(max_digits=2, decimal_places=1)
 

@@ -48,20 +48,21 @@
     <!-- Header End -->
     
     <!-- About Section Begin -->
-    <section class="about-section spad" style="margin-top: 50px;">
+    <section class="about-section spad" style="margin-top: 50px;padding-bottom: 25%;">
         <div class="container">
             <div class="row">
                 
                     <div class="about-text">
                         <form method="POST">
                             {% csrf_token %}
-                            <fieldset class="form-group" style=" float: left; border-width: 10px; font-size: 20px; width: 40%; margin-top: 0px; margin-left: 10%;" >
+                            <fieldset class="form-group" style=" float: left; border-width: 10px; font-size: 20px; width: 25%; margin-top: 0px; margin-left: 0%;" >
                                 <legend class="border-bottom mb-4" style="font-size: 40px; font-weight: bold; color: white;">Log Weight!</legend>
                                 {{form|crispy}}
                                 <div class="form-group" style="margin-bottom: 10px; margin-top: 10px;">
                                     <button class="primary-btn" type="submit" name="form_submit">Log</button>
                                 </div>
                             </fieldset>
+                        </form>
 
                             <!--<div class="col-lg-6" style="float: right;">
                                 <div class="about-pic">
@@ -70,19 +71,30 @@
                             </div>-->
                            
                                                         
-                                <table class="table" style=" width: 45%; margin-left: 65%; color : white; font-size: 20px; border: 5px solid darkgrey;">
+                                <table class="table" style=" width: 50%; margin-left: 50%; color : white; font-size: 20px; border: 5px solid darkgrey; margin-top: 2.5%;">
                                     <thead>
-                                        <h3 style="color: white; margin-left: 65%; margin-top: 30px; font-weight: bold; font-size: 40px;">Weight Tracker</h3>
-                                      <tr>
-                                        <th scope="col">Date</th>
-                                        <th scope="col">Weight</th>
-                                      </tr>
+                                        {% if size != 0 %}
+                                        <!-- <h3 style="color: white; margin-left: 65%; margin-top: 30px; font-weight: bold; font-size: 40px;">Weight Tracker</h3> -->
+                                        <tr>
+                                        <th scope="col" style="text-align: center">Date</th>
+                                        <th scope="col" style="text-align: center">Weight</th>
+                                        <th scope="col" style="text-align: center">Needed for Goal</th>
+                                        <th scope="col"></th> 
+                                        </tr>
+                                        {% endif %}
+                                        {% if size == 0 %}
+                                        <tr>
+                                        <th scope="col" style="padding: 5px;">No weight logged yet, add a log to get started!</th>         
+                                        </tr>
+                                        {% endif %}
                                     </thead>
                                     <tbody>
-                                        {% for weight in weights %}
+                                        {% for weight in listG %}
+                                       
                                             <tr>
-                                                <th scope="row">{{weight.date}}</th>
-                                                <td style="text-align: center">{{weight.lbs}} lbs</td>
+                                                <th scope="row" style="text-align: center">{{weight.0}}</th>
+                                                <td style="text-align: center">{{weight.1}} lbs</td>
+                                                <td style="text-align: center">{{weight.2}} lbs</td>
                                                 <td>
                                                     <form action="" method="post">
                                                         {% csrf_token %}
@@ -92,11 +104,16 @@
                                                     </form>
                                                 </td>
                                             </tr>
+                                    
                                         {% endfor %}
                                     </tbody>
                                 </table>
+                                <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css" >
+                                <form method="POST">
+                                    {% csrf_token %}
+                                    <button class="add btn btn-block btn-primary mb-2" type="submit" name="weight_graph" style="margin-left: 50%; width: 50%;">View Weight Graph</button>
+                                </form>
                             </div>
-                        </form>
                         
                     </div>
                 

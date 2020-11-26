@@ -41,8 +41,8 @@ URLS = [
     {'Quads'  : 'https://www.acefitness.org/education-and-resources/lifestyle/exercise-library/body-part/legs-calves-and-shins/soleus/'}
 ]
 
+MEALNAME = ""
 EXERCISES_GLOBAL = []
-
 
 def register(request):
     if request.method == 'POST':
@@ -246,7 +246,10 @@ def weight(request):
         deleted = WeightRecord.objects.filter(user = request.user, pk=request.POST['pk']).first()
         WeightRecord.objects.filter(user = request.user, pk=request.POST['pk']).delete()
 
-    if request.method == 'POST' and 'form_submit' in request.POST:
+    elif request.method == 'POST' and 'weight_graph' in request.POST:
+        return redirect('profile')
+
+    elif request.method == 'POST' and 'form_submit' in request.POST:
         lbForm = WeightForm(request.POST, instance = weightrecord)
         if lbForm.is_valid():
             lbForm.save()
@@ -254,20 +257,38 @@ def weight(request):
             messages.error(request, "Please re-enter valid information.", extra_tags='danger')
     form = WeightForm()
     data = WeightRecord.objects.filter(user = request.user).order_by('-date')
+    size = len(data)
+    stats = Profile.objects.filter(user = request.user)[0]
+    goal = stats.goal_weight_change
+    listG = []
+    for e in data:
+        diff = goal - e.lbs
+        if diff > 0:
+            diff = '+' + str(diff) 
+        listG.append((e.date, e.lbs, diff)) 
     context = {
         'form' : form,
         'weights' : data,
+        'size' : size,
+        'goal' : goal,
+        'listG' : listG
     }
     return render(request, 'users/weight.html', context)
   
 @login_required
 def macros(request):
+    global MEALNAME
+    print(MEALNAME)
     foodName = ""
     foodDate = ""
     display = False
+
     if request.method == 'POST' and 'delete_but' in request.POST:
         deleted = Food.objects.filter(user = request.user, pk=request.POST['pk']).first()
         Food.objects.filter(user = request.user, pk=request.POST['pk']).delete()
+    
+    elif request.method == 'POST' and 'macro_distrib' in request.POST:
+        return redirect('profile')
 
     if request.method == 'POST' and 'form2_submit' in request.POST:
         display = True
@@ -306,7 +327,9 @@ def macros(request):
             food2.protein = macroList[3]
             food2.date = foodDate
             food2.save()
-    form2 = SingleFood()
+    #form2 = SingleFood()
+    enter = MEALNAME
+    form2 = SingleFood(initial={'foodName': enter})
            
             
     food = Food(user=request.user)
@@ -320,6 +343,8 @@ def macros(request):
     form = FoodForm()
     data = Food.objects.filter(user = request.user).order_by('-date')
     dates = []
+    size = len(data)
+    print("size is " + str(size))
     for e in data:
         carbCal = 4 * e.carbs
         fatCal = 9 * e.fats
@@ -336,9 +361,10 @@ def macros(request):
         'form2': form2,
         'foods' : data,
         'display' : display,
-        'dates' : dates
+        'dates' : dates,
+        'size' : size
     }
-
+    MEALNAME = ""
     return render(request, 'users/macros.html', context)
     
 @login_required
@@ -347,7 +373,14 @@ def exercises(request):
     lift_form_name = ""
 
     category = 'All'
-    if request.method == 'POST':
+    if request.method == 'POST' and 'delete_but' in request.POST:
+        deleted = LiftRecord2.objects.filter(user = request.user, pk=request.POST['pk']).first()
+        LiftRecord2.objects.filter(user = request.user, pk=request.POST['pk']).delete()
+
+    elif request.method == 'POST' and 'strength_graph' in request.POST:
+        return redirect('profile')
+
+    elif request.method == 'POST':
        
         filter_form = ExerciseFilterForm(request.POST)
         if filter_form.is_valid():
@@ -398,6 +431,7 @@ def exercises(request):
     form = Lift2Form(initial={'name': lift_form_name})
     # filter_form = ExerciseFilterForm()
     data = LiftRecord2.objects.filter(user = request.user).order_by('-date')
+    size = len(data)
     print(EXERCISES_GLOBAL)
     context = {
         'exercises': EXERCISES_GLOBAL,
@@ -405,7 +439,8 @@ def exercises(request):
         'form' : form,
         'filter': filter_form,
         'lifts' : data,
-    }
+        'size' : size
+     } 
 
     return render(request, 'users/exercises.html', context)
 
@@ -435,9 +470,16 @@ def scrap_url(url):
 
 @login_required
 def meals(request):
+    global MEALNAME
 
     category = 'All'
+    if request.method == 'POST' and 'log_submit' in request.POST:
+        print("hit meal")
+        MEALNAME = request.POST['log_submit']
+        return redirect('macros')
+
     if request.method == 'POST':
+        print("hit post 1")
         filter_form = MealFilterForm(request.POST)
         if filter_form.is_valid():
             category = filter_form.cleaned_data['category']

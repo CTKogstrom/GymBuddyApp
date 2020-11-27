@@ -76,7 +76,7 @@
                         </form>
                         <form method="POST">
                             {% csrf_token %}
-                            <button class="add btn btn-block btn-primary mb-2" type="submit" name="macro_distrib" style="float: right; width : 50%; margin-left: 40px; margin-top: 1%;">View Macro Distribution</button>
+                            <button class="add btn btn-block btn-primary mb-2" type="submit" name="macro_distrib" style="float: right; width : 50%; margin-left: 40px; margin-top: -1%;">View Macro Distribution</button>
                         </form>
                         <!-- <img src="{% static 'img/Macro-Graphic.png' %}" width="10" height="1000" alt="" style="float: right; width : 45%; margin-left: 30px; margin-right: 40px;"> -->
 
@@ -95,6 +95,7 @@
                             {% endif %}
                             {% if size != 0 %}
                             {% for date in dates %}
+                                
                                 <!--<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css" > -->
                                 <table class="table" style="font-size: 20px; width: 45%; border: 5px solid darkgrey;">
                                     <thead>

@@ -245,14 +245,22 @@ def weight(request):
     if request.method == 'POST' and 'delete_but' in request.POST:
         deleted = WeightRecord.objects.filter(user = request.user, pk=request.POST['pk']).first()
         WeightRecord.objects.filter(user = request.user, pk=request.POST['pk']).delete()
+        messages.success(request, "Successfully deleted weight!", extra_tags='success')
 
     elif request.method == 'POST' and 'weight_graph' in request.POST:
         return redirect('profile')
 
     elif request.method == 'POST' and 'form_submit' in request.POST:
+        saveForm = True
         lbForm = WeightForm(request.POST, instance = weightrecord)
         if lbForm.is_valid():
-            lbForm.save()
+            if lbForm.cleaned_data['lbs'] < 0:
+                messages.error(request, "Please enter a valid weight.", extra_tags='danger')
+                saveForm = False
+            else:
+                messages.success(request, "Successfully logged weight!", extra_tags='success')
+            if saveForm:
+                lbForm.save()
         else:
             messages.error(request, "Please re-enter valid information.", extra_tags='danger')
     form = WeightForm()
@@ -265,7 +273,7 @@ def weight(request):
         diff = goal - e.lbs
         if diff > 0:
             diff = '+' + str(diff) 
-        listG.append((e.date, e.lbs, diff)) 
+        listG.append((e.date, e.lbs, diff,e)) 
     context = {
         'form' : form,
         'weights' : data,

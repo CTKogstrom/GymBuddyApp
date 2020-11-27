@@ -49,13 +49,35 @@
     
     <!-- About Section Begin -->
     <section class="about-section spad" style="margin-top: 50px;padding-bottom: 25%;">
-        <div class="container">
-            <div class="row">
+        
+    
+        <div >
+            
+            <div class="row" >
                 
-                    <div class="about-text">
+                    <div class="about-text" > 
+                        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+            {% if messages %}
+            
+            <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+            <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+            <div class="row">
+            <div class="col-sm-6 col-sm-offset-3">
+                {% for message in messages %}
+                <div class="alert alert-dark alert-dismissible fade show" style="width: 150%; margin-left: 55%;">
+                    <button type="button" class="close" data-dismiss="alert">&times;</button>
+                    <p>{{ message }}</p>
+                </div>
+                {% endfor %}
+              </div>
+          
+            </div>
+          {% endif %}
                         <form method="POST">
+                            
                             {% csrf_token %}
-                            <fieldset class="form-group" style=" float: left; border-width: 10px; font-size: 20px; width: 25%; margin-top: 0px; margin-left: 0%;" >
+                            <fieldset class="form-group" style=" float: left; border-width: 10px; font-size: 20px; width: 100%; margin-top: 0px; margin-left: 25%;" >
                                 <legend class="border-bottom mb-4" style="font-size: 40px; font-weight: bold; color: white;">Log Weight!</legend>
                                 {{form|crispy}}
                                 <div class="form-group" style="margin-bottom: 10px; margin-top: 10px;">
@@ -71,7 +93,7 @@
                             </div>-->
                            
                                                         
-                                <table class="table" style=" width: 50%; margin-left: 50%; color : white; font-size: 20px; border: 5px solid darkgrey; margin-top: 2.5%;">
+                                <table class="table" style=" float: left;width: 100%; margin-left: 150%; color : white; font-size: 20px; border: 5px solid darkgrey; margin-top: -65%;">
                                     <thead>
                                         {% if size != 0 %}
                                         <!-- <h3 style="color: white; margin-left: 65%; margin-top: 30px; font-weight: bold; font-size: 40px;">Weight Tracker</h3> -->
@@ -98,7 +120,7 @@
                                                 <td>
                                                     <form action="" method="post">
                                                         {% csrf_token %}
-                                                        <input type ="hidden" value="{{ weight.pk }}" name="pk">
+                                                        <input type ="hidden" value="{{ weight.3.pk }}" name="pk">
                                                         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
                                                         <button type="submit" name="delete_but" style="border:none;background-color:transparent;font-size:30px;cursor: pointer;color: #990000;" value="Delete" class="p-0 m-0 text-danger pl-3 pr-1"><i class="fa fa-trash"></i></button>
                                                     </form>
@@ -108,16 +130,17 @@
                                         {% endfor %}
                                     </tbody>
                                 </table>
-                                <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css" >
+                                <!-- <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css" > -->
                                 <form method="POST">
                                     {% csrf_token %}
-                                    <button class="add btn btn-block btn-primary mb-2" type="submit" name="weight_graph" style="margin-left: 50%; width: 50%;">View Weight Graph</button>
+                                    <button class="add btn btn-block btn-primary mb-2" type="submit" name="weight_graph" style="margin-left: 150%; width: 100%;">View Weight Graph</button>
                                 </form>
                             </div>
                         
                     </div>
                 
             </div>
+            
         </div>
     </section>
     <!-- About Section End -->

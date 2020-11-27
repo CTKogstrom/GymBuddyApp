@@ -50,12 +50,31 @@
     
     <!-- About Section Begin -->
     <section class="about-section spad" style="margin-top: 50px;">
-        <div class="container">
+        
+        <div >
             <div class="row">             
                 <div class="about-text">
-                    <form method="POST" style="width: 30%; float: left;">
+                    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+        {% if messages %}
+            
+            <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+            <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+            <div class="row">
+            <div class="col-sm-6 col-sm-offset-3">
+                {% for message in messages %}
+                <div class="alert alert-dark alert-dismissible fade show" style="width: 150%; margin-left: 55%;">
+                    <button type="button" class="close" data-dismiss="alert">&times;</button>
+                    <p>{{ message }}</p>
+                </div>
+                {% endfor %}
+              </div>
+          
+            </div>
+          {% endif %}
+                    <form method="POST" >
                         {% csrf_token %}
-                        <fieldset class="form-group" style="color: white; ">
+                        <fieldset class="form-group" style="color: white; width: 70%; margin-left: 20%;">
                             <legend class="border-bottom mb-4" style="font-size: 40px; color: white; text-align: center; font-weight: bold;">Log Exercise</legend>
                             {{form|crispy}}
                             <div class="form-group">
@@ -71,7 +90,7 @@
                     <p class="text-muted">Check out our extensive list of workouts and log your favorites to your profile!</p>
                     </div> -->
                 <!-- </div> -->
-                    <table class="table" style=" width: 55%; margin-left: 50%; color : white; font-size: 20px; border: 5px solid darkgrey;margin-top: 2.5%;">
+                <table class="table" style=" float: left;width: 100%; margin-left: 125%; color : white; font-size: 20px; border: 5px solid darkgrey; margin-top: -95%;">
                                         
                         <thead>
                             {% if size != 0 %}
@@ -112,7 +131,7 @@
                     </table> 
                     <form method="POST">
                         {% csrf_token %}
-                        <button class="add btn btn-block btn-primary mb-2" type="submit" name="strength_graph" style="margin-left: 50%; width: 55%;">View Strength Graph</button>
+                        <button class="add btn btn-block btn-primary mb-2" type="submit" name="strength_graph" style="margin-left: 125%; width: 100%;">View Strength Graph</button>
                     </form>
                 </div>
             </div>
@@ -153,7 +172,7 @@
                             <form action="{% url 'exercises' %}" method="post">
                                 {% csrf_token %}
                                 
-                                <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css" >
+                                
                                 <button class="add btn btn-block btn-primary mb-2" type= "submit" name="form_submit" value="{{exercise.name}}" style="margin-top: 10px; cursor: pointer; width: 50%; text-align: center; margin-left: 25%;">Log</button>
                                  </form>
 

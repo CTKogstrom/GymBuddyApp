@@ -384,6 +384,7 @@ def exercises(request):
     if request.method == 'POST' and 'delete_but' in request.POST:
         deleted = LiftRecord2.objects.filter(user = request.user, pk=request.POST['pk']).first()
         LiftRecord2.objects.filter(user = request.user, pk=request.POST['pk']).delete()
+        messages.success(request, "Successfully deleted exercise!", extra_tags='success')
 
     elif request.method == 'POST' and 'strength_graph' in request.POST:
         return redirect('profile')
@@ -397,7 +398,7 @@ def exercises(request):
         else:
             lift_form_name = request.POST['form_submit']
             print(request.POST['form_submit'])
-    # EXERCISES_GLOBAL = []
+    EXERCISES_GLOBAL = []
     if category =='All':
         threads = len(URLS)
         with concurrent.futures.ThreadPoolExecutor(max_workers=threads) as executor:
@@ -433,7 +434,21 @@ def exercises(request):
     if request.method == 'POST' and 'form_submit' in request.POST:
         liftForm = Lift2Form(request.POST, instance = liftrecord2)
         if liftForm.is_valid():
-            liftForm.save()
+            stillValid = True
+            if liftForm.cleaned_data['weight'] < 0:
+                messages.error(request, "Please enter a valid number for weight.", extra_tags='danger')
+                stillValid = False
+            if liftForm.cleaned_data['sets'] < 0:
+                messages.error(request, "Please enter a valid number for sets.", extra_tags='danger')
+                stillValid = False
+            if liftForm.cleaned_data['reps'] < 0:
+                messages.error(request, "Please enter a valid number for reps.", extra_tags='danger')
+                stillValid = False
+            if stillValid:
+                liftForm.save()
+                messages.success(request, "Successfully logged exercise!", extra_tags='success')
+                print("hrefe")
+                liftForm.save()
         else:
             messages.error(request, "Please re-enter valid information.", extra_tags='danger')
     form = Lift2Form(initial={'name': lift_form_name})

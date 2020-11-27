@@ -345,6 +345,7 @@ def macros(request):
         foodForm = FoodForm(request.POST, instance = food)
         if foodForm.is_valid():
             food.name = foodForm.cleaned_data['name'].capitalize()
+            messages.success(request, "Successfully deleted exercise!", extra_tags='success')
             foodForm.save()
         else:
             messages.error(request, "Please re-enter valid information.", extra_tags='danger')
@@ -389,16 +390,18 @@ def exercises(request):
     elif request.method == 'POST' and 'strength_graph' in request.POST:
         return redirect('profile')
 
-    elif request.method == 'POST':
+    elif request.method == 'POST' and ('exercise_select' or 'filter_submit') in request.POST:
        
         filter_form = ExerciseFilterForm(request.POST)
         if filter_form.is_valid():
             category = filter_form.cleaned_data['category']
             print(category)
-        else:
-            lift_form_name = request.POST['form_submit']
-            print(request.POST['form_submit'])
-    EXERCISES_GLOBAL = []
+            messages.success(request, "Successfully filtered exercises!", extra_tags='success')
+        elif 'exercise_select':
+            lift_form_name = request.POST['exercise_select']
+            print(request.POST['exercise_select'])
+            messages.success(request, "Successfully added exercise!", extra_tags='success')
+    #EXERCISES_GLOBAL = []
     if category =='All':
         threads = len(URLS)
         with concurrent.futures.ThreadPoolExecutor(max_workers=threads) as executor:
@@ -427,6 +430,7 @@ def exercises(request):
             exercise['description_link'] = 'https://www.acefitness.org/' + row.a['href']
             
             EXERCISES_GLOBAL.append(exercise)
+        
     
     filter_form = ExerciseFilterForm(initial={'category': category})
 
@@ -507,7 +511,7 @@ def meals(request):
         if filter_form.is_valid():
             category = filter_form.cleaned_data['category']
 
-    if category != 'All':
+    if category == 'All':
         URL = 'https://www.skinnytaste.com/recipes/' + category + '/'
     else:
         URL = 'https://www.skinnytaste.com/recipes/'

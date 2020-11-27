@@ -131,7 +131,7 @@
                     </table> 
                     <form method="POST">
                         {% csrf_token %}
-                        <button class="add btn btn-block btn-primary mb-2" type="submit" name="strength_graph" style="margin-left: 125%; width: 100%;">View Strength Graph</button>
+                        <button class="add btn btn-block btn-primary mb-2" type="submit" name="strength_graph" style="margin-left: 6%; width: 100%;">View Strength Graph</button>
                     </form>
                 </div>
             </div>
@@ -156,12 +156,12 @@
             <form method='POST' action="{{filter.get_category_display}}" style="padding-bottom: 30px; padding-left: 15px; width: 25%; margin-left: 36.5%;">
                 {% csrf_token %}
                 {{filter|crispy}}
-                <Button class="add btn btn-block btn-primary mb-2" type="submit" name="form_submit" >Filter</Button>  
+                <Button class="add btn btn-block btn-primary mb-2" type="submit" name="filter_submit" >Filter</Button>  
             </form>
                 {% for exercise in exercises %}
-                    <div class="card" style="background-color: #D8D8D8; box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2); border-radius: 10px; transition: 0.3s; float: left; width: 30%; margin-left: 1%; margin-bottom: 1%; margin-top: 1%; margin-right: 1%; padding-bottom: 20px; padding-top: 20px; text-align: center;" >
+                    <div class="card" style="background-color: #D8D8D8; box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2); border-radius: 10px; transition: 0.3s; float: left; width: 30%; margin-left: 2%; margin-bottom: 1%; margin-top: 1%; margin-right: 1%; padding-bottom: 20px; padding-top: 20px; text-align: center;" >
                                            
-                        <img src={{exercise.img}} width="350px" height="400px">
+                        <img src={{exercise.img}} width="350px" height="400px" style="align-self: center;">
                             <!--Pending: populate exercise log with selected exercise-->
                             <!-- <strong>{{filter.get_category_display}}</strong></br> -->
                         <h2 style="color:black; margin: 0; font-size: larger; margin-top: 10px;"><strong>{{exercise.name}}</strong></br>
@@ -173,7 +173,7 @@
                                 {% csrf_token %}
                                 
                                 
-                                <button class="add btn btn-block btn-primary mb-2" type= "submit" name="form_submit" value="{{exercise.name}}" style="margin-top: 10px; cursor: pointer; width: 50%; text-align: center; margin-left: 25%;">Log</button>
+                                <button class="add btn btn-block btn-primary mb-2" type= "submit" name="exercise_select" value="{{exercise.name}}" style="margin-top: 10px; cursor: pointer; width: 50%; text-align: center; margin-left: 25%;">Log</button>
                                  </form>
 
 

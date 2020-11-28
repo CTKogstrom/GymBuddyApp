@@ -2,6 +2,7 @@
 {% load static %}
 <!DOCTYPE html>
 <html lang="zxx">
+<!-- <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css" > -->
 
 <head>
     <meta charset="UTF-8">
@@ -50,11 +51,9 @@
     <!-- About Section Begin -->
     <section class="about-section spad" style="margin-top: 50px;">
         <div class="container">
-            <div class="row">
-                
-
-
-                    <form method="POST" style="width: 50%; margin-left: 25%;">
+            <div class="row">             
+                <div class="about-text">
+                    <form method="POST" style="width: 30%; float: left;">
                         {% csrf_token %}
                         <fieldset class="form-group" style="color: white; ">
                             <legend class="border-bottom mb-4" style="font-size: 40px; color: white; text-align: center; font-weight: bold;">Log Exercise</legend>
@@ -72,6 +71,50 @@
                     <p class="text-muted">Check out our extensive list of workouts and log your favorites to your profile!</p>
                     </div> -->
                 <!-- </div> -->
+                    <table class="table" style=" width: 55%; margin-left: 50%; color : white; font-size: 20px; border: 5px solid darkgrey;margin-top: 2.5%;">
+                                        
+                        <thead>
+                            {% if size != 0 %}
+                            <tr>
+                            <th scope="col" style="padding: 5px;text-align: center;">Exercise</th>
+                            <th scope="col" style="padding: 5px;text-align: center;">Weight</th>
+                            <th scope="col" style="padding: 5px;text-align: center;">Sets</th>
+                            <th scope="col" style="padding: 5px;text-align: center;"> Reps </th>
+                            <th scope="col" style="padding: 5px;text-align: center;">Date</th>
+                            <th scope="col" style="padding: 5px;"></th>          
+                            </tr>
+                            {% endif %}
+                            {% if size == 0 %}
+                            <tr>
+                            <th scope="col" style="padding: 5px;">No exercises logged yet, add an exercise to get started!</th>         
+                            </tr>
+                            {% endif %}
+                        </thead>
+                        <tbody>
+                            {% for exercise in lifts %}                  
+                                <tr>
+                                    <th scope="row" style="text-align: center">{{exercise.name}}</th>
+                                    <td style="text-align: center">{{exercise.weight}} lbs</td>
+                                    <td style="text-align: center">{{exercise.sets}}</td>
+                                    <td style="text-align: center;">{{exercise.reps}}</td>
+                                    <td style="text-align: center">{{exercise.date}}</td>
+                                    <td>
+                                        <form action="" method="post">
+                                            {% csrf_token %}
+                                            <input type ="hidden" value="{{ exercise.pk }}" name="pk">
+                                            <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+                                            <button type="submit" name="delete_but" style="border:none;background-color:transparent;font-size:30px;cursor: pointer;color: #990000;" value="Delete" class="p-0 m-0 text-danger pl-3 pr-1"><i class="fa fa-trash"></i></button>
+                                        </form>
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table> 
+                    <form method="POST">
+                        {% csrf_token %}
+                        <button class="add btn btn-block btn-primary mb-2" type="submit" name="strength_graph" style="margin-left: 50%; width: 55%;">View Strength Graph</button>
+                    </form>
+                </div>
             </div>
         </div>
     </section>

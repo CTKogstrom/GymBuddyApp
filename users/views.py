@@ -34,6 +34,7 @@ URLS = [
     {'Quads'  : 'https://www.acefitness.org/education-and-resources/lifestyle/exercise-library/body-part/legs-calves-and-shins/soleus/'}
 ]
 
+MEALNAME = ""
 EXERCISES_GLOBAL = []
 
 
@@ -258,7 +259,10 @@ def weight(request):
         deleted = WeightRecord.objects.filter(user=request.user, pk=request.POST['pk']).first()
         WeightRecord.objects.filter(user=request.user, pk=request.POST['pk']).delete()
 
-    if request.method == 'POST' and 'form_submit' in request.POST:
+    elif request.method == 'Post' and 'weight_graph' in request.POST:
+        return redirect('profile')
+
+    elif request.method == 'POST' and 'form_submit' in request.POST:
         lbForm = WeightForm(request.POST, instance = weightrecord)
         if lbForm.is_valid():
             lbForm.save()
@@ -266,20 +270,41 @@ def weight(request):
             messages.error(request, "Please re-enter valid information.", extra_tags='danger')
     form = WeightForm()
     data = WeightRecord.objects.filter(user = request.user).order_by('-date')
+    size = len(data)
+    stats = Profile.objects.filter(user=request.user)[0]
+    goal = stats.goal_weight_change
+
+    listG = []
+
+    for e in data:
+        diff = goal = e.lbs
+        if diff > 0:
+            diff = '+' + str(diff)
+        listG.append((e.date,e.lbs,diff))
+
+
     context = {
         'form' : form,
         'weights' : data,
+        'size': size,
+        'goal': goal,
+        'listG': listG
     }
     return render(request, 'users/weight.html', context)
   
 @login_required
 def macros(request):
+    global MEALNAME
     foodName = ""
     foodDate = ""
     display = False
+
     if request.method == 'POST' and 'delete_but' in request.POST:
         deleted = Food.objects.filter(user=request.user, pk=request.POST['pk']).first()
         Food.objects.filter(user=request.user, pk=request.POST['pk']).delete()
+
+    elif request.method == 'POST' and 'macro_distrib' in request.POST:
+        return redirect('profile')
 
     if request.method == 'POST' and 'form2_submit' in request.POST:
         display = True
@@ -316,8 +341,9 @@ def macros(request):
             food2.protein = macroList[3]
             food2.date = foodDate
             food2.save()
-    form2 = SingleFood()
-           
+    #form2 = SingleFood()
+    enter = MEALNAME
+    form2 = SingleFood(initial={'foodName': enter})
             
     food = Food(user=request.user)
     if request.method == 'POST' and 'form_submit' in request.POST:
@@ -325,12 +351,13 @@ def macros(request):
         if foodForm.is_valid():
             food.name = foodForm.cleaned_data['name'].capitalize()
             foodForm.save()
-            return redirect('macros')
+            #return redirect('macros')
         else:
             messages.error(request, "Please re-enter valid information.", extra_tags='danger')
     form = FoodForm()
     data = Food.objects.filter(user = request.user).order_by('-date')
     dates = []
+    size = len(data)
 
     for e in data:
         carbCal = 4 * e.carbs
@@ -345,9 +372,10 @@ def macros(request):
         'form2': form2,
         'foods' : data,
         'display' : display,
-        'dates': dates
+        'dates': dates,
+        'size': size
     }
-
+    MEALNAME = ""
     return render(request, 'users/macros.html', context)
     
 @login_required

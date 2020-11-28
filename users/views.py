@@ -256,16 +256,24 @@ def profile(request):
 def weight(request):
     weightrecord = WeightRecord(user=request.user)
     if request.method == 'POST' and 'delete_but' in request.POST:
-        deleted = WeightRecord.objects.filter(user=request.user, pk=request.POST['pk']).first()
-        WeightRecord.objects.filter(user=request.user, pk=request.POST['pk']).delete()
+        deleted = WeightRecord.objects.filter(user = request.user, pk=request.POST['pk']).first()
+        WeightRecord.objects.filter(user = request.user, pk=request.POST['pk']).delete()
+        messages.success(request, "Successfully deleted weight!", extra_tags='success')
 
     elif request.method == 'Post' and 'weight_graph' in request.POST:
         return redirect('profile')
 
     elif request.method == 'POST' and 'form_submit' in request.POST:
+        saveForm = True
         lbForm = WeightForm(request.POST, instance = weightrecord)
         if lbForm.is_valid():
-            lbForm.save()
+            if lbForm.cleaned_data['lbs'] < 0:
+                messages.error(request, "Please enter a valid weight.", extra_tags='danger')
+                saveForm = False
+            else:
+                messages.success(request, "Successfully logged weight!", extra_tags='success')
+            if saveForm:
+                lbForm.save()
         else:
             messages.error(request, "Please re-enter valid information.", extra_tags='danger')
     form = WeightForm()
@@ -279,10 +287,8 @@ def weight(request):
     for e in data:
         diff = goal = e.lbs
         if diff > 0:
-            diff = '+' + str(diff)
-        listG.append((e.date,e.lbs,diff))
-
-
+            diff = '+' + str(diff) 
+        listG.append((e.date, e.lbs, diff,e)) 
     context = {
         'form' : form,
         'weights' : data,
@@ -350,6 +356,7 @@ def macros(request):
         foodForm = FoodForm(request.POST, instance = food)
         if foodForm.is_valid():
             food.name = foodForm.cleaned_data['name'].capitalize()
+            messages.success(request, "Successfully deleted exercise!", extra_tags='success')
             foodForm.save()
             #return redirect('macros')
         else:
@@ -383,17 +390,27 @@ def exercises(request):
     lift_form_name = ""
 
     category = 'All'
-    if request.method == 'POST':
+    if request.method == 'POST' and 'delete_but' in request.POST:
+        deleted = LiftRecord2.objects.filter(user = request.user, pk=request.POST['pk']).first()
+        LiftRecord2.objects.filter(user = request.user, pk=request.POST['pk']).delete()
+        messages.success(request, "Successfully deleted exercise!", extra_tags='success')
 
+    elif request.method == 'POST' and 'strength_graph' in request.POST:
+        return redirect('profile')
+
+    elif request.method == 'POST' and ('exercise_select' or 'filter_submit') in request.POST:
+       
         filter_form = ExerciseFilterForm(request.POST)
         if filter_form.is_valid():
             category = filter_form.cleaned_data['category']
             print(category)
-        else:
-            lift_form_name = request.POST['form_submit']
-            print(request.POST['form_submit'])
-    # EXERCISES_GLOBAL = []
-    if category == 'All':
+            messages.success(request, "Successfully filtered exercises!", extra_tags='success')
+        elif 'exercise_select':
+            lift_form_name = request.POST['exercise_select']
+            print(request.POST['exercise_select'])
+            messages.success(request, "Successfully added exercise!", extra_tags='success')
+    #EXERCISES_GLOBAL = []
+    if category =='All':
         threads = len(URLS)
         with concurrent.futures.ThreadPoolExecutor(max_workers=threads) as executor:
             executor.map(scrap_url, URLS)
@@ -422,14 +439,27 @@ def exercises(request):
             exercise['description_link'] = 'https://www.acefitness.org/' + row.a['href']
 
             EXERCISES_GLOBAL.append(exercise)
-
     filter_form = ExerciseFilterForm(initial={'category': category})
 
     liftrecord = LiftRecord(user=request.user)
     if request.method == 'POST' and 'form_submit' in request.POST:
         liftForm = LiftForm(request.POST, instance=liftrecord)
         if liftForm.is_valid():
-            liftForm.save()
+            stillValid = True
+            if liftForm.cleaned_data['weight'] < 0:
+                messages.error(request, "Please enter a valid number for weight.", extra_tags='danger')
+                stillValid = False
+            if liftForm.cleaned_data['sets'] < 0:
+                messages.error(request, "Please enter a valid number for sets.", extra_tags='danger')
+                stillValid = False
+            if liftForm.cleaned_data['reps'] < 0:
+                messages.error(request, "Please enter a valid number for reps.", extra_tags='danger')
+                stillValid = False
+            if stillValid:
+                liftForm.save()
+                messages.success(request, "Successfully logged exercise!", extra_tags='success')
+                print("hrefe")
+                liftForm.save()
         else:
             messages.error(request, "Please re-enter valid information.", extra_tags='danger')
     form = LiftForm(initial={'name': lift_form_name})
@@ -478,7 +508,7 @@ def meals(request):
         if filter_form.is_valid():
             category = filter_form.cleaned_data['category']
 
-    if category != 'All':
+    if category == 'All':
         URL = 'https://www.skinnytaste.com/recipes/' + category + '/'
     else:
         URL = 'https://www.skinnytaste.com/recipes/'

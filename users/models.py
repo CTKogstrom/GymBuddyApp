@@ -1,6 +1,5 @@
 from django.db import models
 from django.contrib.auth.models import User
-from activityLibrary.models import Exercise
 from django.utils import timezone
 from django.core.exceptions import ValidationError
 from django.utils.translation import gettext_lazy
@@ -39,9 +38,10 @@ class Profile(models.Model):
     pct_diet_carbs = models.IntegerField(default=45)
     pct_diet_fat = models.IntegerField(default=20)
     pct_diet_prot = models.IntegerField(default=35)
-    goal_weight_change = models.DecimalField(max_digits=3, decimal_places=2, default=-1, validators=[validate_goal_weight_change])
+    goal_weight_change = models.DecimalField(max_digits=3, decimal_places=2, default=-1,
+                                             help_text="Must be a value between -1 and 1", validators=[validate_goal_weight_change])
     activity_level = models.DecimalField(max_digits=2, decimal_places=1,default=1.5,
-                                         help_text="Must be a value betwen 1.2 and 2.1",
+                                         help_text="Must be a value between 1.2 and 2.1",
                                          validators=[validate_activity_level])
     def __str__(self):
         return f'{self.user.username} Profile'
@@ -59,18 +59,10 @@ class WeightRecord(models.Model):
 
 class LiftRecord(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
-    exercise = models.ForeignKey(Exercise, on_delete=models.CASCADE)
-    sets = models.IntegerField(blank=True, null=True)
-    reps_per_set = models.IntegerField(blank=True, null=True)
-    date = models.DateField()
-
-
-class LiftRecord2(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
     name = models.CharField(max_length=100)
-    weight = models.IntegerField(blank=True, null=True)
-    sets = models.IntegerField(blank=True, null=True)
-    reps = models.IntegerField(blank=True, null=True)
+    weight = models.IntegerField(blank=True, null=True, validators=[validate_not_neg], help_text="Cannot be negative")
+    sets = models.IntegerField(blank=True, null=True, validators=[validate_not_neg], help_text="Cannot be negative")
+    reps = models.IntegerField(blank=True, null=True, validators=[validate_not_neg], help_text="Cannot be negative")
     date = models.DateField(default=timezone.now)
 
 

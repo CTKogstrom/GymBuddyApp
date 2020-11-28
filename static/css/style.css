@@ -32,6 +32,12 @@
 /* Template default CSS
 /*----------------------------------------*/
 
+.graph-container{
+	margin:5em;
+}
+
+
+
 html, body {
 	height: 100%;
 	font-family: "Poppins", sans-serif;

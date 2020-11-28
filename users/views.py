@@ -18,6 +18,7 @@ from bs4 import BeautifulSoup
 import cchardet as chardet
 import lxml
 import concurrent.futures
+import datetime
 
 
 URLS = [
@@ -37,15 +38,20 @@ EXERCISES_GLOBAL = []
 
 
 def register(request):
+    #If the user presses the register button the reqest methon will be POST
     if request.method == 'POST':
+        #Creates a UserRegistrationForm with the information from the request which is associated with the user model in the database
         form = UserRegisterForm(request.POST)
+        #Checks the validitiy of the information entered in the form
         if form.is_valid():
+            #Saving adds the informaiton to the database
             new_user = form.save()
             messages.info(request, "Thanks for registering. You are now logged in.")
             new_user = authenticate(username=form.cleaned_data['username'], password=form.cleaned_data['password1'])
             login(request, new_user)
             return redirect('profile')
     else:
+        #if there is not a POST request then display an empty form
         form = UserRegisterForm()
     return render(request, 'users/register.html', {'form' : form})
 
@@ -54,15 +60,20 @@ def login2(request, user):
 
 @login_required
 def profile(request):
+
+    #If the user submits new information to the update profile form this conditional will be true
     if request.method == 'POST' and 'form_submit' in request.POST:
+        #fill out form according to the POST information
         update_prof_form = ProfileUpdateForm(request.POST, instance=request.user.profile)
         if update_prof_form.is_valid():
+            #if the form information is valid save the information to the profile model in the sqlite database
             update_prof_form.save()
             messages.success(request, "Successfully updated profile data!", extra_tags='success')
             return redirect('profile')
         else:
             messages.error(request, "Please check entries are valid", extra_tags='danger')
     else:
+        #if there is not a post request fill out the fields of the form with the logged in user's information
         update_prof_form = ProfileUpdateForm(instance=request.user.profile)
 
 
@@ -82,17 +93,25 @@ def profile(request):
     weightList = []
     dateList = []
     lbsList = []
-    weights = WeightRecord.objects.filter(user=request.user).order_by('-date')
+
+    #Get the weight records for the current user sorted by the date
+    weights = WeightRecord.objects.filter(user=request.user).order_by('date')
+
+    #add the fields of the weight records to the 3 lists created above
     for e in weights:
         weightList.append(e)
         lbsList.append(e.lbs)
-        dateList.append(e.date)
+        dateList.append(e.date.strftime("%m-%d"))
     matplotlib.use('Agg')
-    plt.style.use('ggplot')
-    plt.plot(dateList, lbsList, marker='D', markersize=5)
+
+    #style for the plot
+    plt.style.use('seaborn')
+
+    #plot the dates on the x axis and the
+    plt.plot(dateList, lbsList, marker='o', markersize=2)
     for i in range(0, len(lbsList)):
         plt.annotate(lbsList[i], (dateList[i], lbsList[i]), ha="center")
-    plt.title('Weight Record')
+    plt.title('Weight History')
     plt.xlabel('Date')
     plt.ylabel('Weight (lbs)')
     weightFig = plt.gcf()
@@ -105,7 +124,7 @@ def profile(request):
 
     #create graph for lifts
     exerciseNames = []
-    exercises = LiftRecord2.objects.filter(user=request.user).order_by('-name')
+    exercises = LiftRecord.objects.filter(user=request.user).order_by('-name')
     for e in exercises:
         if not e.name.lower().title() in exerciseNames:
            exerciseNames.append(e.name.lower().title())
@@ -117,14 +136,15 @@ def profile(request):
 
     chosenList = []
     date2List = []
-    exercisesFiltered = LiftRecord2.objects.filter(user=request.user).order_by('-date')
+    exercisesFiltered = LiftRecord.objects.filter(user=request.user).order_by('-date')
     for e in exercisesFiltered:
         if e.name.lower().title() == chosenName:
             chosenList.append(e.weight)
             date2List.append(e.date)
     matplotlib.use('Agg')
+    plt.style.use('seaborn')
     plt.plot(date2List, chosenList, marker='D', markersize=5)
-    for i in range (0,len(chosenList)):
+    for i in range(len(chosenList)):
         plt.annotate(chosenList[i], (date2List[i], chosenList[i]), ha="center")
     plt.title(chosenName.title() + ' Record')
     plt.xlabel('Date')
@@ -179,6 +199,7 @@ def profile(request):
     string = base64.b64encode(macroBuf.read())
     macroGraph = urllib.parse.quote(string)
     matplotlib.use('Agg')
+    plt.style.use('seaborn')
     plt.close()
 
     daily_activity_desc = ["""Very light - Seated and standing activities, office work, driving, cooking; 
@@ -186,7 +207,8 @@ def profile(request):
                            """,
                            """
                            Low active - In addition to the activities of a sedentary lifestyle, 30 minutes of moderate 
-                           activity equivalent of walking 2 mines in 30 minutes; most office workers with additional planned exercis routines
+                           activity equivalent of walking 2 miles in 30 minutes; most office workers with additional 
+                           planned exercise routines
                            """,
                            """
                            Active - In addition to the activities of a low active lifestyle, an additional 3 hours of 
@@ -375,16 +397,16 @@ def exercises(request):
 
     filter_form = ExerciseFilterForm(initial={'category': category})
 
-    liftrecord2 = LiftRecord2(user=request.user)
+    liftrecord = LiftRecord(user=request.user)
     if request.method == 'POST' and 'form_submit' in request.POST:
-        liftForm = Lift2Form(request.POST, instance=liftrecord2)
+        liftForm = LiftForm(request.POST, instance=liftrecord)
         if liftForm.is_valid():
             liftForm.save()
         else:
             messages.error(request, "Please re-enter valid information.", extra_tags='danger')
-    form = Lift2Form(initial={'name': lift_form_name})
+    form = LiftForm(initial={'name': lift_form_name})
     # filter_form = ExerciseFilterForm()
-    data = LiftRecord2.objects.filter(user=request.user).order_by('-date')
+    data = LiftRecord.objects.filter(user=request.user).order_by('-date')
     print(EXERCISES_GLOBAL)
     context = {
         'exercises': EXERCISES_GLOBAL,

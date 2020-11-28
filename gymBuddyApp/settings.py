@@ -32,7 +32,6 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
-    'activityLibrary.apps.ActivitylibraryConfig',
     'users.apps.UsersConfig',
     'pages.apps.PagesConfig',
     'crispy_forms',
@@ -141,3 +140,15 @@ LOGIN_URL = 'login'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'static/media')
 
 MEDIA_URL = '/media/'
+
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+
+EMAIL_HOST = 'smtp.gmail.com'
+
+EMAIL_PORT = 587
+
+EMAIL_USE_TLS = True
+
+EMAIL_HOST_USER = 'gym.buddy.app.recovery@gmail.com'
+
+EMAIL_HOST_PASSWORD = 'ehnrcdzigeiilrhi'

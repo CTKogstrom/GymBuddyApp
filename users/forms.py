@@ -3,7 +3,7 @@ from django.contrib.auth.models import User
 from django.contrib.auth.forms import UserCreationForm
 from .models import Profile
 from .models import WeightRecord
-from .models import LiftRecord2
+from .models import LiftRecord
 from .models import Food
 from django.utils import timezone
 
@@ -58,9 +58,9 @@ class WeightForm(forms.ModelForm):
         fields = ['lbs', 'date']
 
 
-class Lift2Form(forms.ModelForm):
+class LiftForm(forms.ModelForm):
     class Meta:
-        model = LiftRecord2
+        model = LiftRecord
         fields = ['name','weight', 'sets', 'reps', 'date']
 
 
@@ -85,6 +85,7 @@ class OptionForm(forms.Form):
 
 class MealFilterForm(forms.Form):
     category = forms.CharField(label='Filter by Meal Type: ', widget=forms.Select(choices = MEAL_CATEGORIES))
+
 
 class ProfileUpdateForm(forms.ModelForm):
     class Meta:

@@ -1,44 +1,76 @@
 {% extends "users/base.html" %}
 {% load crispy_forms_tags %}
 {% block content %}
-    <h1>My Profile</h1>
-    <div class="content-section">
-        <div style="padding-bottom: 3em; display: flex; justify-content: space-around; border: 0.5vw solid rgb(50,10,10);
+    <h1 style="margin-left: 2vw; color: #ffffff">My Profile</h1>
+    <div style="margin-left: 2vw" class="content-section">
+        <div style="background-color: #86989B; padding-bottom: 3em; display: flex; align-items: flex-start; justify-content: space-around; border-radius: 0.5em; border: 0.2em solid #ffffff;
                 margin-bottom: 2vh;" id = "goals-section">
-            <div style="display: flex; flex-direction:column; background-color: #5f788a; padding: 1em;
-            border-style: solid; border: #86989B; border-width: 3em;" id="goals-card">
-                <h2 id="Profile-goals-header">
-                    Your Current Goals
+            <div style="width: 80%; display: flex; flex-direction:column; padding: 1em;
+                    padding-top: 0.5em" id="goals-card">
+                <h2 style="margin-bottom: 1rem; color: #ffffff"id="Profile-goals-header">
+                    My Current Goals
                 </h2>
                 <section id="Profile-goals-section">
-                    Daily Calorie Intake (kCal): {{ calories }}<br>
-                    Daily Carbohydrate Intake (grams): {{ carbs }}<br>
-                    Daily Fat Intake (grams): {{ fats }}<br>
-                    Daily Protein Intake (grams): {{ protein }}<br>
-                    +<br>
-                    {{ daily_act_info }}<br>
-                    ------------------------------------------------------------------<br>
-                    A weight change of {{ goalWeight }} pounds this week.
+                    <p style="background-color: #cc3300; color: #ffffff; padding: 0.5vw; margin-bottom: 1rem;
+                                border-radius: 0.5em">
+                        <b>Nutrition</b><br>
+                        Daily Calorie Intake (kCal): {{ calories }}<br>
+                        Daily Carbohydrate Intake (grams): {{ carbs }}<br>
+                        Daily Fat Intake (grams): {{ fats }}<br>
+                        Daily Protein Intake (grams): {{ protein }}
+                    </p>
+                    <p style="text-align:center; color: #ffffff; font-size: larger">+</p>
+                    <p style="background-color: #cc3300; color: #ffffff; padding: 0.5vw; margin-top: 1rem;
+                                border-radius: 0.5em;">
+                        <b>Activity</b><br>
+                        {{ daily_act_info }}
+                    </p>
+                    <br>
+                    <p style="color: #ffffff; border-top: #ffffff solid 0.2em; padding-top: 1em"></p>
+                    <p style="padding: 0.5vw; border-radius: 0.5em; background-color: #cc3300; color: #ffffff;">A weight change of {{ goalWeight }} pounds per week.</p>
                 </section>
 
             </div>
-            <form method="POST" style="padding: 1em; background-color: #5b80b2">
-                {% csrf_token %}
-                <fieldset class="form-group">
-                    <legend class="border-bottom mb-4">Update Gains</legend>
-                    {{ update_prof_form|crispy }}
-                </fieldset>
-                <div class="form-group">
-                    <button class="btn btn-outline-info" type="submit" name="form_submit">Update Info</button>
-                </div>
-            </form>
+            <div class="flex-container" style="flex-direction: row; width: 80%">
+                <section id="ProfileInfo"style="padding-bottom: 1em; padding-top: 4.5em; padding-left: 4.5em; padding-right: 3em; flex-basis: fit-content">
+                    <div style="width=20%">
+                        Welcome to your dashboard. Here you can view or update your goals.
+                        On the graphs below you can observe your progress as you log lifts
+                        and meals.<br><br>
+                        Any time you change your activity level, your weight, or your goal
+                        weight change, your nutrition goals will be recalculated.<br><br>
+                        Activity level is a value ranging from 1.2 to 2.1, which ranges from a sedentary lifestyle to
+                        the lifestyle of a professional athlete or manual laborer and is used to calculate your caloric needs.
 
+
+
+                    </div>
+                </section>
+                <form method="POST" style="padding-top: 0em; padding: 1em; flex-basis: fit-content">
+                    {% csrf_token %}
+                    <fieldset class="form-group" style="float: left; border-width: 10px; font-size: 1rem; width: 80%; margin-top: 0px; margin-left: 10%;">
+                        <legend class="border-bottom mb-4" style="font-size: 40px; font-weight: bold; color: white;">Update Goals</legend>
+                        {{ update_prof_form|crispy }}
+                    </fieldset>
+                    <div class="form-group">
+                        <button style="width: 25%; margin-left: 5em" class="btn btn-outline-info" type="submit" name="form_submit">Update Goals</button>
+                    </div>
+                </form>
+
+            </div>
         </div>
-        <div id="graphs-section-container" style="display: flex; flex-direction: column; align-items: center; justify-content: space-between">
-            <div class="graph-container">
-                <div>
+        <div id="graphs-section-container" style="background-color: #769283; display: flex; flex-direction: column;
+                                            align-items: start; justify-content: space-between; border: solid #ffffff;
+                                            border-width: 0.2rem; border-radius: 0.5%; padding: 2%" >
+            <h2 style="color: white; margin:1% 0%">View Your Stats</h2>
+            <div class="graph-container" style=" display: flex; flex-direction: column; padding: 2% 2%">
+                <div class="graph-blurb-container" style="padding: 5% 10%">
+                    Here you can view your past weight logs. To improve accuracy, it is recommended you choose the same
+                    time of day to weigh yourself so that daily fluctuations do not skew the stats.
+                </div>
+                <div class="graph-stats-container">
                     <p class="card-text">
-                    <img src="data:image/png;base64,{{ weightGraph }}" width="100%" style="border-radius: 5%">
+                        <img src="data:image/png;base64,{{ weightGraph }}" width="100%" style="border-radius: 1%">
                     </p>
                 </div>
             </div>
@@ -55,26 +87,32 @@
                 </form>
                 <div>
                     <p class="card-text">
-                    <img src="data:image/png;base64,{{ strengthGraph }}" width="80%" style="border-radius: 5%">
+                        <img src="data:image/png;base64,{{ strengthGraph }}" width="80%" style="border-radius: 2%">
                     </p>
                 </div>
             </div>
-            <div class="graph-container">
-                <form method="POST" action="/profile/">{% csrf_token %}
-                    <label for="colorSelect">Select a Date</label>
-                        <select type="text" class="form-control" name="date" id ="date">
-                            <option selected disabled>---------</option>
-                            {% for date in foodDates %}
-                                <option value="{{ date }}"> {{date}}</option>
-                            {% endfor %}
-                        </select>
-                    <Button class="btn btn-outline-secondary form-control" name="date_submit" type="submit">Select</Button>
-                </form>
-                <div>
-                    <p class="card-text">
-                    <img src="data:image/png;base64,{{ macroGraph }}" width="80%" style="border-radius: 5%">
-                    </p>
+            <div class="graph-container" style=" display: flex; flex-direction: column; padding: 2% 2%">
+                <div class="graph-blurb-container" style="padding: 5% 10%">
+                    Want to check if you're meeting your nutritional goals? Here you can access the breakdown of your
+                    food logs. Start by picking a date
                 </div>
+                <div class="graph-stats-container" style="width: 50%">
+                    <form method="POST" style="margin-bottom: 1em;" action="/profile/" >{% csrf_token %}
+                        <label for="colorSelect">Select a Date:</label><br>
+                            <select type="text" class="form-control" name="date" id ="date">
+                                <option selected disabled>---------</option>
+                                {% for date in foodDates %}
+                                    <option value="{{ date }}"> {{date}}</option>
+                                {% endfor %}
+                            </select>
+                        <Button class="btn btn-outline-secondary form-control" name="date_submit" type="submit">Select</Button>
+                    </form>
+                    <div>
+                        <p class="card-text">
+                        <img src="data:image/png;base64,{{ macroGraph }}" width="80%" style="border-radius: 2%">
+                        </p>
+                    </div>
+                 </div>
             </div>
         </div>
         <div class="border-top pt-3">

@@ -11,14 +11,14 @@ GymBuddy is a web application for anyone who is committed to pursuing a healthie
 * If a user need to update any of their health information, they can do so from their profile page.
 
 ## Pip Installation
+* If project has already been previously installed on testing machine run ``` pip uninstall GymBuddy```  to ensure pip updates you to the most recent version. 
+
 ```
 pip install GymBuddy
 ```
 
 ## Commands to start project
 ```
-launch migrate
-
 launch runserver
 ```
 

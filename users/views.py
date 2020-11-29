@@ -528,11 +528,17 @@ def scrap_url(url):
             exercise['description_link'] = 'https://www.acefitness.org/' + row.a['href']
             EXERCISES_GLOBAL.append(exercise)
 
-@login_required
 def meals(request):
+    global MEALNAME
 
     category = 'All'
+    if request.method == 'POST' and 'log_submit' in request.POST:
+        print("hit meal")
+        MEALNAME = request.POST['log_submit']
+        return redirect('macros')
+
     if request.method == 'POST':
+        print("hit post 1")
         filter_form = MealFilterForm(request.POST)
         if filter_form.is_valid():
             category = filter_form.cleaned_data['category']

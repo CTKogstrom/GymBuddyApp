@@ -1,3 +1,4 @@
+{% load crispy_forms_tags %}
 {% load static %}
 <!DOCTYPE html>
 <html lang="zxx">
@@ -15,54 +16,43 @@
         rel="stylesheet">
     
     <!-- Css Styles -->
-    <link rel="stylesheet" href="{% static 'css/style.css' %}" type="text/css"> 
+    <link rel="stylesheet" href="{% static 'css/style.css' %}" type="text/css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
 </head>
 
-<body style="background-color:grey;" >
-
-    <!-- Header Section Begin -->
+<body style="background-color:grey;">
     <header class="header-section">
-        <div class="container">
+        <div class="container" style="display: flex; justify-content: space-between; align-items: center">
             <div class="logo" style="margin-left: 15px;">
                 <a href="/home">
                     <img src="{% static 'img/logo2.png' %}" alt="">
                 </a>
             </div>
-            <div class="nav-menu" style="margin-top: 45px;">
+            <div class="nav-menu">
                 <nav class="mainmenu mobile-menu">
                     <ul>
                         <li><a href="/home">Home</a></li>
                         <li><a href="/macros">Track Macros/Calories</a></li>
                         <li><a href="/meals">Meals</a></li>
                         <li><a href="/exercises">Exercises</a></li>
-                        <li><a href="/weight">Track Your Weight</a></li>
+                        <li class="active"><a href="/weight">Track Your Weight</a></li>
                     </ul>
                 </nav>
-                {% if loggedIn %}
-                    <a href="/profile" class="primary-btn">Profile</a>
-                    <a href="/logout" class="primary-btn">Logout</a>
-                {% endif %}
-                {% if not loggedIn %}
-                    <a href="/register" class="primary-btn">Register</a>
-                    <a href="/login" class="primary-btn">Sign In</a>
-                {% endif %}
+                <a href="/profile" style="background-color: #cc3300" class="primary-btn">Profile</a>
+                <a href="/logout" style="background-color: #cc3300" class="primary-btn">Logout</a>
             </div>
-            <div id="mobile-menu-wrap"></div>
         </div>
     </header>
-    <!-- Header End -->
-    
-    <!-- About Section Begin -->
-    <section class="about-section spad" style="margin-top: 50px;">
-        <div class="container">
-            <div class="row" style="color:white;">
+
+    <!-- Page Main Section Begin -->
+    <section class="about-section spad" style="position: relative; margin-top: 50px;">
+        <div class="container" style="color: white">
+            <div class="row" style="padding-top: 2rem">
                 {% block content %}{% endblock %}
             </div>
         </div>
     </section>
     <!-- About Section End -->
-
-
 </body>
 
 </html>

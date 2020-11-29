@@ -51,27 +51,25 @@
     <!-- About Section Begin -->
     <section class="about-section spad" style="margin-top: 50px;">
         
-        <div >
+        <div>
             <div class="row">             
                 <div class="about-text">
                     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-        {% if messages %}
-            
-            <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-            <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
-            <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-            <div class="row">
-            <div class="col-sm-6 col-sm-offset-3">
-                {% for message in messages %}
-                <div class="alert alert-dark alert-dismissible fade show" style="width: 150%; margin-left: 55%;">
-                    <button type="button" class="close" data-dismiss="alert">&times;</button>
-                    <p>{{ message }}</p>
-                </div>
-                {% endfor %}
-              </div>
-          
-            </div>
-          {% endif %}
+                    {% if messages %}
+                        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+                        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+                        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+                        <div class="row">
+                            <div class="col-sm-6 col-sm-offset-3">
+                                {% for message in messages %}
+                                    <div class="alert alert-dark alert-dismissible fade show" style="width: 150%; margin-left: 55%;">
+                                        <button type="button" class="close" data-dismiss="alert">&times;</button>
+                                        <p>{{ message }}</p>
+                                    </div>
+                                {% endfor %}
+                            </div>
+                        </div>
+                    {% endif %}
                     <form method="POST" >
                         {% csrf_token %}
                         <fieldset class="form-group" style="color: white; width: 70%; margin-left: 20%;">

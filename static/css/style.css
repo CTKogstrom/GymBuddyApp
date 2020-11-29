@@ -32,10 +32,6 @@
 /* Template default CSS
 /*----------------------------------------*/
 
-.graph-container{
-	margin:5em;
-}
-
 
 
 html, body {
@@ -137,16 +133,7 @@ ul, ol {
 	text-align: center;
 	width: 160px;
 	height: 46px;
-	border-left: 2px solid #eb3c5a;
-	border-right: 2px solid #f67831;
-	-webkit-box-sizing: border-box;
-	box-sizing: border-box;
-	background-position: 0 0, 0 100%;
-	background-repeat: no-repeat;
-	background-size: 100% 2px;
-	background-image: -webkit-gradient(linear, left top, right top, from(#eb3c5a), to(#f67831)), -webkit-gradient(linear, left top, right top, from(#eb3c5a), to(#f67831));
-	background-image: -o-linear-gradient(left, #eb3c5a 0%, #f67831 100%), -o-linear-gradient(left, #eb3c5a 0%, #f67831 100%);
-	background-image: linear-gradient(to right, #eb3c5a 0%, #f67831 100%), linear-gradient(to right, #eb3c5a 0%, #f67831 100%);
+	background-color: #cc3300;
 	-webkit-transition-duration: 1000ms;
 	-o-transition-duration: 1000ms;
 	transition-duration: 1000ms;
@@ -160,10 +147,7 @@ ul, ol {
 	-webkit-transition-duration: 500ms;
 	-o-transition-duration: 500ms;
 	transition-duration: 500ms;
-	background: #f67831;
-	background: -webkit-gradient(linear, left top, right top, from(#eb3c5a), to(#f67831));
-	background: -o-linear-gradient(left, #eb3c5a, #f67831);
-	background: linear-gradient(to right, #eb3c5a, #f67831);
+	background-color: #cc3300;
 	content: "";
 	position: absolute;
 	width: 100%;

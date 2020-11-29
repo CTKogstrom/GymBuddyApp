@@ -1,15 +1,30 @@
 {% extends "users/base.html" %}
-{% load crispy_forms_tags %}
 {% block content %}
-    <h1 style="margin-left: 2vw; color: #ffffff">My Profile</h1>
+    {% load crispy_forms_tags %}
+
+    {% if messages %}
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+        <div class="row">
+            <div class="col-sm-6 col-sm-offset-3">
+                {% for message in messages %}
+                    <div class="alert alert-dark alert-dismissible fade show" style="max-height: 3rem; min-width: 25rem; margin-left: 2rem;">
+                        <button type="button" class="close" data-dismiss="alert">&times;</button>
+                        <p>{{ message }}</p>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+    {% endif %}
     <div style="margin-left: 2vw" class="content-section">
-        <div style="background-color: #86989B; padding-bottom: 3em; display: flex; align-items: flex-start; justify-content: space-around; border-radius: 0.5em; border: 0.2em solid #ffffff;
+        <div style="background-color: #86989B; padding-left: 2rem; padding-bottom: 3em; display: flex; align-items: flex-start; justify-content: space-between; border-radius: 0.5em; border: 0.2em solid #ffffff;
                 margin-bottom: 2vh;" id = "goals-section">
             <div style="width: 80%; display: flex; flex-direction:column; padding: 1em;
                     padding-top: 0.5em" id="goals-card">
-                <h2 style="margin-bottom: 1rem; color: #ffffff"id="Profile-goals-header">
-                    My Current Goals
-                </h2>
+                <h1 style="margin: 1rem 0rem 2rem 0rem; color: #ffffff"id="Profile-goals-header">
+                    My Current Goals:
+                </h1>
                 <section id="Profile-goals-section">
                     <p style="background-color: #cc3300; color: #ffffff; padding: 0.5vw; margin-bottom: 1rem;
                                 border-radius: 0.5em">
@@ -33,17 +48,14 @@
             </div>
             <div class="flex-container" style="flex-direction: row; width: 80%">
                 <section id="ProfileInfo"style="padding-bottom: 1em; padding-top: 4.5em; padding-left: 4.5em; padding-right: 3em; flex-basis: fit-content">
-                    <div style="width=20%">
-                        Welcome to your dashboard. Here you can view or update your goals.
+                    <div>
+                        Welcome to your dashboard! Here you can view or update your goals.
                         On the graphs below you can observe your progress as you log lifts
                         and meals.<br><br>
                         Any time you change your activity level, your weight, or your goal
                         weight change, your nutrition goals will be recalculated.<br><br>
                         Activity level is a value ranging from 1.2 to 2.1, which ranges from a sedentary lifestyle to
                         the lifestyle of a professional athlete or manual laborer and is used to calculate your caloric needs.
-
-
-
                     </div>
                 </section>
                 <form method="POST" style="padding-top: 0em; padding: 1em; flex-basis: fit-content">
@@ -53,18 +65,20 @@
                         {{ update_prof_form|crispy }}
                     </fieldset>
                     <div class="form-group">
-                        <button style="width: 25%; margin-left: 5em" class="btn btn-outline-info" type="submit" name="form_submit">Update Goals</button>
+                        <button style="width: 25%;margin-left: 4rem;" class="btn btn-info" type="submit" name="form_submit">Update Goals</button>
                     </div>
                 </form>
 
             </div>
         </div>
-        <div id="graphs-section-container" style="background-color: #769283; display: flex; flex-direction: column;
-                                            align-items: start; justify-content: space-between; border: solid #ffffff;
-                                            border-width: 0.2rem; border-radius: 0.5%; padding: 2%" >
-            <h2 style="color: white; margin:1% 0%">View Your Stats</h2>
-            <div class="graph-container" style=" display: flex; flex-direction: column; padding: 2% 2%">
-                <div class="graph-blurb-container" style="padding: 5% 10%">
+        <div class='flex-container' id="graphs-section-container" style="background-color: #769283; display: flex;
+                                                                    flex-direction: column; border: solid #ffffff 0.2rem;
+                                                                    border-radius: 0.5em;
+                                                                    padding: 2rem 3rem 3rem 3rem">
+            <h1 style="color: white; margin-bottom: 2rem;">View Your Stats:</h1>
+            <div class="graph-container" style=" display: flex; flex-direction: column; justify-content: space-around;
+                                                align-items: center">
+                <div class="graph-blurb-container" style="font-size: large; width:60%; margin: 3rem 0rem 3rem 0rem;">
                     Here you can view your past weight logs. To improve accuracy, it is recommended you choose the same
                     time of day to weigh yourself so that daily fluctuations do not skew the stats.
                 </div>

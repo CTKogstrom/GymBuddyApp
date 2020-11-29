@@ -71,8 +71,6 @@ def profile(request):
             update_prof_form.save()
             messages.success(request, "Successfully updated profile data!", extra_tags='success')
             return redirect('profile')
-        else:
-            messages.error(request, "Please check entries are valid", extra_tags='danger')
     else:
         #if there is not a post request fill out the fields of the form with the logged in user's information
         update_prof_form = ProfileUpdateForm(instance=request.user.profile)
@@ -256,8 +254,8 @@ def profile(request):
 def weight(request):
     weightrecord = WeightRecord(user=request.user)
     if request.method == 'POST' and 'delete_but' in request.POST:
-        deleted = WeightRecord.objects.filter(user = request.user, pk=request.POST['pk']).first()
-        WeightRecord.objects.filter(user = request.user, pk=request.POST['pk']).delete()
+        deleted = WeightRecord.objects.filter(user=request.user, pk=request.POST['pk']).first()
+        WeightRecord.objects.filter(user=request.user, pk=request.POST['pk']).delete()
         messages.success(request, "Successfully deleted weight!", extra_tags='success')
 
     elif request.method == 'Post' and 'weight_graph' in request.POST:
@@ -277,7 +275,7 @@ def weight(request):
         else:
             messages.error(request, "Please re-enter valid information.", extra_tags='danger')
     form = WeightForm()
-    data = WeightRecord.objects.filter(user = request.user).order_by('-date')
+    data = WeightRecord.objects.filter(user=request.user).order_by('-date')
     size = len(data)
     stats = Profile.objects.filter(user=request.user)[0]
     goal = stats.goal_weight_change
@@ -285,10 +283,7 @@ def weight(request):
     listG = []
 
     for e in data:
-        diff = goal = e.lbs
-        if diff > 0:
-            diff = '+' + str(diff) 
-        listG.append((e.date, e.lbs, diff,e)) 
+        listG.append((e.date, e.lbs, e))
     context = {
         'form' : form,
         'weights' : data,
@@ -391,8 +386,8 @@ def exercises(request):
 
     category = 'All'
     if request.method == 'POST' and 'delete_but' in request.POST:
-        deleted = LiftRecord2.objects.filter(user = request.user, pk=request.POST['pk']).first()
-        LiftRecord2.objects.filter(user = request.user, pk=request.POST['pk']).delete()
+        deleted = LiftRecord.objects.filter(user = request.user, pk=request.POST['pk']).first()
+        LiftRecord.objects.filter(user = request.user, pk=request.POST['pk']).delete()
         messages.success(request, "Successfully deleted exercise!", extra_tags='success')
 
     elif request.method == 'POST' and 'strength_graph' in request.POST:

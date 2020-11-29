@@ -329,7 +329,6 @@ def macros(request):
         if singleFood.is_valid():
             foodName = singleFood.cleaned_data['foodName'].capitalize()
             foodDate = singleFood.cleaned_data['date']
-            messages.success(request, 'Successfully logged food!', extra_tags='success')
         else:
             messages.error(request, "Please re-enter valid information.", extra_tags='danger')        
 
@@ -402,10 +401,6 @@ def macros(request):
         'display' : display,
         'dates': dates,
         'size': size,
-        'macros_page': True,
-        'exercise_page': False,
-        'meals_page': False,
-        'weights_page': False
     }
     MEALNAME = ""
     return render(request, 'users/macros.html', context)

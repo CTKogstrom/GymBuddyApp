@@ -42,24 +42,22 @@
                 <a href="/profile" class="primary-btn">Profile</a>
                 <a href="/logout" class="primary-btn">Logout</a>
             </div>
-            <div id="mobile-menu-wrap"></div>
         </div>
     </header>
     <!-- Header End -->
     
     <!-- About Section Begin -->
-    <section class="about-section spad">
+    <section class="about-section spad"style="margin-top: 50px;">
         <div class="container">
+            <h2 style="color:white; padding-bottom: 10px; padding-top: 10px; margin-top: 3%; text-align: center;" >Find New Meals To Fit Your Goals!</h2>
+            <div class="meal-box-overflow">
 
-                        <h2 style="color:white; padding-bottom: 10px; padding-top: 10px; margin-top: 3%; text-align: center;" >Find New Meals To Fit Your Goals!</h2>
-                        <div class="meal-box-overflow">
-
-                         <form method='POST' action="{{filter.get_category_display}}" style="padding-bottom: 30px; padding-left: 15px; width: 25%; margin-left: 36.5%;">
-                             {% csrf_token %}
-                            {{filter|crispy}}
-                            <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css" >
-                            <Button class="add btn btn-block btn-primary mb-2" type="submit" name="form_submit">Filter</Button>
-                         </form>
+             <form method='POST' action="{{filter.get_category_display}}" style="padding-bottom: 30px; padding-left: 15px; width: 25%; margin-left: 36.5%;">
+                 {% csrf_token %}
+                {{filter|crispy}}
+                <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css" >
+                <Button class="add btn btn-block btn-primary mb-2" type="submit" name="form_submit">Filter</Button>
+             </form>
 
                            {% for recipe in meals %}
                                {{filter.get_category_display}}

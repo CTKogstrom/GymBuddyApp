@@ -19,6 +19,8 @@ import cchardet as chardet
 import lxml
 import concurrent.futures
 import datetime
+import math
+import numpy as np
 
 
 URLS = [
@@ -56,27 +58,29 @@ def register(request):
         form = UserRegisterForm()
     return render(request, 'users/register.html', {'form' : form})
 
+
 def login2(request, user):
     return render(request, 'users/login.html')
+
 
 @login_required
 def profile(request):
 
-    #If the user submits new information to the update profile form this conditional will be true
+    # If the user submits new information to the update profile form this conditional will be true
     if request.method == 'POST' and 'form_submit' in request.POST:
-        #fill out form according to the POST information
+        # fill out form according to the POST information
         update_prof_form = ProfileUpdateForm(request.POST, instance=request.user.profile)
         if update_prof_form.is_valid():
-            #if the form information is valid save the information to the profile model in the sqlite database
+            # if the form information is valid save the information to the profile model in the sqlite database
             update_prof_form.save()
             messages.success(request, "Successfully updated profile data!", extra_tags='success')
             return redirect('profile')
     else:
-        #if there is not a post request fill out the fields of the form with the logged in user's information
+        # if there is not a post request fill out the fields of the form with the logged in user's information
         update_prof_form = ProfileUpdateForm(instance=request.user.profile)
 
 
-    #retrieve data in profile
+    # retrieve data in profile
     data = Profile.objects.filter(user = request.user)
     calories = carbs = fats = protein = goalWeight = currWeight = activity = starting_weight = {}
     for e in data:
@@ -105,14 +109,22 @@ def profile(request):
 
     #style for the plot
     plt.style.use('seaborn')
-
     #plot the dates on the x axis and the
-    plt.plot(dateList, lbsList, marker='o', markersize=2)
+    plt.plot(dateList, lbsList, marker='*', markersize=5)
+
+    x_tix = []
+    j = 0
+    while j < len(dateList):
+        x_tix.append(dateList[j])
+        j = j + math.floor(len(dateList)/7)
+    plt.xticks(x_tix, x_tix)
+
     for i in range(0, len(lbsList)):
-        plt.annotate(lbsList[i], (dateList[i], lbsList[i]), ha="center")
+        plt.annotate(lbsList[i], (dateList[i], lbsList[i]))
     plt.title('Weight History')
     plt.xlabel('Date')
     plt.ylabel('Weight (lbs)')
+
     weightFig = plt.gcf()
     weightBuf = io.BytesIO()
     weightFig.savefig(weightBuf, format='png')
@@ -173,8 +185,9 @@ def profile(request):
 
     percentages = [0,0,0]
     totalCal = 0
-    macroLabels = 'Carbohydrates','Fats','Protein'
-    fig3 = plt.figure(figsize =(10, 7)) 
+    macroLabels = ['Carbohydrates', 'Fats', 'Protein']
+    matplotlib.use('Agg')
+    plt.style.use('seaborn')
     if chosenDate != "":
         foodsFiltered = Food.objects.filter(user=request.user,date=chosenDate)
         for e in foodsFiltered:
@@ -186,19 +199,20 @@ def profile(request):
             percentages[2] += e.protein
             totalCal += e.calories
             print(e.calories)
-        plt.pie(percentages, labels = macroLabels, autopct='%1.1f%%', shadow=True, startangle=90)
+        plt.pie(percentages, labels=macroLabels, autopct=lambda pct: pie_text_func(pct, percentages), shadow=True, startangle=90)
+
     totalCalStr = ""
     if titleDate != "":
         totalCalStr = "Total Calories: " + str(totalCal)
-    plt.title("Macro Distribution " + str(titleDate) +"\n" + totalCalStr)
+    plt.title("Macro Distribution " + str(titleDate) + "\n" + totalCalStr)
+
+    #saves the plot as a png to display on html
     macroFig = plt.gcf()
     macroBuf = io.BytesIO()
     macroFig.savefig(macroBuf, format='png')
     macroBuf.seek(0)
     string = base64.b64encode(macroBuf.read())
     macroGraph = urllib.parse.quote(string)
-    matplotlib.use('Agg')
-    plt.style.use('seaborn')
     plt.close()
 
     daily_activity_desc = ["""Very light - Seated and standing activities, office work, driving, cooking; 
@@ -227,6 +241,7 @@ def profile(request):
         daily_act = daily_activity_desc[3]
     if len(weightList) != 0:
         currWeight = weightList[0].lbs
+
     context = {
         'username': request.user.username,
         'loggedIn': False,
@@ -245,10 +260,20 @@ def profile(request):
         'strengthGraph' : strengthGraph,
         'foodDates' : foodDates,
         'macroGraph' : macroGraph,
+        'meals_page': False,
+        'exercise_page': False,
+        'macros_page': False,
+        'weights_page': False
     }
     if request.user.is_authenticated:
         context['loggedIn'] = True
     return render(request, 'users/profile.html', context)
+
+
+def pie_text_func(pct, allvals):
+    abso = int(pct/100.*np.sum(allvals))
+    return "{:.1f}%\n({:d} g)".format(pct, abso)
+
 
 @login_required
 def weight(request):
@@ -289,7 +314,11 @@ def weight(request):
         'weights' : data,
         'size': size,
         'goal': goal,
-        'listG': listG
+        'listG': listG,
+        'weights_page': True,
+        'macros_page': False,
+        'meals_page': False,
+        'exercise_page': False
     }
     return render(request, 'users/weight.html', context)
   
@@ -375,7 +404,11 @@ def macros(request):
         'foods' : data,
         'display' : display,
         'dates': dates,
-        'size': size
+        'size': size,
+        'macros_page': True,
+        'exercise_page': False,
+        'meals_page': False,
+        'weights_page': False
     }
     MEALNAME = ""
     return render(request, 'users/macros.html', context)
@@ -467,7 +500,7 @@ def exercises(request):
             messages.error(request, "Please re-enter valid information.", extra_tags='danger')
     form = LiftForm(initial={'name': lift_form_name})
     # filter_form = ExerciseFilterForm()
-    data = LiftRecord2.objects.filter(user = request.user).order_by('-date')
+    data = LiftRecord.objects.filter(user=request.user).order_by('-date')
     size = len(data)
     #print(EXERCISES_GLOBAL)
     context = {
@@ -476,6 +509,10 @@ def exercises(request):
         'form': form,
         'filter': filter_form,
         'lifts': data,
+        'exercise_page': True,
+        'meals_page': False,
+        'macros_page': False,
+        'weights_page': False
     }
 
     return render(request, 'users/exercises.html', context)
@@ -548,6 +585,10 @@ def meals(request):
         'meals': recipe_list,
         'title': 'Meals',
         'filter': filter_form,
+        'meals_page': True,
+        'macros_page': False,
+        'weights_page': False,
+        'exercise_page': False
     }
 
     return render(request, 'users/meals.html', context)

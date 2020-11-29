@@ -857,6 +857,41 @@ ul, ol {
 	color: #ffffff;
 	margin-bottom: 42px;
 }
+
+/*----------------------------
+		Profile Page
+---------------------------- */
+.graph-container {
+	display: flex;
+	flex-direction: column;
+	justify-content: space-around;
+	align-items: center;
+	margin: 5rem 0rem 0rem 0rem;
+}
+
+.graph-blurb-container{
+	font-size: large;
+	width:60%;
+	margin: 0rem 0rem 3rem 0rem;
+}
+
+.graph-selection-form{
+	display: flex;
+	flex-direction: row;
+	align-items: baseline;
+	margin: 0rem 3rem 3rem 0rem;
+	width: 40%;
+
+
+}
+
+.graph-stats-container{
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+}
+
+
 /*---------------------
   Footer
 -----------------------*/

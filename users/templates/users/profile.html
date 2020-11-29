@@ -1,22 +1,6 @@
 {% extends "users/base.html" %}
 {% block content %}
     {% load crispy_forms_tags %}
-
-    {% if messages %}
-        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
-        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-        <div class="row">
-            <div class="col-sm-6 col-sm-offset-3">
-                {% for message in messages %}
-                    <div class="alert alert-dark alert-dismissible fade show" style="max-height: 3rem; min-width: 25rem; margin-left: 2rem;">
-                        <button type="button" class="close" data-dismiss="alert">&times;</button>
-                        <p>{{ message }}</p>
-                    </div>
-                {% endfor %}
-            </div>
-        </div>
-    {% endif %}
     <div style="margin-left: 2vw" class="content-section">
         <div style="background-color: #86989B; padding-left: 2rem; padding-bottom: 3em; display: flex; align-items: flex-start; justify-content: space-between; border-radius: 0.5em; border: 0.2em solid #ffffff;
                 margin-bottom: 2vh;" id = "goals-section">
@@ -75,62 +59,71 @@
                                                                     flex-direction: column; border: solid #ffffff 0.2rem;
                                                                     border-radius: 0.5em;
                                                                     padding: 2rem 3rem 3rem 3rem">
-            <h1 style="color: white; margin-bottom: 2rem;">View Your Stats:</h1>
-            <div class="graph-container" style=" display: flex; flex-direction: column; justify-content: space-around;
-                                                align-items: center">
-                <div class="graph-blurb-container" style="font-size: large; width:60%; margin: 3rem 0rem 3rem 0rem;">
+            <h1 style="color: white;">View Your Stats:</h1>
+            <div class="graph-container">
+                <div class="graph-blurb-container">
                     Here you can view your past weight logs. To improve accuracy, it is recommended you choose the same
-                    time of day to weigh yourself so that daily fluctuations do not skew the stats.
+                    time of day to weigh yourself so that daily fluctuations do not skew the stats. And remember to log
+                    every day or the scale of the x-axis will be distorted.
                 </div>
                 <div class="graph-stats-container">
                     <p class="card-text">
-                        <img src="data:image/png;base64,{{ weightGraph }}" width="100%" style="border-radius: 1%">
+                        <img src="data:image/png;base64,{{ weightGraph }}" width="100%" style="border-radius: 0.5rem">
                     </p>
                 </div>
             </div>
             <div class="graph-container">
-                <form method="POST" action="/profile/">{% csrf_token %}
-                    <label for="colorSelect">Select an Exercise</label>
-                        <select type="text" class="form-control" name="exercise" id ="exercise">
-                            <option selected disabled>---------</option>
-                            {% for exercise in exerciseNames %}
-                                <option value="{{ exercise }}"> {{exercise}}</option>
-                            {% endfor %}
-                        </select>
-                    <Button class="btn btn-outline-secondary form-control" name="option_submit" type="submit">Select</Button>
-                </form>
+                <div class="graph-blurb-container">
+                    Here you can see the exercises you have logged.
+                </div>
+                <div class="graph-stats-container">
+                    <form class="graph-selection-form" method="POST" action="/profile/">
+                        {% csrf_token %}
+                        <label style="width: 40rem;" for="colorSelect">Select an Exercise:</label>
+                            <select type="text" class="form-control" name="exercise" id ="exercise" style="width: 8rem;">
+                                <option selected disabled>---------</option>
+                                {% for exercise in exerciseNames %}
+                                    <option value="{{ exercise }}"> {{exercise}}</option>
+                                {% endfor %}
+                            </select>
+                        <Button style="width: 5rem; margin-left: 1rem;" class="btn btn-secondary form-control" name="option_submit" type="submit">
+                            Select
+                        </Button>
+                    </form>
+                </div>
                 <div>
                     <p class="card-text">
-                        <img src="data:image/png;base64,{{ strengthGraph }}" width="80%" style="border-radius: 2%">
+                        <img src="data:image/png;base64,{{ strengthGraph }}" width="100%" style="border-radius: 0.5rem;">
                     </p>
                 </div>
             </div>
-            <div class="graph-container" style=" display: flex; flex-direction: column; padding: 2% 2%">
-                <div class="graph-blurb-container" style="padding: 5% 10%">
+            <div class="graph-container">
+                <div class="graph-blurb-container">
                     Want to check if you're meeting your nutritional goals? Here you can access the breakdown of your
                     food logs. Start by picking a date
                 </div>
-                <div class="graph-stats-container" style="width: 50%">
-                    <form method="POST" style="margin-bottom: 1em;" action="/profile/" >{% csrf_token %}
-                        <label for="colorSelect">Select a Date:</label><br>
-                            <select type="text" class="form-control" name="date" id ="date">
-                                <option selected disabled>---------</option>
-                                {% for date in foodDates %}
-                                    <option value="{{ date }}"> {{date}}</option>
-                                {% endfor %}
-                            </select>
-                        <Button class="btn btn-outline-secondary form-control" name="date_submit" type="submit">Select</Button>
+                <div class="graph-stats-container">
+                    <form class="graph-selection-form" method="POST" action="/profile/" >
+                        {% csrf_token %}
+                        <label for="colorSelect" style="width: 12rem;">Select a Date:</label><br>
+                        <select type="text" class="form-control" name="date" id ="date" style="width: 8rem;">
+                            <option selected disabled>---------</option>
+                            {% for date in foodDates %}
+                                <option value="{{ date }}"> {{date}}</option>
+                            {% endfor %}
+                        </select>
+                        <Button class="btn btn-secondary form-control" name="date_submit" type="submit"
+                                style="width: 5rem; margin-left: 1rem;">
+                            Select
+                        </Button>
                     </form>
                     <div>
                         <p class="card-text">
-                        <img src="data:image/png;base64,{{ macroGraph }}" width="80%" style="border-radius: 2%">
+                        <img src="data:image/png;base64,{{ macroGraph }}" width="100%" style="border-radius: 0.5rem">
                         </p>
                     </div>
                  </div>
             </div>
         </div>
-        <div class="border-top pt-3">
-        </div>
-
     </div>
 {% endblock content %}

@@ -29,25 +29,92 @@
                 </a>
             </div>
             <div class="nav-menu">
-                <nav class="mainmenu mobile-menu">
-                    <ul>
-                        <li><a href="/home">Home</a></li>
-                        <li><a href="/macros">Track Macros/Calories</a></li>
-                        <li><a href="/meals">Meals</a></li>
-                        <li><a href="/exercises">Exercises</a></li>
-                        <li><a href="/weight">Track Your Weight</a></li>
-                    </ul>
-                </nav>
-                <a href="/profile" style="background-color: #cc3300" class="primary-btn">Profile</a>
-                <a href="/logout" style="background-color: #cc3300" class="primary-btn">Logout</a>
+                {% if macros_page %}
+                    <nav class="mainmenu mobile-menu">
+                        <ul>
+                            <li><a href="/home">Home</a></li>
+                            <li class="active"><a href="/macros">Track Macros/Calories</a></li>
+                            <li><a href="/meals">Meals</a></li>
+                            <li><a href="/exercises">Exercises</a></li>
+                            <li><a href="/weight">Track Your Weight</a></li>
+                        </ul>
+                    </nav>
+                {% endif %}
+                {% if meals_page %}
+                    <nav class="mainmenu mobile-menu">
+                        <ul>
+                            <li><a href="/home">Home</a></li>
+                            <li class="active"><a href="/macros">Track Macros/Calories</a></li>
+                            <li><a href="/meals">Meals</a></li>
+                            <li><a href="/exercises">Exercises</a></li>
+                            <li><a href="/weight">Track Your Weight</a></li>
+                        </ul>
+                    </nav>
+                {% endif %}
+                {% if exercise_page %}
+                    <nav class="mainmenu mobile-menu">
+                        <ul>
+                            <li><a href="/home">Home</a></li>
+                            <li><a href="/macros">Track Macros/Calories</a></li>
+                            <li><a href="/meals">Meals</a></li>
+                            <li class="active"><a href="/exercises">Exercises</a></li>
+                            <li><a href="/weight">Track Your Weight</a></li>
+                        </ul>
+                    </nav>
+                {% endif %}
+                {% if weights_page %}
+                    <nav class="mainmenu mobile-menu">
+                        <ul>
+                            <li><a href="/home">Home</a></li>
+                            <li><a href="/macros">Track Macros/Calories</a></li>
+                            <li><a href="/meals">Meals</a></li>
+                            <li><a href="/exercises">Exercises</a></li>
+                            <li class="active"><a href="/weight">Track Your Weight</a></li>
+                        </ul>
+                    </nav>
+                {% endif %}
+                {% if not meals_page and not exercise_page and not macros_page and not weights_page %}
+                    <nav class="mainmenu mobile-menu">
+                        <ul>
+                            <li><a href="/home">Home</a></li>
+                            <li><a href="/macros">Track Macros/Calories</a></li>
+                            <li><a href="/meals">Meals</a></li>
+                            <li><a href="/exercises">Exercises</a></li>
+                            <li><a href="/weight">Track Your Weight</a></li>
+                        </ul>
+                    </nav>
+                {% endif %}
+                {% if loggedIn %}
+                    <a href="/profile" style="background-color: #cc3300" class="primary-btn">Profile</a>
+                    <a href="/logout" style="background-color: #cc3300" class="primary-btn">Logout</a>
+                {% endif %}
+                {% if not loggedIn %}
+                    <a href="/register" style="background-color: #cc3300" class="primary-btn">Register</a>
+                    <a href="/login" style="background-color: #cc3300" class="primary-btn">Sign In</a>
+                {% endif %}
             </div>
         </div>
     </header>
 
     <!-- Page Main Section Begin -->
-    <section class="about-section spad" style="position: relative; margin-top: 50px;">
+    <section class="about-section spad" style="margin-top: 50px;">
         <div class="container" style="color: white">
             <div class="row" style="padding-top: 2rem">
+                {% if messages %}
+                    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+                    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+                    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+                    <div class="row">
+                        <div class="col-sm-6 col-sm-offset-3">
+                            {% for message in messages %}
+                                <div class="alert alert-dark alert-dismissible fade show" style="max-height: 3rem; width: 25rem; margin-left: 2rem;">
+                                    <button type="button" class="close" data-dismiss="alert">&times;</button>
+                                    <p>{{ message }}</p>
+                                </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                {% endif %}
                 {% block content %}{% endblock %}
             </div>
         </div>

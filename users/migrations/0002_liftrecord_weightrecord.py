@@ -29,7 +29,6 @@ class Migration(migrations.Migration):
                 ('sets', models.IntegerField(blank=True, null=True)),
                 ('reps_per_set', models.IntegerField(blank=True, null=True)),
                 ('date', models.DateField()),
-                ('exercise', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='activityLibrary.exercise')),
                 ('user', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to=settings.AUTH_USER_MODEL)),
             ],
         ),

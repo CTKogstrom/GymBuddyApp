@@ -6,10 +6,10 @@
                 margin-bottom: 2vh;" id = "goals-section">
             <div style="width: 80%; display: flex; flex-direction:column; padding: 1em;
                     padding-top: 0.5em" id="goals-card">
-                <h1 style="margin: 1rem 0rem 2rem 0rem; color: #ffffff"id="Profile-goals-header">
+                <h1 style="margin: 5rem 0rem 2rem 2rem; color: #ffffff"id="Profile-goals-header">
                     My Current Goals:
                 </h1>
-                <section id="Profile-goals-section">
+                <section id="Profile-goals-section" style="margin-top: 4rem;">
                     <p style="background-color: #cc3300; color: #ffffff; padding: 0.5vw; margin-bottom: 1rem;
                                 border-radius: 0.5em">
                         <b>Nutrition</b><br>
@@ -39,7 +39,10 @@
                         Any time you change your activity level, your weight, or your goal
                         weight change, your nutrition goals will be recalculated.<br><br>
                         Activity level is a value ranging from 1.2 to 2.1, which ranges from a sedentary lifestyle to
-                        the lifestyle of a professional athlete or manual laborer and is used to calculate your caloric needs.
+                        the lifestyle of a professional athlete or manual laborer and is used to calculate your caloric needs.<br><br>
+                        The goal weight change field contains the amount of weight you either want to lose or gain
+                        each week. We limit this field to the range [-1,1], because it is unhealthy and unsustainable to
+                        exceed this range.
                     </div>
                 </section>
                 <form method="POST" style="padding-top: 0em; padding: 1em; flex-basis: fit-content">
@@ -74,7 +77,11 @@
             </div>
             <div class="graph-container">
                 <div class="graph-blurb-container">
-                    Here you can see the exercises you have logged.
+                    Here you can see your strength gains based on the weight and reps you did of each
+                    exercise. This function only works for weight lifting exercises and not cardio.
+                    We calculated your one rep max based on the amount of weight and reps you logged.
+                    If you notice one day you did not manage to lift as much go down below and check if
+                    you met your nutrition goals for that day!
                 </div>
                 <div class="graph-stats-container">
                     <form class="graph-selection-form" method="POST" action="/profile/">

@@ -16,7 +16,8 @@
         rel="stylesheet">
     
     <!-- Css Styles -->
-    <link rel="stylesheet" href="{% static 'css/style.css' %}" type="text/css"> 
+    <link rel="stylesheet" href="{% static 'css/style.css' %}" type="text/css">
+
 </head>
 
 <body style="background-color:grey;" >
@@ -52,8 +53,21 @@
         <div class="container">
             <div class="row" >
                 <!-- <img src="{% static 'img/Macro-Graphic.png' %}" width="700" height="1200" alt="" style="float: left; width : 50%; margin-left: 30px; margin-right: 40px;"> -->
-               
-               
+                {% if messages %}
+                    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+                    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+                    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+                    <div class="row">
+                        <div class="col-sm-6 col-sm-offset-3">
+                            {% for message in messages %}
+                                <div class="alert alert-dark alert-dismissible fade show" style="max-height: 3rem; width: 25rem; margin-left: 2rem;">
+                                    <button type="button" class="close" data-dismiss="alert">&times;</button>
+                                    <p>{{ message }}</p>
+                                </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                {% endif %}
                     <div class="about-text" style="color: white;">
                         <form method="POST">
                             {% csrf_token %}

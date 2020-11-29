@@ -29,61 +29,15 @@
                 </a>
             </div>
             <div class="nav-menu">
-                {% if macros_page %}
-                    <nav class="mainmenu mobile-menu">
-                        <ul>
-                            <li><a href="/home">Home</a></li>
-                            <li class="active"><a href="/macros">Track Macros/Calories</a></li>
-                            <li><a href="/meals">Meals</a></li>
-                            <li><a href="/exercises">Exercises</a></li>
-                            <li><a href="/weight">Track Your Weight</a></li>
-                        </ul>
-                    </nav>
-                {% endif %}
-                {% if meals_page %}
-                    <nav class="mainmenu mobile-menu">
-                        <ul>
-                            <li><a href="/home">Home</a></li>
-                            <li class="active"><a href="/macros">Track Macros/Calories</a></li>
-                            <li><a href="/meals">Meals</a></li>
-                            <li><a href="/exercises">Exercises</a></li>
-                            <li><a href="/weight">Track Your Weight</a></li>
-                        </ul>
-                    </nav>
-                {% endif %}
-                {% if exercise_page %}
-                    <nav class="mainmenu mobile-menu">
-                        <ul>
-                            <li><a href="/home">Home</a></li>
-                            <li><a href="/macros">Track Macros/Calories</a></li>
-                            <li><a href="/meals">Meals</a></li>
-                            <li class="active"><a href="/exercises">Exercises</a></li>
-                            <li><a href="/weight">Track Your Weight</a></li>
-                        </ul>
-                    </nav>
-                {% endif %}
-                {% if weights_page %}
-                    <nav class="mainmenu mobile-menu">
-                        <ul>
-                            <li><a href="/home">Home</a></li>
-                            <li><a href="/macros">Track Macros/Calories</a></li>
-                            <li><a href="/meals">Meals</a></li>
-                            <li><a href="/exercises">Exercises</a></li>
-                            <li class="active"><a href="/weight">Track Your Weight</a></li>
-                        </ul>
-                    </nav>
-                {% endif %}
-                {% if not meals_page and not exercise_page and not macros_page and not weights_page %}
-                    <nav class="mainmenu mobile-menu">
-                        <ul>
-                            <li><a href="/home">Home</a></li>
-                            <li><a href="/macros">Track Macros/Calories</a></li>
-                            <li><a href="/meals">Meals</a></li>
-                            <li><a href="/exercises">Exercises</a></li>
-                            <li><a href="/weight">Track Your Weight</a></li>
-                        </ul>
-                    </nav>
-                {% endif %}
+                <nav class="mainmenu mobile-menu">
+                    <ul>
+                        <li><a href="/home">Home</a></li>
+                        <li><a href="/macros">Track Macros/Calories</a></li>
+                        <li><a href="/meals">Meals</a></li>
+                        <li><a href="/exercises">Exercises</a></li>
+                        <li><a href="/weight">Track Your Weight</a></li>
+                    </ul>
+                </nav>
                 {% if loggedIn %}
                     <a href="/profile" style="background-color: #cc3300" class="primary-btn">Profile</a>
                     <a href="/logout" style="background-color: #cc3300" class="primary-btn">Logout</a>
@@ -115,7 +69,8 @@
                         </div>
                     </div>
                 {% endif %}
-                {% block content %}{% endblock %}
+                {% block content %}
+                {% endblock %}
             </div>
         </div>
     </section>

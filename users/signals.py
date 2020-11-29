@@ -3,6 +3,7 @@ from django.contrib.auth.models import User
 from django.dispatch import receiver
 from .models import Profile
 from .models import WeightRecord
+from .models import LiftRecord
 import math
 
 @receiver(post_save, sender=User)
@@ -14,6 +15,12 @@ def create_profile(sender, instance, created, **kwargs):
 @receiver(post_save, sender=WeightRecord)
 def save_weight(sender, instance, **kwargs):
     Profile.objects.filter(user=instance.user).update(weight=instance.lbs)
+
+@receiver(post_save, sender=LiftRecord)
+def calculate_one_rep_max(sender, instance, **kwargs):
+    if instance.weight or instance.reps:
+        one_rm = int(instance.weight) * (1+0.025*instance.reps)
+        LiftRecord.objects.filter(user=instance.user, name=instance.name, date=instance.date).update(one_rep_max_equiv=one_rm)
 
 
 @receiver(post_save, sender=Profile)

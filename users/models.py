@@ -64,6 +64,7 @@ class LiftRecord(models.Model):
     sets = models.IntegerField(blank=True, null=True, validators=[validate_not_neg], help_text="Cannot be negative")
     reps = models.IntegerField(blank=True, null=True, validators=[validate_not_neg], help_text="Cannot be negative")
     date = models.DateField(default=timezone.now)
+    one_rep_max_equiv = models.IntegerField(blank=True, null=True)
 
 
 class Food(models.Model):

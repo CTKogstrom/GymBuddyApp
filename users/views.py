@@ -112,12 +112,6 @@ def profile(request):
     #plot the dates on the x axis and the
     plt.plot(dateList, lbsList, marker='*', markersize=5)
 
-    x_tix = []
-    j = 0
-    while j < len(dateList):
-        x_tix.append(dateList[j])
-        j = j + math.floor(len(dateList)/7)
-    plt.xticks(x_tix, x_tix)
 
     for i in range(0, len(lbsList)):
         plt.annotate(lbsList[i], (dateList[i], lbsList[i]))
@@ -137,7 +131,7 @@ def profile(request):
     exerciseNames = []
     exercises = LiftRecord.objects.filter(user=request.user).order_by('-name')
     for e in exercises:
-        if not e.name.lower().title() in exerciseNames:
+        if not e.name.lower().title() in exerciseNames and e.weight and e.reps:
            exerciseNames.append(e.name.lower().title())
     chosenName = ""
     if request.method == 'POST' and 'option_submit' in request.POST:
@@ -150,7 +144,7 @@ def profile(request):
     exercisesFiltered = LiftRecord.objects.filter(user=request.user).order_by('-date')
     for e in exercisesFiltered:
         if e.name.lower().title() == chosenName:
-            chosenList.append(e.weight)
+            chosenList.append(e.one_rep_max_equiv)
             date2List.append(e.date)
     matplotlib.use('Agg')
     plt.style.use('seaborn')
@@ -260,10 +254,6 @@ def profile(request):
         'strengthGraph' : strengthGraph,
         'foodDates' : foodDates,
         'macroGraph' : macroGraph,
-        'meals_page': False,
-        'exercise_page': False,
-        'macros_page': False,
-        'weights_page': False
     }
     if request.user.is_authenticated:
         context['loggedIn'] = True
@@ -283,10 +273,10 @@ def weight(request):
         WeightRecord.objects.filter(user=request.user, pk=request.POST['pk']).delete()
         messages.success(request, "Successfully deleted weight!", extra_tags='success')
 
-    elif request.method == 'Post' and 'weight_graph' in request.POST:
+    if request.method == 'POST' and 'weight_graph' in request.POST:
         return redirect('profile')
 
-    elif request.method == 'POST' and 'form_submit' in request.POST:
+    if request.method == 'POST' and 'form_submit' in request.POST:
         saveForm = True
         lbForm = WeightForm(request.POST, instance = weightrecord)
         if lbForm.is_valid():
@@ -315,10 +305,6 @@ def weight(request):
         'size': size,
         'goal': goal,
         'listG': listG,
-        'weights_page': True,
-        'macros_page': False,
-        'meals_page': False,
-        'exercise_page': False
     }
     return render(request, 'users/weight.html', context)
   
@@ -342,6 +328,7 @@ def macros(request):
         if singleFood.is_valid():
             foodName = singleFood.cleaned_data['foodName'].capitalize()
             foodDate = singleFood.cleaned_data['date']
+            messages.success(request, 'Successfully logged food!', extra_tags='success')
         else:
             messages.error(request, "Please re-enter valid information.", extra_tags='danger')        
 
@@ -380,7 +367,7 @@ def macros(request):
         foodForm = FoodForm(request.POST, instance = food)
         if foodForm.is_valid():
             food.name = foodForm.cleaned_data['name'].capitalize()
-            messages.success(request, "Successfully deleted exercise!", extra_tags='success')
+            messages.success(request, "Successfully deleted food!", extra_tags='success')
             foodForm.save()
             #return redirect('macros')
         else:
@@ -509,10 +496,6 @@ def exercises(request):
         'form': form,
         'filter': filter_form,
         'lifts': data,
-        'exercise_page': True,
-        'meals_page': False,
-        'macros_page': False,
-        'weights_page': False
     }
 
     return render(request, 'users/exercises.html', context)
@@ -585,10 +568,6 @@ def meals(request):
         'meals': recipe_list,
         'title': 'Meals',
         'filter': filter_form,
-        'meals_page': True,
-        'macros_page': False,
-        'weights_page': False,
-        'exercise_page': False
     }
 
     return render(request, 'users/meals.html', context)

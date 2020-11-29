@@ -9,7 +9,6 @@ class Migration(migrations.Migration):
 
     dependencies = [
         migrations.swappable_dependency(settings.AUTH_USER_MODEL),
-        ('activityLibrary', '0005_merge_20201015_0456'),
         ('users', '0001_initial'),
     ]
 

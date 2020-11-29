@@ -294,6 +294,7 @@ def macros(request):
     if request.method == 'POST' and 'delete_but' in request.POST:
         deleted = Food.objects.filter(user = request.user, pk=request.POST['pk']).first()
         Food.objects.filter(user = request.user, pk=request.POST['pk']).delete()
+        messages.success(request, "Successfully deleted food!", extra_tags='success')
     
     elif request.method == 'POST' and 'macro_distrib' in request.POST:
         return redirect('profile')
@@ -314,6 +315,7 @@ def macros(request):
         soup = BeautifulSoup(r.content, 'html5lib') # If this line causes an error, run 'pip install html5lib' or install html5lib 
         print("hi")
         if soup.find('div', attrs = {"class": "jss16"}) == None:
+            messages.success(request, "Could not find food!", extra_tags='success')
             print("rip")
         else:
             macroData = soup.find('div', attrs = {"class": "jss16"}).text
@@ -335,6 +337,7 @@ def macros(request):
             food2.protein = macroList[3]
             food2.date = foodDate
             food2.save()
+            messages.success(request, "Successfully added food!", extra_tags='success')
     #form2 = SingleFood()
     enter = MEALNAME
     form2 = SingleFood(initial={'foodName': enter})
@@ -345,8 +348,16 @@ def macros(request):
         foodForm = FoodForm(request.POST, instance = food)
         if foodForm.is_valid():
             food.name = foodForm.cleaned_data['name'].capitalize()
-            messages.success(request, "Successfully deleted exercise!", extra_tags='success')
-            foodForm.save()
+            stillValid = True
+            if foodForm.cleaned_data['carbs'] < 0:
+                stillValid = False
+            if foodForm.cleaned_data['fats'] < 0:
+                stillValid = False
+            if foodForm.cleaned_data['protein'] < 0:
+                stillValid = False
+            if stillValid:
+                messages.success(request, "Successfully logged food!", extra_tags='success')
+                foodForm.save()
         else:
             messages.error(request, "Please re-enter valid information.", extra_tags='danger')
     form = FoodForm()

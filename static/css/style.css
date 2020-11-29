@@ -32,6 +32,10 @@
 /* Template default CSS
 /*----------------------------------------*/
 
+div, span, p{
+    border: 1px solid red;
+}
+
 html, body {
 	height: 100%;
 	font-family: "Poppins", sans-serif;

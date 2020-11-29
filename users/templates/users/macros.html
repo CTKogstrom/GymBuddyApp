@@ -2,6 +2,7 @@
 {% load static %}
 <!DOCTYPE html>
 <html lang="zxx">
+    
 
 <head>
     <meta charset="UTF-8">
@@ -73,100 +74,96 @@
           
             </div>
           {% endif %}
-                        <div style="float: left; width: 50%; margin-top: 5%; margin-right: 20%;">
-                        <form method="POST">
-                            {% csrf_token %}
-                            <fieldset class="form-group"  >
-                                <legend class="border-bottom mb-4" style="font-size: 40px; font-weight: bold;">Search!</legend>
-                                {{form2|crispy}}
-                                <button class="primary-btn" type="submit" name="form2_submit" style="margin-bottom: 10px; margin-top: 10px;cursor: pointer">Add</button>
-                            </fieldset>
-                        </form>
-                        <form method="POST">
-                            {% csrf_token %}
-                            <fieldset class="form-group" >
-                                <legend class="border-bottom mb-4" style="font-size: 40px; font-weight: bold;">Log a Food!</legend>
-                                {{form|crispy}}
-                                <div class="form-group">
-                                    <button class="primary-btn" type="submit" name="form_submit" style="cursor: pointer">Log</button>
-                                </div>
-                            </fieldset>
-                            
-                        </form>
-                        <form method="POST">
-                            {% csrf_token %}
-                            <button class="add btn btn-block btn-primary mb-2" type="submit" name="macro_distrib" style="float: left; width : 50%; margin-left: 25%; margin-top: -1%;">View Macro Distribution</button>
-                        </form>
-                        <!-- <img src="{% static 'img/Macro-Graphic.png' %}" width="10" height="1000" alt="" style="float: right; width : 45%; margin-left: 30px; margin-right: 40px;"> -->
-
-                        </div>
-                        
-                        <div style="float: left; width: 30%; margin-top: 7%;">
-                            {% if size == 0 %}
-                                <table class="table" style="font-size: 20px; border: 5px solid darkgrey; margin-top: 2.5%;">
-                                    <thead>
-                                        <tr>
-                                            <th scope="col" style="padding: 5px;">No exercises logged yet, add an exercise to get started!</th>         
-                                        </tr>
-                                    </thead>
-                                </table>
-                                    
-                            {% endif %}
-                            {% if size != 0 %}
-                            {% for date in dates %}
-                                
-                                <!--<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css" > -->
-                                <table class="table" style="font-size: 20px; border: 5px solid darkgrey; margin-top: 2.5%;">
-                                    <thead>
-                                        {% if size != 0 %}
-
-                                        <h5 style="color: white; font-weight: bold; font-size: 30px;">{{date}}</h5>
-                                        <tr>
-                                        <th scope="col" style="padding: 5px;">Food</th>
-                                        <th scope="col" style="padding: 5px;">Carbs</th>
-                                        <th scope="col" style="padding: 5px;">Fats</th>
-                                        <th scope="col" style="padding: 5px;"> Protein </th>
-                                        <th scope="col" style="padding: 5px;">Calories</th>   
-                                        <th scope="col" style="padding: 5px;"></th>         
-                                        </tr>
-                                        {% endif %}
-                                        {% if size == 0 %}
-                                        <tr>
-                                            <th scope="col" style="padding: 5px;">No macros logged yet, add a food to get started!</th>         
-                                        </tr>
-                                        {% endif %}
-                                    </thead>
-                                    <tbody>
-                                        {% for food in foods %}
-                                        {% if food.date == date %}
-                                            <tr>
-                                                <th scope="row">{{food.name}}</th>
-                                                <td style="text-align: center">{{food.carbs}} g</td>
-                                                <td style="text-align: center">{{food.fats}} g</td>
-                                                <td style="text-align: center;">{{food.protein}} g</td>
-                                                <td style="text-align: center">{{food.calories}}</td>
-                                                <td>
-                                                    <form action="" method="post">
-                                                        {% csrf_token %}
-                                                        <input type ="hidden" value="{{ food.pk }}" name="pk">
-                                                        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-                                                        <button type="submit" name="delete_but" style="border:none;background-color:transparent;font-size:30px;cursor: pointer;color: #990000;" value="Delete" class="p-0 m-0 text-danger pl-3 pr-1"><i class="fa fa-trash"></i></button>
-                                                    </form>
-                                                </td>
-                                            </tr>
-                                        {% endif %}
-                                        {% endfor %}
-                                    </tbody>
-                                </table>
-                            {% endfor %}
-                            {% endif %}
-                            <!-- <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css" > -->
-                        </div>
-                        <div class="col-lg-6" >
-                            <div class="about-pic">
-                                <img src="{% static 'img/picdoesntexist.png' %}" alt="">
+                    <div style="float: left; width: 50%; margin-top: 5%; margin-right: 20%;">
+                    <form method="POST">
+                        {% csrf_token %}
+                        <fieldset class="form-group"  >
+                            <legend class="border-bottom mb-4" style="font-size: 40px; font-weight: bold;">Search!</legend>
+                            {{form2|crispy}}
+                            <button class="primary-btn" type="submit" name="form2_submit" style="margin-bottom: 10px; margin-top: 10px;cursor: pointer">Add</button>
+                        </fieldset>
+                    </form>
+                    <form method="POST">
+                        {% csrf_token %}
+                        <fieldset class="form-group" >
+                            <legend class="border-bottom mb-4" style="font-size: 40px; font-weight: bold;">Log a Food!</legend>
+                            {{form|crispy}}
+                            <div class="form-group">
+                                <button class="primary-btn" type="submit" name="form_submit" style="cursor: pointer">Log</button>
                             </div>
-                        </div>
+                        </fieldset>
+                        
+                    </form>
+                    <form method="POST">
+                        {% csrf_token %}
+                        <button class="add btn btn-block btn-primary mb-2" type="submit" name="macro_distrib" style="float: left; width : 50%; margin-left: 25%; margin-top: -1%;">View Macro Distribution</button>
+                    </form>
+                    <!-- <img src="{% static 'img/Macro-Graphic.png' %}" width="10" height="1000" alt="" style="float: right; width : 45%; margin-left: 30px; margin-right: 40px;"> -->
+
+                    </div>
+                    
+                    <div style="float: left; width: 30%; margin-top: 7%;">
+                        {% if size == 0 %}
+                            <table class="table" style="font-size: 20px; border: 5px solid darkgrey; margin-top: 2.5%;">
+                                <thead>
+                                    <tr>
+                                        <th scope="col" style="padding: 5px;">No exercises logged yet, add an exercise to get started!</th>         
+                                    </tr>
+                                </thead>
+                            </table>
+                                
+                        {% endif %}
+                        {% if size != 0 %}
+                        {% for date in dates %}
+                            
+                            <!--<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css" > -->
+                            <table class="table" style="font-size: 20px; border: 5px solid darkgrey; margin-top: 2.5%;">
+                                <thead>
+                                    {% if size != 0 %}
+
+                                    <h5 style="color: white; font-weight: bold; font-size: 30px;">{{date}}</h5>
+                                    <tr>
+                                    <th scope="col" style="padding: 10px;">Food</th>
+                                    <th scope="col" style="padding: 10px;">Carbs</th>
+                                    <th scope="col" style="padding: 10px;">Fats</th>
+                                    <th scope="col" style="padding: 10px;"> Protein </th>
+                                    <th scope="col" style="padding: 10px;">Calories</th>   
+                                    <th scope="col" style="padding: 10px;"></th>         
+                                    </tr>
+                                    {% endif %}
+                                    {% if size == 0 %}
+                                    <tr>
+                                        <th scope="col" style="padding: 5px;">No macros logged yet, add a food to get started!</th>         
+                                    </tr>
+                                    {% endif %}
+                                </thead>
+                                <tbody>
+                                    {% for food in foods %}
+                                    {% if food.date == date %}
+                                        <tr>
+                                            <th scope="row">{{food.name}}</th>
+                                            <td style="text-align: center">{{food.carbs}} g</td>
+                                            <td style="text-align: center">{{food.fats}} g</td>
+                                            <td style="text-align: center;">{{food.protein}} g</td>
+                                            <td style="text-align: center">{{food.calories}}</td>
+                                            <td>
+                                                <form action="" method="post">
+                                                    {% csrf_token %}
+                                                    <input type ="hidden" value="{{ food.pk }}" name="pk">
+                                                    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+                                                    <button type="submit" name="delete_but" style="border:none;background-color:transparent;font-size:30px;cursor: pointer;color: #990000;" value="Delete" class="p-0 m-0 text-danger pl-3 pr-1"><i class="fa fa-trash"></i></button>
+                                                </form>
+                                            </td>
+                                        </tr>
+                                    {% endif %}
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        {% endfor %}
+                        {% endif %}
+                        <!-- <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css" > -->
+                    </div>
+                        
                     </div>
                
             </div>

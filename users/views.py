@@ -385,25 +385,29 @@ def exercises(request):
     lift_form_name = ""
 
     category = 'All'
+    
     if request.method == 'POST' and 'delete_but' in request.POST:
         deleted = LiftRecord.objects.filter(user = request.user, pk=request.POST['pk']).first()
         LiftRecord.objects.filter(user = request.user, pk=request.POST['pk']).delete()
         messages.success(request, "Successfully deleted exercise!", extra_tags='success')
+        print("filter1")
 
-    elif request.method == 'POST' and 'strength_graph' in request.POST:
+    if request.method == 'POST' and 'strength_graph' in request.POST:
+        print("filter2")
         return redirect('profile')
 
-    elif request.method == 'POST' and ('exercise_select' or 'filter_submit') in request.POST:
-       
+    if request.method == 'POST':
+        print("filter")
         filter_form = ExerciseFilterForm(request.POST)
+        print("filter")
         if filter_form.is_valid():
             category = filter_form.cleaned_data['category']
             print(category)
             messages.success(request, "Successfully filtered exercises!", extra_tags='success')
-        elif 'exercise_select':
+        elif 'exercise_select' in request.POST:
             lift_form_name = request.POST['exercise_select']
             print(request.POST['exercise_select'])
-            messages.success(request, "Successfully added exercise!", extra_tags='success')
+            messages.success(request, "Successfully added exercise, log to complete!", extra_tags='success')
     #EXERCISES_GLOBAL = []
     if category =='All':
         threads = len(URLS)
@@ -441,13 +445,17 @@ def exercises(request):
         liftForm = LiftForm(request.POST, instance=liftrecord)
         if liftForm.is_valid():
             stillValid = True
-            if liftForm.cleaned_data['weight'] < 0:
+            skip = True
+            if not str(liftForm.cleaned_data['weight']).isdigit() or not str(liftForm.cleaned_data['sets']).isdigit() or not str(liftForm.cleaned_data['reps']).isdigit():
+                #liftForm.save()
+                skip = False
+            if skip and liftForm.cleaned_data['weight'] < 0 :
                 messages.error(request, "Please enter a valid number for weight.", extra_tags='danger')
                 stillValid = False
-            if liftForm.cleaned_data['sets'] < 0:
+            if skip and liftForm.cleaned_data['sets'] < 0 :
                 messages.error(request, "Please enter a valid number for sets.", extra_tags='danger')
                 stillValid = False
-            if liftForm.cleaned_data['reps'] < 0:
+            if skip and liftForm.cleaned_data['reps'] < 0 :
                 messages.error(request, "Please enter a valid number for reps.", extra_tags='danger')
                 stillValid = False
             if stillValid:
@@ -459,8 +467,9 @@ def exercises(request):
             messages.error(request, "Please re-enter valid information.", extra_tags='danger')
     form = LiftForm(initial={'name': lift_form_name})
     # filter_form = ExerciseFilterForm()
-    data = LiftRecord.objects.filter(user=request.user).order_by('-date')
-    print(EXERCISES_GLOBAL)
+    data = LiftRecord2.objects.filter(user = request.user).order_by('-date')
+    size = len(data)
+    #print(EXERCISES_GLOBAL)
     context = {
         'exercises': EXERCISES_GLOBAL,
         'title': 'Exercises',
@@ -478,10 +487,10 @@ def scrap_url(url):
 
         soup = BeautifulSoup(r.content, 'html5lib')  # If this line causes an error, run 'pip install html5lib' or install html5lib
 
-        table = soup.find('div', attrs={'id': 'exerciseLibrary'})
-        print("OVER THERE")
-        for row in table.findAll('div', attrs={"class": "exercise-card-grid__cell"}):
-            print("Over here")
+        table = soup.find('div', attrs = {'id':'exerciseLibrary'})
+       # print("OVER THERE")
+        for row in table.findAll('div', attrs = {"class" : "exercise-card-grid__cell"}):
+           # print("Over here")
             exercise = {}
             exercise['category'] = key
             # exercise = {}

@@ -1,3 +1,4 @@
+{% load crispy_forms_tags %}
 {% load static %}
 <!DOCTYPE html>
 <html lang="zxx">
@@ -15,20 +16,19 @@
         rel="stylesheet">
     
     <!-- Css Styles -->
-    <link rel="stylesheet" href="{% static 'css/style.css' %}" type="text/css"> 
+    <link rel="stylesheet" href="{% static 'css/style.css' %}" type="text/css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
 </head>
 
-<body style="background-color:grey;" >
-
-    <!-- Header Section Begin -->
-    <header class="header-section">
-        <div class="container">
+<body style="background-color:grey;">
+    <header class="header-section" >
+        <div class="container" style="display: flex; align-items: center;">
             <div class="logo" style="margin-left: 15px;">
                 <a href="/home">
                     <img src="{% static 'img/logo2.png' %}" alt="">
                 </a>
             </div>
-            <div class="nav-menu" style="margin-top: 45px;">
+            <div class="nav-menu">
                 <nav class="mainmenu mobile-menu">
                     <ul>
                         <li><a href="/home">Home</a></li>
@@ -39,30 +39,42 @@
                     </ul>
                 </nav>
                 {% if loggedIn %}
-                    <a href="/profile" class="primary-btn">Profile</a>
-                    <a href="/logout" class="primary-btn">Logout</a>
+                    <a href="/profile" style="background-color: #cc3300" class="primary-btn">Profile</a>
+                    <a href="/logout" style="background-color: #cc3300" class="primary-btn">Logout</a>
                 {% endif %}
                 {% if not loggedIn %}
-                    <a href="/register" class="primary-btn">Register</a>
-                    <a href="/login" class="primary-btn">Sign In</a>
+                    <a href="/register" style="background-color: #cc3300" class="primary-btn">Register</a>
+                    <a href="/login" style="background-color: #cc3300" class="primary-btn">Sign In</a>
                 {% endif %}
             </div>
-            <div id="mobile-menu-wrap"></div>
         </div>
     </header>
-    <!-- Header End -->
-    
-    <!-- About Section Begin -->
+
+    <!-- Page Main Section Begin -->
     <section class="about-section spad" style="margin-top: 50px;">
-        <div class="container">
-            <div class="row" style="color:white;">
-                {% block content %}{% endblock %}
+        <div class="container" style="color: white">
+            <div class="row" style="padding-top: 2rem">
+                {% if messages %}
+                    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+                    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+                    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+                    <div class="row">
+                        <div class="col-sm-6 col-sm-offset-3">
+                            {% for message in messages %}
+                                <div class="alert alert-dark alert-dismissible fade show" style="max-height: 3rem; width: 25rem; margin-left: 2rem;">
+                                    <button type="button" class="close" data-dismiss="alert">&times;</button>
+                                    <p>{{ message }}</p>
+                                </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                {% endif %}
+                {% block content %}
+                {% endblock %}
             </div>
         </div>
     </section>
     <!-- About Section End -->
-
-
 </body>
 
 </html>

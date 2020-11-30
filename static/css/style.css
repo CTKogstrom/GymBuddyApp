@@ -32,9 +32,7 @@
 /* Template default CSS
 /*----------------------------------------*/
 
-div, span, p{
-    border: 1px solid red;
-}
+
 
 html, body {
 	height: 100%;
@@ -135,16 +133,7 @@ ul, ol {
 	text-align: center;
 	width: 160px;
 	height: 46px;
-	border-left: 2px solid #eb3c5a;
-	border-right: 2px solid #f67831;
-	-webkit-box-sizing: border-box;
-	box-sizing: border-box;
-	background-position: 0 0, 0 100%;
-	background-repeat: no-repeat;
-	background-size: 100% 2px;
-	background-image: -webkit-gradient(linear, left top, right top, from(#eb3c5a), to(#f67831)), -webkit-gradient(linear, left top, right top, from(#eb3c5a), to(#f67831));
-	background-image: -o-linear-gradient(left, #eb3c5a 0%, #f67831 100%), -o-linear-gradient(left, #eb3c5a 0%, #f67831 100%);
-	background-image: linear-gradient(to right, #eb3c5a 0%, #f67831 100%), linear-gradient(to right, #eb3c5a 0%, #f67831 100%);
+	background-color: #cc3300;
 	-webkit-transition-duration: 1000ms;
 	-o-transition-duration: 1000ms;
 	transition-duration: 1000ms;
@@ -158,10 +147,7 @@ ul, ol {
 	-webkit-transition-duration: 500ms;
 	-o-transition-duration: 500ms;
 	transition-duration: 500ms;
-	background: #f67831;
-	background: -webkit-gradient(linear, left top, right top, from(#eb3c5a), to(#f67831));
-	background: -o-linear-gradient(left, #eb3c5a, #f67831);
-	background: linear-gradient(to right, #eb3c5a, #f67831);
+	background-color: #cc3300;
 	content: "";
 	position: absolute;
 	width: 100%;
@@ -240,7 +226,7 @@ ul, ol {
 	left: 0;
 	top: 0;
 	width: 100%;
-	border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+	border-bottom: 2px solid rgba(255, 255, 255, 0.2);
 }
 .logo {
 	float: left;
@@ -871,6 +857,41 @@ ul, ol {
 	color: #ffffff;
 	margin-bottom: 42px;
 }
+
+/*----------------------------
+		Profile Page
+---------------------------- */
+.graph-container {
+	display: flex;
+	flex-direction: column;
+	justify-content: space-around;
+	align-items: center;
+	margin: 5rem 0rem 0rem 0rem;
+}
+
+.graph-blurb-container{
+	font-size: large;
+	width:60%;
+	margin: 0rem 0rem 3rem 0rem;
+}
+
+.graph-selection-form{
+	display: flex;
+	flex-direction: row;
+	align-items: baseline;
+	margin: 0rem 3rem 3rem 0rem;
+	width: 40%;
+
+
+}
+
+.graph-stats-container{
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+}
+
+
 /*---------------------
   Footer
 -----------------------*/

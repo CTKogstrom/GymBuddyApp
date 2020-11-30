@@ -1,12 +1,11 @@
 {% extends "users/base.html" %}
 {% block content %}
-    <h2 style="margin-left: 2.5%; margin-top: 8%; margin-bottom: 5%; color: white;">You have been logged out.</h2>
-    <div class="content-section">
-    <div class="border-top pt-3">
-        <small class="text-muted">
-            <a href={% url 'login' %} style="margin-left: 2.5%; font-size: 25px;">Click Here to Log In Again</a>
-        </small>
+    <div style="display: flex; align-items: flex-start">
+        <h6 style="margin-left: 5rem; color: white;">You have been logged out.</h6>
+        <div class="content-section" style="display: flex; align-items: center">
+            <small class="text-muted">
+                <a style="width: 25rem; margin: 2rem;" href={% url 'login' %}>Click Here to Log In Again</a>
+            </small>
+        </div>
     </div>
-    </div>
-    
 {% endblock content %}

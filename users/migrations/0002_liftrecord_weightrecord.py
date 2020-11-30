@@ -9,7 +9,6 @@ class Migration(migrations.Migration):
 
     dependencies = [
         migrations.swappable_dependency(settings.AUTH_USER_MODEL),
-        ('activityLibrary', '0005_merge_20201015_0456'),
         ('users', '0001_initial'),
     ]
 
@@ -30,7 +29,6 @@ class Migration(migrations.Migration):
                 ('sets', models.IntegerField(blank=True, null=True)),
                 ('reps_per_set', models.IntegerField(blank=True, null=True)),
                 ('date', models.DateField()),
-                ('exercise', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='activityLibrary.exercise')),
                 ('user', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to=settings.AUTH_USER_MODEL)),
             ],
         ),

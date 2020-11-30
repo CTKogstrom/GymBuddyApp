@@ -501,6 +501,7 @@ def exercises(request):
         'form': form,
         'filter': filter_form,
         'lifts': data,
+        'size' : size
     }
 
     return render(request, 'users/exercises.html', context)

@@ -21,6 +21,7 @@ pip install GymBuddy
 ```
 launch runserver
 ```
+* An then navigate to  http://127.0.0.1:8000/ in your browser
 
 ## Command to create superuser
 * To be able to view the admin console, you can create a superuser using the command below and then navigate to /admin

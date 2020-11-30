@@ -185,14 +185,12 @@ def profile(request):
     if chosenDate != "":
         foodsFiltered = Food.objects.filter(user=request.user,date=chosenDate)
         for e in foodsFiltered:
-            print(chosenDate)
-            print("matches")
-            print(e.date)
+           
             percentages[0] += e.carbs
             percentages[1] += e.fats
             percentages[2] += e.protein
             totalCal += e.calories
-            print(e.calories)
+           
         plt.pie(percentages, labels=macroLabels, autopct=lambda pct: pie_text_func(pct, percentages), shadow=True, startangle=90)
 
     totalCalStr = ""
@@ -338,19 +336,13 @@ def macros(request):
         soup = BeautifulSoup(r.content, 'html5lib') # If this line causes an error, run 'pip install html5lib' or install html5lib 
         if soup.find('div', attrs = {"class": "jss16"}) == None:
             messages.success(request, "Could not find food!", extra_tags='success')
-            print("rip")
+            
         else:
             macroData = soup.find('div', attrs = {"class": "jss16"}).text
             servingSize = soup.find('div', attrs = {"class": "jss11"}).text
             servingSize = servingSize[servingSize.find(",")+2:]
             macroList = re.findall(r'[0-9]+', macroData) 
-            print(macroData)
-            print(macroList)
-            print(servingSize)
-            print("Calories: " + str(macroList[0]))
-            print("Carbs: " + str(macroList[1]))
-            print("Fat: " + str(macroList[2]))
-            print("Protein: " + str(macroList[3]))
+           
             food2 = Food(user=request.user)
             food2.name = foodName
             food2.calories = macroList[0]
@@ -415,23 +407,23 @@ def exercises(request):
         deleted = LiftRecord.objects.filter(user = request.user, pk=request.POST['pk']).first()
         LiftRecord.objects.filter(user = request.user, pk=request.POST['pk']).delete()
         messages.success(request, "Successfully deleted exercise!", extra_tags='success')
-        print("filter1")
+       
 
     if request.method == 'POST' and 'strength_graph' in request.POST:
-        print("filter2")
+        
         return redirect('profile')
 
     if request.method == 'POST':
-        print("filter")
+        
         filter_form = ExerciseFilterForm(request.POST)
-        print("filter")
+       
         if filter_form.is_valid():
             category = filter_form.cleaned_data['category']
-            print(category)
+            
             messages.success(request, "Successfully filtered exercises!", extra_tags='success')
         elif 'exercise_select' in request.POST:
             lift_form_name = request.POST['exercise_select']
-            print(request.POST['exercise_select'])
+            
             messages.success(request, "Successfully added exercise, log to complete!", extra_tags='success')
     #EXERCISES_GLOBAL = []
     if category =='All':
@@ -486,7 +478,7 @@ def exercises(request):
             if stillValid:
                 liftForm.save()
                 messages.success(request, "Successfully logged exercise!", extra_tags='success')
-                print("hrefe")
+                
                 liftForm.save()
         else:
             messages.error(request, "Please re-enter valid information.", extra_tags='danger')
@@ -494,7 +486,7 @@ def exercises(request):
     # filter_form = ExerciseFilterForm()
     data = LiftRecord.objects.filter(user=request.user).order_by('-date')
     size = len(data)
-    #print(EXERCISES_GLOBAL)
+   
     context = {
         'exercises': EXERCISES_GLOBAL,
         'title': 'Exercises',
@@ -514,9 +506,9 @@ def scrap_url(url):
         soup = BeautifulSoup(r.content, 'html5lib')  # If this line causes an error, run 'pip install html5lib' or install html5lib
 
         table = soup.find('div', attrs = {'id':'exerciseLibrary'})
-       # print("OVER THERE")
+       
         for row in table.findAll('div', attrs = {"class" : "exercise-card-grid__cell"}):
-           # print("Over here")
+           
             exercise = {}
             exercise['category'] = key
             # exercise = {}
@@ -528,23 +520,23 @@ def scrap_url(url):
             exercise['img'] = row.find('div', attrs={"class": "exercise-card__image"})['style'].split("'")[1]
             exercise['description_link'] = 'https://www.acefitness.org/' + row.a['href']
             EXERCISES_GLOBAL.append(exercise)
-            
+
 @login_required
 def meals(request):
     global MEALNAME
 
     category = 'All'
     if request.method == 'POST' and 'log_submit' in request.POST:
-        print("hit meal")
+        
         MEALNAME = request.POST['log_submit']
         return redirect('macros')
 
     if request.method == 'POST' and 'filter_submit' in request.POST:
-        print("hit post 1")
+        
         filter_form = MealFilterForm(request.POST)
         if filter_form.is_valid():
             category = filter_form.cleaned_data['category']
-            print(category)
+            
 
     if category == 'All':
         URL = 'https://www.skinnytaste.com/recipes/' + category + '/'

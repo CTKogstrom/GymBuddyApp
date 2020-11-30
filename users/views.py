@@ -528,7 +528,8 @@ def scrap_url(url):
             exercise['img'] = row.find('div', attrs={"class": "exercise-card__image"})['style'].split("'")[1]
             exercise['description_link'] = 'https://www.acefitness.org/' + row.a['href']
             EXERCISES_GLOBAL.append(exercise)
-
+            
+@login_required
 def meals(request):
     global MEALNAME
 
@@ -538,16 +539,17 @@ def meals(request):
         MEALNAME = request.POST['log_submit']
         return redirect('macros')
 
-    if request.method == 'POST':
+    if request.method == 'POST' and 'filter_submit' in request.POST:
         print("hit post 1")
         filter_form = MealFilterForm(request.POST)
         if filter_form.is_valid():
             category = filter_form.cleaned_data['category']
+            print(category)
 
     if category == 'All':
         URL = 'https://www.skinnytaste.com/recipes/' + category + '/'
     else:
-        URL = 'https://www.skinnytaste.com/recipes/'
+        URL = 'https://www.skinnytaste.com/recipes/' + category + '/'
 
     r = requests.get(URL)
 

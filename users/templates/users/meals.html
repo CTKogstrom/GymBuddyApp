@@ -56,7 +56,7 @@
                  {% csrf_token %}
                 {{filter|crispy}}
                 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css" >
-                <Button class="add btn btn-block btn-primary mb-2" type="submit" name="form_submit">Filter</Button>
+                <Button class="add btn btn-block btn-primary mb-2" type="submit" name="filter_submit">Filter</Button>
              </form>
 
                            {% for recipe in meals %}

@@ -31,5 +31,5 @@ launch createsuperuser
 ## GitHub Link
 [GymBuddy GitHub](https://urldefense.proofpoint.com/v2/url?u=https-3A__github.com_CTKogstrom_GymBuddyApp&d=DwIGAg&c=sJ6xIWYx-zLMB3EPkvcnVg&r=iBtJv8aA_GdaWP2f1Jfg-Q&m=JlI2fcLdD2_Z40s29sj6y5LXq-K-L9ygAsW06ukBMBE&s=8JYmXZOpU4ZrNh_OzvwnblpBzkbGBMCUqdce0thrl-Y&e=)
 
-** Notes: Because our performance element included active webscraping on load, slow internet speed may result in long wait times for the meals and exercises pages. With normal internet speed wait times should not exceed 3 seconds.**
+** Notes: Because our performance element included active webscraping on load, slow internet speeds may result in long wait times for the meals and exercises pages. With normal internet speed wait times should not exceed 3 seconds.
 
